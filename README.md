@@ -28,29 +28,29 @@ Site for browsing bartools, the tools used to augment posts and site experience.
 Gulp is used to expediate many common tasks particularly for builds and deployment.  Gulp is used in order to keep flexibility high as the setup of which services belong in which EVM's may change in the future.  Other deployment tools may work but for now gulp and some manual labour is in use until enough patterned usage needs emerge.
 
 
-### Building Releases
+## Building Releases
 
 The project is first initialized as an umbrella app but as separate releases per app in the exrm style:
 
-# One time requirement
-> mix release.init --release-per-app
+### One time requirement
+mix release.init --release-per-app
 
-# Only for apps that have static assets (js/css/images):
-> cd apps/smileys/assets
-> ./node_modules/brunch/bin/brunch b -p
+### Only for apps that have static assets (js/css/images):
+cd apps/smileys/assets
+./node_modules/brunch/bin/brunch b -p
 
-# Back in the base dir of smileys_umbrella:
-> MIX_ENV=prod mix phoenix.digest
+### Back in the base dir of smileys_umbrella:
+MIX_ENV=prod mix phoenix.digest
 
-# First release:
-> MIX_ENV=prod mix release --env=prod --name=smileys
-> MIX_ENV=prod mix release --env=prod --name=smileysapi
-> MIX_ENV=prod mix release --env=prod --name=smileyscaretaker
+### First release:
+MIX_ENV=prod mix release --env=prod --name=smileys
+MIX_ENV=prod mix release --env=prod --name=smileysapi
+MIX_ENV=prod mix release --env=prod --name=smileyscaretaker
 
-# On subsequent releases:
-> MIX_ENV=prod mix release --env=prod --upgrade --name=smileys
-> MIX_ENV=prod mix release --env=prod --upgrade --name=smileysapi
-> MIX_ENV=prod mix release --env=prod --upgrade --name=smileyscaretaker
+### On subsequent releases:
+MIX_ENV=prod mix release --env=prod --upgrade --name=smileys
+MIX_ENV=prod mix release --env=prod --upgrade --name=smileysapi
+MIX_ENV=prod mix release --env=prod --upgrade --name=smileyscaretaker
 
 
 ### Releasing the releases
