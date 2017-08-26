@@ -1,0 +1,48 @@
+<div class="form-halfpage">
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Something went wrong. Errors are listed below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+    <div class="form-description">The name is also your unique url. Use letters only and no spaces or special characters. We keep the right in our code of ethics to take a name from people in some circumstances, please review <a href="#" target="_blank">our terms and admin code</a>.</div>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :title, class: "control-label" %>
+    <%= text_input f, :title, class: "form-control" %>
+    <%= error_tag f, :title %>
+    <div class="form-description">A longer (shorter is good but 250 characters max) title that displays prominently near in your room.</div>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :description, class: "control-label" %>
+    <%= text_input f, :description, class: "form-control" %>
+    <%= error_tag f, :description %>
+    <div class="form-description">A description of up to 500 characters.</div>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :type, class: "control-label" %>
+    <%= text_input f, :type, class: "form-control" %>
+    <%= error_tag f, :type %>
+    <div class="form-description">Public: everyone can see it and subscribe. Restricted: everyone can look but only subscribers you allow can post. Private: Nobody can even look at this unless you enter their user name into a form and allow them access. Admins of this site can always check out your room so keep that in mind and know <a href="#" target="_blank">our terms and admin code</a>.</div>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :age, class: "control-label" %>
+    <%= number_input f, :age, class: "form-control" %>
+    <%= error_tag f, :age %>
+    <div class="form-description">The minimum age to be here in the room. 0 means you don't care. Use good sense and if anything mature goes on here please help us protect younger folk. You have to get this right so the room doesn't end up destroyed.</div>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+</div>

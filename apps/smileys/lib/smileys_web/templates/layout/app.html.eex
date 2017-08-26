@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= if assigns[:op] do %>
+      <meta name="description" content="Smiley's post: <%= assigns[:op].title %> ">
+    <%= else %>
+      <meta name="description" content="This is a place to have discussions and hang out, people watch, joke around maybe.">
+    <% end %>
+    <meta name="author" content="Smiley">
+
+    <title>
+      <%= if assigns[:title] do %>
+        <%= assigns[:title] %>
+      <%= else %>
+        Smiley's. Welcome to Smiley's Pub. It is what it is
+      <% end %>
+    </title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <%= if Guardian.Plug.current_token(@conn) do %>
+      <meta name='guardian_token' content="<%= Guardian.Plug.current_token(@conn) %>">
+    <% end %>
+
+    <%= if assigns[:user] do %>
+      <meta name='user_name' content="<%= assigns[:user].name %>">
+    <% end %>
+
+    <meta name="_csrf_token" content="<%= get_csrf_token() %>">
+
+    <%= if assigns[:subscriptions] do %>
+      <script>
+        var subscriptions = [<%= for subscription <- assigns[:subscriptions] do 
+          raw ("'" <> subscription.roomname <> "',")
+        end %>]
+      </script>
+    <% end %>
+  </head>
+
+
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1><a href="/">Smiley's</a></h1>
+
+        <div id="search"></div>
+
+        <nav role="navigation">
+          <ul class="nav nav-pills pull-right">
+            <%= if assigns[:user] do %>
+              <li><a href="/u/<%= assigns[:user].name %>"><%= assigns[:user].name %></a></li>
+              <li><%= link "Log out", to: session_path(@conn, :delete), method: :delete %></li>
+            <%= else %>
+              <li><a href="/sessions/new">Sign in</a></li>
+              <li><a href="/registrations/new">Register</a></li>
+            <% end %>
+          </ul>
+        </nav>
+      </header>
+
+      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <p class="alert-temp" role="alert"></p>
+
+      <main role="main" class="main-content">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div> <!-- /container -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script>require("js/app").App.run()</script>
+  </body>
+</html>

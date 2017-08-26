@@ -1,0 +1,78 @@
+# This file is responsible for configuring your application
+# and its dependencies with the aid of the Mix.Config module.
+#
+# This configuration file is loaded before any dependency and
+# is restricted to this project.
+use Mix.Config
+
+# import_config "scout_apm.exs"
+
+# General application configuration
+config :smileys,
+  namespace: Smileys,
+  ecto_repos: [SmileysData.Repo]
+
+# Configures the endpoint
+config :smileys, SmileysWeb.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "somesecretkeybase",
+  render_errors: [view: SmileysWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Smileys.PubSub,
+           adapter: Phoenix.PubSub.PG2]
+
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+config :kerosene,
+    theme: :bootstrap4
+
+config :cloudex,
+  api_key: "cloudexkey",
+  secret: "cloudexsecret",
+  cloud_name: "yourcloudname"
+
+config :guardian, Guardian,
+  permissions: %{
+    default: [:user],
+    admin: [:admin],
+    khan: [:admin, :khan]
+  },
+  allowed_algos: ["HS512"], # optional
+  allowed_drift: 2000,
+  verify_module: Guardian.JWT,  # optional
+  issuer: "Smileys",
+  ttl: { 3, :years },
+  verify_issuer: false, # optional
+  secret_key: %{
+    "k" => "supersecretimportantkey",
+    "kty" => "oct"
+  },
+  serializer: SmileysData.GuardianSerializer
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env}.exs"
+
+# %% Coherence Configuration %%   Don't remove this line
+config :coherence,
+  max_failed_login_attempts: 10,
+  allow_unconfirmed_access_for: 700,
+  rememberable_cookie_expire_hours: 365 * 24,
+  login_cookie: "coherence_login",
+  user_schema: SmileysData.User,
+  repo: SmileysData.Repo,
+  module: Smileys,
+  web_module: SmileysWeb,
+  router: SmileysWeb.Router,
+  messages_backend: SmileysWeb.Coherence.Messages,
+  logged_out_url: "/",
+  email_from_name: "Smileys Pub",
+  email_from_email: "anemailaddress@anemailserver.com",
+  opts: [:authenticatable, :recoverable, :lockable, :trackable, :unlockable_with_token, :confirmable, :registerable]
+
+config :coherence, SmileysWeb.Coherence.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "sendgridapikey"
+# %% End Coherence Configuration %%

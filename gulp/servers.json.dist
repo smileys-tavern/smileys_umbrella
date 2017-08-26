@@ -1,0 +1,50 @@
+{
+	"beams": ["smileysWeb"],
+	"smileysWeb": 
+		[
+			{
+				"name": "smileys1@servername1.com",
+				"ssh": "servername1.com",
+				"public": "servername1.com"
+			},
+			{
+				"name": "smileys2@servername2.com",
+				"ssh": "servername2.com",
+				"public": "servername2.com"
+			},
+			{
+				"name": "smileys3@servername3.com",
+				"ssh": "servername3.com",
+				"public": "servername3.com"
+			},
+			{
+				"name": "smileys3@servername4.com",
+				"ssh": "servername4.com",
+				"public": "servername4.com"
+			},
+
+			{
+				"name": "smileysapi1@apiservername1.com",
+				"ssh": "apiservername1.com",
+				"public": "apiservername1.com"
+			},
+			{
+				"name": "smileysapi2@apiservername2.com",
+				"ssh": "apiservername2.com",
+				"public": "apiservername2.com"
+			},
+
+			{
+				"name": "smileyscaretaker1@caretakerservername1.com",
+				"ssh": "caretakerservername1.com",
+				"public": "caretakerservername1.com"
+			}
+		],
+	"other":
+		[
+			{
+				"name": "sphinx",
+				"ssh": "sphinxserver1.com"
+			}
+		]
+}

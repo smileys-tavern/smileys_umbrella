@@ -1,0 +1,1 @@
+<p><img class="post-image" src="<%= assigns[:url] %>" /></p>

@@ -1,0 +1,11 @@
+<%= if assigns[:post][:parenttype] == "room" do %>
+	<a class="hash" href="/r/<%= assigns[:post][:roomname] %>/comments/<%= assigns[:post][:hash] %>/<%= assigns[:post][:title] %>" data-hash="<%= assigns[:post][:hash] %>">
+		<%= String.slice(assigns[:post][:title], 0, 40) %>
+<%= else %>
+	<a class="hash" href="/r/<%= assigns[:post][:roomname] %>/comments/<%= assigns[:post][:ophash] %>/focus/<%= assigns[:post][:hash] %>" data-hash="<%= assigns[:post][:hash] %>">
+  		/r/<%= assigns[:post][:roomname] %> Reply
+<% end %>
+  <br />
+  <span class="activity activity-post-<%= assigns[:post][:hash] %>"></span>
+  <span class="votes">Votes <span class="count vote-count-<%= assigns[:post][:hash] %>"><%= assigns[:post][:votepublic] %></span></span>
+</a>

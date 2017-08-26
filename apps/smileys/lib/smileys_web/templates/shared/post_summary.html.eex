@@ -1,0 +1,54 @@
+<% roomname = cond do 
+  assigns[:post][:roomname] ->
+   assigns[:post][:roomname]
+  assigns[:room] ->
+    assigns[:room]
+  true ->
+    nil
+end %>
+
+<div class="post">
+  <div class="post-summary vote hash vote-<%= assigns[:post][:hash] %>" data-hash="<%= assigns[:post][:hash] %>">
+      <div class="arrow-up vote-up" data-hash="<%=  assigns[:post][:hash] %>" data-room="<%= assigns[:post][:roomname] %>"></div>
+      <div class="vote-count vote-count-<%=  assigns[:post][:hash] %>"><%=  assigns[:post][:votepublic] %></div>
+      <div class="arrow-down vote-down" data-hash="<%= assigns[:post][:hash] %>" data-room="<%= assigns[:post][:roomname] %>"></div>
+  </div>
+  
+  <div class="preview-square">
+    <%= cond do 
+       assigns[:post][:tags] && String.contains?(assigns[:post][:tags], ["nsfw", "NSFW", "18"]) ->
+        raw "NSFW"
+
+       assigns[:post][:thumb] && String.length( assigns[:post][:thumb]) -> 
+        raw "<img src=\"http://" <> assigns[:post][:thumb] <> "\" />"
+
+       assigns[:post][:link] ->
+        raw "<strong>L</strong>"
+
+      true ->
+        raw "<strong>T</strong>"
+    end %>
+  </div>
+
+  <div class="title">
+      <div class="text">
+        <%= if assigns[:post][:parenttype] == "room" do %>
+          <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:hash] %>/<%= assigns[:post][:title] %>">
+            <%= assigns[:post][:title] %>
+          </a>
+        <%= else %>
+          <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:ophash] %>/focus/<%= assigns[:post][:hash] %>">
+            <%= assigns[:post][:title] %>
+          </a>
+        <% end %>
+        <%= if assigns[:post][:name] do %> by <%= assigns[:post][:name] %><% end %></div>
+      <div class="actions">
+        <%= if roomname && assigns[:post][:parenttype] != "room" do %>
+          <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:ophash] %>/focus/<%= assigns[:post][:hash] %>">Focus</a> 
+        <% end %>
+      	<%= if assigns[:post][:roomname] do %><a href="/r/<%= assigns[:post][:roomname] %>">/r/<%= assigns[:post][:roomname] %></a><% end %>
+      	<%= if assigns[:post][:link] do %><a href="<%= assigns[:post][:link] %>">Direct Link</a><% end %>
+        <%= if assigns[:post][:tags] do %><strong><%= assigns[:post][:tags] %></strong><% end %>
+      </div>
+  </div>
+</div>

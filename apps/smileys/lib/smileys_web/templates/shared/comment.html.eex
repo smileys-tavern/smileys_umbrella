@@ -1,0 +1,45 @@
+<div class="comment comment-depth-<%= assigns[:comment].depth %>" id="comment-<%= assigns[:comment].hash %>" data-commentdepth="<%= assigns[:comment].depth %>">
+    <div class="vote hash vote-<%= assigns[:comment].hash %>" data-hash="<%= assigns[:comment].hash %>">
+    	<div class="arrow-up vote-up" data-hash="<%= assigns[:comment].hash %>"></div>
+    	<div class="vote-count vote-count-<%= assigns[:comment].hash %>"><%= assigns[:comment].votepublic %></div>
+    	<div class="arrow-down vote-down" data-hash="<%= assigns[:comment].hash %>"></div>
+    </div>
+
+    <div class="comment-text">
+    	<div class="text">
+            <strong>
+                <%= if assigns[:comment].name do %>
+                    <a href="/u/<%= assigns[:comment].name %>"><%= assigns[:comment].name %></a>
+                <%= else %> 
+                    amysteriousstranger
+                <% end %>:
+            </strong> 
+            <span class="textbody"><%= assigns[:comment].body %></span>
+        </div>
+    	<div class="actions">
+            <%= if assigns[:comment].depth < 10 do %>
+                <a href="javascript:void(0)" class="reply" data-hash="<%= assigns[:comment].hash %>">Reply</a>
+                
+                <%= if assigns[:room] && assigns[:op] do %>
+                     | <a href="/r/<%= assigns[:room].name %>/comments/<%= assigns[:op].hash %>/<%= assigns[:op].title %>/focus/<%= assigns[:comment].hash %>">Focus</a>
+                <% end %>
+
+                <%= if assigns[:user] && assigns[:comment].posterid == assigns[:user].id do %>
+                     | <a href="javascript:void(0)" class="edit" data-hash="<%= assigns[:comment].hash %>">Edit</a>
+                <% end %>
+
+                <%= if assigns[:comment].depth == 1 do %>
+                    | <a href="javascript:void(0)" class="collapse-thread" data-hash="<%= assigns[:comment].hash %>">Collapse</a>
+                <% end %>
+
+                <%= if assigns[:ismod] do %>
+                     | <a href="javascript:void(0)" class="moddelete mod-action" data-hash="<%= assigns[:comment].hash %>">Delete</a>
+                <% end %>
+
+                <span class="hidden interactive">| <a href="javascript:void(0)" class="load-thread" data-hash="<%= assigns[:comment].hash %>">New Replies</a></span>
+            <% end %>
+        </div>
+    </div>
+
+    <div id="comment-reply-<%= assigns[:comment].hash %>" data-commentdepth="<%= assigns[:comment].depth %>"></div>
+</div>

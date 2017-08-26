@@ -1,0 +1,60 @@
+{
+	"smileys1@servername1.com": 
+	{
+		"version": "0.0.2",
+		"name": "smileys",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+	"smileys2@servername2.com": 
+	{
+		"version": "0.0.2",
+		"name": "smileys",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+	"smileys3@servername3.com": 
+	{
+		"version": "0.0.2",
+		"name": "smileys",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+	"smileys4@servername4.com": 
+	{
+		"version": "0.0.2",
+		"name": "smileys",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+
+	"smileysapi1@apiservername1.com":
+	{
+		"version": "0.0.1",
+		"name": "smileysapi",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+	"smileysapi2@apiservername2.com":
+	{
+		"version": "0.0.1",
+		"name": "smileysapi",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+
+	"smileyscaretaker1@caretakerserver1.com":
+	{
+		"version": "0.0.1",
+		"name": "smileyscaretaker",
+		"dir": "/home/ubuntu/",
+		"cookie": "somesharedcookie"
+	},
+
+	"sphinx":
+	{
+		"name": "sphinxsearch",
+		"files": "sphinx.conf",
+		"dir": "/home/ubuntu/"
+	}
+}

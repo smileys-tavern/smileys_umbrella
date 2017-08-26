@@ -1,0 +1,765 @@
+var _user$project$SmileysSearch$renderSearchResult = function (result) {
+	var children = {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('search-result-title'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						A3(_elm_lang$core$String$slice, 0, 80, result.title),
+						' .. by ')),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('search-result-username'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(result.name),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('search-result-room'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'/r/',
+							A3(_elm_lang$core$String$slice, 0, 80, result.roomname))),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('search-result-votes'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Votes ',
+								_elm_lang$core$Basics$toString(result.votepublic))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('search-result'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$href(result.posturl),
+				_1: {ctor: '[]'}
+			}
+		},
+		children);
+};
+var _user$project$SmileysSearch$renderSearchResults = function (results) {
+	return (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$List$length(results),
+		0) > 0) ? A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('search-results'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _user$project$SmileysSearch$renderSearchResult, results)) : A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('hidden search-results'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _user$project$SmileysSearch$renderSearchResult, results));
+};
+var _user$project$SmileysSearch$term = _elm_lang$core$Json_Encode$object(
+	{
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: 'term',
+			_1: _elm_lang$core$Json_Encode$string('searchfor')
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'offset',
+				_1: _elm_lang$core$Json_Encode$int(0)
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$SmileysSearch$initPhxSocket = function (websocketUrl) {
+	return _fbonetti$elm_phoenix_socket$Phoenix_Socket$init(websocketUrl);
+};
+var _user$project$SmileysSearch$pageSize = 25;
+var _user$project$SmileysSearch$Flags = function (a) {
+	return {websocketUrl: a};
+};
+var _user$project$SmileysSearch$SearchResults = F2(
+	function (a, b) {
+		return {results: a, amt: b};
+	});
+var _user$project$SmileysSearch$initSearchResults = A2(
+	_user$project$SmileysSearch$SearchResults,
+	{ctor: '[]'},
+	0);
+var _user$project$SmileysSearch$PostSummary = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {title: a, hash: b, votepublic: c, name: d, thumb: e, parenttype: f, link: g, imageurl: h, tags: i, roomname: j, posturl: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$SmileysSearch$postSummaryDecoder = A2(
+	_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+	A2(
+		_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+		A2(
+			_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+			A2(
+				_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+				A2(
+					_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+					A2(
+						_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+						A2(
+							_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+							A2(
+								_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+								A2(
+									_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+									A2(
+										_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+										A2(
+											_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+											_elm_lang$core$Json_Decode$succeed(_user$project$SmileysSearch$PostSummary),
+											A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string)),
+										A2(_elm_lang$core$Json_Decode$field, 'hash', _elm_lang$core$Json_Decode$string)),
+									A2(_elm_lang$core$Json_Decode$field, 'votepublic', _elm_lang$core$Json_Decode$int)),
+								A2(
+									_elm_lang$core$Json_Decode$field,
+									'name',
+									_elm_lang$core$Json_Decode$oneOf(
+										{
+											ctor: '::',
+											_0: _elm_lang$core$Json_Decode$string,
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Json_Decode$null(''),
+												_1: {ctor: '[]'}
+											}
+										}))),
+							A2(
+								_elm_lang$core$Json_Decode$field,
+								'thumb',
+								_elm_lang$core$Json_Decode$oneOf(
+									{
+										ctor: '::',
+										_0: _elm_lang$core$Json_Decode$string,
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Json_Decode$null(''),
+											_1: {ctor: '[]'}
+										}
+									}))),
+						A2(
+							_elm_lang$core$Json_Decode$field,
+							'parenttype',
+							_elm_lang$core$Json_Decode$oneOf(
+								{
+									ctor: '::',
+									_0: _elm_lang$core$Json_Decode$string,
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Json_Decode$null(''),
+										_1: {ctor: '[]'}
+									}
+								}))),
+					A2(
+						_elm_lang$core$Json_Decode$field,
+						'link',
+						_elm_lang$core$Json_Decode$oneOf(
+							{
+								ctor: '::',
+								_0: _elm_lang$core$Json_Decode$string,
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Json_Decode$null(''),
+									_1: {ctor: '[]'}
+								}
+							}))),
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'imageurl',
+					_elm_lang$core$Json_Decode$oneOf(
+						{
+							ctor: '::',
+							_0: _elm_lang$core$Json_Decode$string,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Json_Decode$null(''),
+								_1: {ctor: '[]'}
+							}
+						}))),
+			A2(
+				_elm_lang$core$Json_Decode$field,
+				'tags',
+				_elm_lang$core$Json_Decode$oneOf(
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Json_Decode$string,
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Json_Decode$null(''),
+							_1: {ctor: '[]'}
+						}
+					}))),
+		A2(_elm_lang$core$Json_Decode$field, 'roomname', _elm_lang$core$Json_Decode$string)),
+	A2(_elm_lang$core$Json_Decode$field, 'posturl', _elm_lang$core$Json_Decode$string));
+var _user$project$SmileysSearch$searchDecoder = A2(
+	_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+	A2(
+		_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+		_elm_lang$core$Json_Decode$succeed(_user$project$SmileysSearch$SearchResults),
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'results',
+			_elm_lang$core$Json_Decode$list(_user$project$SmileysSearch$postSummaryDecoder))),
+	A2(_elm_lang$core$Json_Decode$field, 'amt', _elm_lang$core$Json_Decode$int));
+var _user$project$SmileysSearch$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {search: a, results: b, amount_results: c, user_input: d, status: e, current_channel: f, page: g, phxSocket: h};
+	});
+var _user$project$SmileysSearch$init = function (flags) {
+	var _p0 = flags;
+	var websocketUrl = _p0.websocketUrl;
+	var _p1 = {
+		ctor: '_Tuple2',
+		_0: _user$project$SmileysSearch$initPhxSocket(websocketUrl),
+		_1: _user$project$SmileysSearch$initSearchResults
+	};
+	var phxSocket = _p1._0;
+	var searchResults = _p1._1;
+	return {
+		ctor: '_Tuple2',
+		_0: A8(
+			_user$project$SmileysSearch$Model,
+			'',
+			searchResults,
+			0,
+			_elm_lang$core$Native_Utils.chr(' '),
+			'',
+			'',
+			0,
+			phxSocket),
+		_1: _elm_lang$core$Platform_Cmd$none
+	};
+};
+var _user$project$SmileysSearch$NoOp = {ctor: 'NoOp'};
+var _user$project$SmileysSearch$CloseSearch = {ctor: 'CloseSearch'};
+var _user$project$SmileysSearch$ShowLeftMessage = function (a) {
+	return {ctor: 'ShowLeftMessage', _0: a};
+};
+var _user$project$SmileysSearch$ShowJoinedMessage = function (a) {
+	return {ctor: 'ShowJoinedMessage', _0: a};
+};
+var _user$project$SmileysSearch$PageDown = {ctor: 'PageDown'};
+var _user$project$SmileysSearch$PageUp = {ctor: 'PageUp'};
+var _user$project$SmileysSearch$renderSearchSummary = F4(
+	function (results, amount_results, page, status) {
+		return (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$List$length(results),
+			0) > 0) ? A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('search-results-summary'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(status),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('search-summary-left'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$SmileysSearch$PageDown),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('<'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								' ',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString(page + 1),
+									' '))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('search-summary-right'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$SmileysSearch$PageUp),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('>'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('search-summary-count'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'Results: ',
+												_elm_lang$core$Basics$toString(amount_results))),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('search-summary-close'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$SmileysSearch$CloseSearch),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('[X]'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}) : A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('hidden search-results-summary'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'});
+	});
+var _user$project$SmileysSearch$LeaveChannel = {ctor: 'LeaveChannel'};
+var _user$project$SmileysSearch$JoinChannel = {ctor: 'JoinChannel'};
+var _user$project$SmileysSearch$ReceiveSearchResults = function (a) {
+	return {ctor: 'ReceiveSearchResults', _0: a};
+};
+var _user$project$SmileysSearch$RequestSearch = {ctor: 'RequestSearch'};
+var _user$project$SmileysSearch$PhoenixMsg = function (a) {
+	return {ctor: 'PhoenixMsg', _0: a};
+};
+var _user$project$SmileysSearch$requestSearch = function (model) {
+	var payload = _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'term',
+				_1: _elm_lang$core$Json_Encode$string(model.search)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'offset',
+					_1: _elm_lang$core$Json_Encode$int(model.page * _user$project$SmileysSearch$pageSize)
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+	var push_ = A2(
+		_fbonetti$elm_phoenix_socket$Phoenix_Push$withPayload,
+		payload,
+		A2(_fbonetti$elm_phoenix_socket$Phoenix_Push$init, 'search_for', model.current_channel));
+	var _p2 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$push, push_, model.phxSocket);
+	var phxSocket = _p2._0;
+	var phxCmd = _p2._1;
+	return {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Native_Utils.update(
+			model,
+			{phxSocket: phxSocket}),
+		_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+	};
+};
+var _user$project$SmileysSearch$update = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'PhoenixMsg':
+				var _p4 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$update, _p3._0, model.phxSocket);
+				var phxSocket = _p4._0;
+				var phxCmd = _p4._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							phxSocket: A4(
+								_fbonetti$elm_phoenix_socket$Phoenix_Socket$on,
+								'search_result',
+								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+								_user$project$SmileysSearch$ReceiveSearchResults,
+								phxSocket)
+						}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+				};
+			case 'Presses':
+				var _p6 = _p3._0;
+				if (_elm_lang$core$Native_Utils.eq(
+					_p6,
+					_elm_lang$core$Native_Utils.chr('\r'))) {
+					var channel = A2(
+						_fbonetti$elm_phoenix_socket$Phoenix_Channel$onClose,
+						_elm_lang$core$Basics$always(
+							_user$project$SmileysSearch$ShowLeftMessage(
+								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))),
+						A2(
+							_fbonetti$elm_phoenix_socket$Phoenix_Channel$onJoin,
+							_elm_lang$core$Basics$always(_user$project$SmileysSearch$RequestSearch),
+							_fbonetti$elm_phoenix_socket$Phoenix_Channel$init(
+								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))));
+					var _p5 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$join, channel, model.phxSocket);
+					var phxSocket = _p5._0;
+					var phxCmd = _p5._1;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								phxSocket: phxSocket,
+								current_channel: A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+								page: 0
+							}),
+						_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+					};
+				} else {
+					if (_elm_lang$core$Native_Utils.eq(
+						_p6,
+						_elm_lang$core$Native_Utils.chr('→'))) {
+						var newModel = (_elm_lang$core$Native_Utils.cmp(model.page, (model.results.amt / _user$project$SmileysSearch$pageSize) | 0) > 0) ? model : _elm_lang$core$Native_Utils.update(
+							model,
+							{page: model.page + 1});
+						return _user$project$SmileysSearch$requestSearch(newModel);
+					} else {
+						if (_elm_lang$core$Native_Utils.eq(
+							_p6,
+							_elm_lang$core$Native_Utils.chr('←'))) {
+							var newModel = (_elm_lang$core$Native_Utils.cmp(model.page, 0) < 1) ? model : _elm_lang$core$Native_Utils.update(
+								model,
+								{page: model.page - 1});
+							return _user$project$SmileysSearch$requestSearch(newModel);
+						} else {
+							return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+						}
+					}
+				}
+			case 'UpdateSearchTerm':
+				var _p8 = _p3._0;
+				if (!_elm_lang$core$Native_Utils.eq(model.current_channel, '')) {
+					var _p7 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$leave, model.current_channel, model.phxSocket);
+					var phxSocket = _p7._0;
+					var phxCmd = _p7._1;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{search: _p8, phxSocket: phxSocket}),
+						_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{search: _p8}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'JoinChannel':
+				var channel = A2(
+					_fbonetti$elm_phoenix_socket$Phoenix_Channel$onClose,
+					_elm_lang$core$Basics$always(
+						_user$project$SmileysSearch$ShowLeftMessage(
+							A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))),
+					A2(
+						_fbonetti$elm_phoenix_socket$Phoenix_Channel$onJoin,
+						_elm_lang$core$Basics$always(_user$project$SmileysSearch$RequestSearch),
+						_fbonetti$elm_phoenix_socket$Phoenix_Channel$init(
+							A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))));
+				var _p9 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$join, channel, model.phxSocket);
+				var phxSocket = _p9._0;
+				var phxCmd = _p9._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							phxSocket: phxSocket,
+							current_channel: A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+							page: 0
+						}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+				};
+			case 'LeaveChannel':
+				var _p10 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$leave, model.current_channel, model.phxSocket);
+				var phxSocket = _p10._0;
+				var phxCmd = _p10._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{phxSocket: phxSocket, current_channel: ''}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
+				};
+			case 'RequestSearch':
+				return _user$project$SmileysSearch$requestSearch(model);
+			case 'ReceiveSearchResults':
+				var _p11 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$SmileysSearch$searchDecoder, _p3._0);
+				if (_p11.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{results: _p11._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'PageUp':
+				var newModel = (_elm_lang$core$Native_Utils.cmp(model.page, ((model.results.amt / _user$project$SmileysSearch$pageSize) | 0) - 1) > 0) ? model : _elm_lang$core$Native_Utils.update(
+					model,
+					{page: model.page + 1});
+				return _user$project$SmileysSearch$requestSearch(newModel);
+			case 'PageDown':
+				var newModel = (_elm_lang$core$Native_Utils.cmp(model.page, 0) < 1) ? model : _elm_lang$core$Native_Utils.update(
+					model,
+					{page: model.page - 1});
+				return _user$project$SmileysSearch$requestSearch(newModel);
+			case 'ShowJoinedMessage':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'ShowLeftMessage':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'CloseSearch':
+				var _p12 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$leave, model.current_channel, model.phxSocket);
+				var phxSocket = _p12._0;
+				var phxCmd = _p12._1;
+				var searchResults = _user$project$SmileysSearch$initSearchResults;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{results: searchResults, phxSocket: phxSocket, current_channel: ''}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$SmileysSearch$Presses = function (a) {
+	return {ctor: 'Presses', _0: a};
+};
+var _user$project$SmileysSearch$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$listen, model.phxSocket, _user$project$SmileysSearch$PhoenixMsg),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(
+					function (code) {
+						return _user$project$SmileysSearch$Presses(
+							_elm_lang$core$Char$fromCode(code));
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$SmileysSearch$UpdateSearchTerm = function (a) {
+	return {ctor: 'UpdateSearchTerm', _0: a};
+};
+var _user$project$SmileysSearch$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('search-container'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('Search'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$autofocus(true),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$SmileysSearch$UpdateSearchTerm),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('search-activate'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$SmileysSearch$JoinChannel),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('[Enter]'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A4(_user$project$SmileysSearch$renderSearchSummary, model.results.results, model.results.amt, model.page, model.status),
+					_1: {
+						ctor: '::',
+						_0: _user$project$SmileysSearch$renderSearchResults(model.results.results),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$SmileysSearch$main = _elm_lang$html$Html$programWithFlags(
+	{init: _user$project$SmileysSearch$init, view: _user$project$SmileysSearch$view, update: _user$project$SmileysSearch$update, subscriptions: _user$project$SmileysSearch$subscriptions})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (websocketUrl) {
+			return _elm_lang$core$Json_Decode$succeed(
+				{websocketUrl: websocketUrl});
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'websocketUrl', _elm_lang$core$Json_Decode$string)));

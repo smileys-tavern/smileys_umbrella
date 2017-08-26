@@ -1,0 +1,5 @@
+<div class="manage-menu">
+	<a href="/room/<%= assigns[:room].name %>/manage">Manage People</a> | 
+	<a href="/room/<%= assigns[:room].name %>/manage/mods">Manage Mods</a> | 
+	<a href="/r/<%= assigns[:room].name %>">Back to Room</a>
+</div>

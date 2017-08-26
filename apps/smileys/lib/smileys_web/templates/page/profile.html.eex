@@ -1,0 +1,11 @@
+<p>Here is what <%= assigns[:profileuser].name %> has been saying</p>
+
+<%= if assigns[:posts] do %>
+	<%= for post <- assigns[:posts] do %>
+	  <%= render SmileysWeb.SharedView, "post_summary.html", [{:post, post}] %>
+	<% end %>
+<%= else %>
+	<div>Nothing here yet!</div>
+<% end %>
+
+<%= render SmileysWeb.SharedView, "sidebar.html", assigns %>

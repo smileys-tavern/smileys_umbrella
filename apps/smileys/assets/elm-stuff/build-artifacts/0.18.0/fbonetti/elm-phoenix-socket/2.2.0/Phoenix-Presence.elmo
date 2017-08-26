@@ -1,0 +1,191 @@
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$merge = F6(
+	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
+		var stepState = F3(
+			function (rKey, rValue, _p0) {
+				stepState:
+				while (true) {
+					var _p1 = _p0;
+					var _p7 = _p1._1;
+					var _p6 = _p1._0;
+					var _p2 = _p6;
+					if (_p2.ctor === '[]') {
+						return {
+							ctor: '_Tuple2',
+							_0: _p6,
+							_1: A3(rightStep, rKey, rValue, _p7)
+						};
+					} else {
+						var _p5 = _p2._1;
+						var _p4 = _p2._0._1;
+						var _p3 = _p2._0._0;
+						if (_elm_lang$core$Native_Utils.cmp(_p3, rKey) < 0) {
+							var _v2 = rKey,
+								_v3 = rValue,
+								_v4 = {
+								ctor: '_Tuple2',
+								_0: _p5,
+								_1: A3(leftStep, _p3, _p4, _p7)
+							};
+							rKey = _v2;
+							rValue = _v3;
+							_p0 = _v4;
+							continue stepState;
+						} else {
+							if (_elm_lang$core$Native_Utils.cmp(_p3, rKey) > 0) {
+								return {
+									ctor: '_Tuple2',
+									_0: _p6,
+									_1: A3(rightStep, rKey, rValue, _p7)
+								};
+							} else {
+								return {
+									ctor: '_Tuple2',
+									_0: _p5,
+									_1: A4(bothStep, _p3, _p4, rValue, _p7)
+								};
+							}
+						}
+					}
+				}
+			});
+		var _p8 = A3(
+			_elm_lang$core$Dict$foldl,
+			stepState,
+			{
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Dict$toList(leftDict),
+				_1: initialResult
+			},
+			rightDict);
+		var leftovers = _p8._0;
+		var intermediateResult = _p8._1;
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (_p9, result) {
+					var _p10 = _p9;
+					return A3(leftStep, _p10._0, _p10._1, result);
+				}),
+			intermediateResult,
+			leftovers);
+	});
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$syncState = F2(
+	function (newState, state) {
+		return newState;
+	});
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$list = function (mapper) {
+	return function (_p11) {
+		return _elm_lang$core$Dict$values(
+			A2(_elm_lang$core$Dict$map, mapper, _p11));
+	};
+};
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$listDefault = _elm_lang$core$Dict$values;
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaWrapper = function (a) {
+	return {metas: a};
+};
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$syncDiff = F2(
+	function (diff, state) {
+		var mergeJoins = F2(
+			function (left, right) {
+				var inBoth = F4(
+					function (key, leftValue, rightValue, acc) {
+						return A3(
+							_elm_lang$core$Dict$insert,
+							key,
+							_fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaWrapper(
+								A2(_elm_lang$core$Basics_ops['++'], leftValue.metas, rightValue.metas)),
+							acc);
+					});
+				return A6(_fbonetti$elm_phoenix_socket$Phoenix_Presence$merge, _elm_lang$core$Dict$insert, inBoth, _elm_lang$core$Dict$insert, left, right, _elm_lang$core$Dict$empty);
+			});
+		var mergeLeaves = F3(
+			function (leaves, key, currentMetaWrapper) {
+				var _p12 = A2(_elm_lang$core$Dict$get, key, leaves);
+				if (_p12.ctor === 'Nothing') {
+					return currentMetaWrapper;
+				} else {
+					var leftRefs = A2(
+						_elm_lang$core$List$map,
+						function (_) {
+							return _.phx_ref;
+						},
+						_p12._0.metas);
+					return _fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaWrapper(
+						A2(
+							_elm_lang$core$List$filter,
+							function (metaValue) {
+								return !A2(
+									_elm_lang$core$List$any,
+									function (phx_ref) {
+										return _elm_lang$core$Native_Utils.eq(metaValue.phx_ref, phx_ref);
+									},
+									leftRefs);
+							},
+							currentMetaWrapper.metas));
+				}
+			});
+		return A2(
+			_elm_lang$core$Dict$filter,
+			F2(
+				function (_p13, metaWrapper) {
+					return !_elm_lang$core$Native_Utils.eq(
+						metaWrapper.metas,
+						{ctor: '[]'});
+				}),
+			A2(
+				_elm_lang$core$Dict$map,
+				mergeLeaves(diff.leaves),
+				A2(mergeJoins, diff.joins, state)));
+	});
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaValue = F2(
+	function (a, b) {
+		return {phx_ref: a, payload: b};
+	});
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateMetaDecoder = function (payloadDecoder) {
+	var createFinalRecord = F2(
+		function (phxRef, payload) {
+			return _elm_lang$core$Json_Decode$succeed(
+				A2(_fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaValue, phxRef, payload));
+		});
+	var decodeWithPhxRef = function (phxRef) {
+		return A2(
+			_elm_lang$core$Json_Decode$andThen,
+			createFinalRecord(phxRef),
+			payloadDecoder);
+	};
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		decodeWithPhxRef,
+		A2(_elm_lang$core$Json_Decode$field, 'phx_ref', _elm_lang$core$Json_Decode$string));
+};
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateMetaWrapperDecoder = function (payloadDecoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$map,
+		_fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceStateMetaWrapper,
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'metas',
+			_elm_lang$core$Json_Decode$list(
+				_fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateMetaDecoder(payloadDecoder))));
+};
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateDecoder = function (payloadDecoder) {
+	return _elm_lang$core$Json_Decode$dict(
+		_fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateMetaWrapperDecoder(payloadDecoder));
+};
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceDiff = F2(
+	function (a, b) {
+		return {leaves: a, joins: b};
+	});
+var _fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceDiffDecoder = function (payloadDecoder) {
+	return A3(
+		_elm_lang$core$Json_Decode$map2,
+		_fbonetti$elm_phoenix_socket$Phoenix_Presence$PresenceDiff,
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'leaves',
+			_fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateDecoder(payloadDecoder)),
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'joins',
+			_fbonetti$elm_phoenix_socket$Phoenix_Presence$presenceStateDecoder(payloadDecoder)));
+};

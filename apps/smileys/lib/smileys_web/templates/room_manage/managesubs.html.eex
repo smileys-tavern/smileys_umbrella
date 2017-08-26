@@ -1,0 +1,22 @@
+<%= render SmileysWeb.SharedView, "manageroom_menu.html", assigns %>
+
+<div class="mod-section">
+	Subscribers:
+
+	Still deciding to do
+</div>
+
+<div class="mod-section">
+	Allowed people:
+	<div>
+		<%= for user <- assigns[:userroomallow] do %>
+			<div class="col-lg-4">
+				<%= user.username %> <a href="/room/<%= assigns[:room].name %>/removeuser/<%= user.username %>">X</a>
+			</div>
+		<%= end %>
+		<div class="end-float">
+			<%= paginate @conn, @kerosene %>
+		</div>
+	</div>
+	<div class="end-float"></div>
+</div>

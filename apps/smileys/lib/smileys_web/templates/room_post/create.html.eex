@@ -1,0 +1,49 @@
+<div class="form-halfpage">
+<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Something went wrong. Errors are listed below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :title, class: "control-label" %>
+    <%= text_input f, :title, class: "form-control" %>
+    <%= error_tag f, :title %>
+    <div class="form-description">Post title, allowed: letters, numbers and -.,?!:)(#][+$  allowed</div>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :body, class: "control-label" %>
+    <%= textarea f, :body, class: "form-control" %>
+    <%= error_tag f, :body %>
+    <div class="form-description">(OPTIONAL) Speak your words. Please make it contextual to the room you are in. Basic characters allowed including .,?!:;-"' ][ )(#</div>
+  </div>
+
+  <div class="form-group">
+    <label for="meta_link" class="control-label">A Link</label>
+    <input type="text" name="meta[link]" class="form-control" id="meta_link" />
+    <div class="form-description">(OPTIONAL) Link to somewhere, and please make it appropriate to the room you are in.</div>
+  </div>
+
+  <div class="form-group">
+    <label>Image</label>
+    <input class="form-control" id="meta_image" name="meta[image]" type="file">
+    <div class="form-description">(OPTIONAL) Add an image for your post, but please one that is suitable for the room. Must be logged in. Max size is currently about 10MB</div>
+  </div>
+
+  <div class="form-group">
+    <label>Tags</label>
+    <input class="form-control" id="meta_tags" name="meta[tags]" type="text">
+    <div class="form-description">(OPTIONAL) Add a comma (,) separated list of tags. These will help with search. Special tags: nsfw, 18, bmap (bing map), youtube, vidme, image. Numbers, letters, spaces and commas will work.</div>
+  </div>
+
+  <div class="form-group">
+    <%= raw Recaptcha.Template.display %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+</div>

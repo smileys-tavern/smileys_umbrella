@@ -1,0 +1,5 @@
+<p>
+  <div class="videoWrapper">
+	<iframe src="<%= assigns[:url] %>" width="560" height="315" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen scrolling="no"></iframe>
+  </div>
+</p>

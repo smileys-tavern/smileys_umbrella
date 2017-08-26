@@ -1,0 +1,8 @@
+<p>
+  <div>
+    <iframe width="500" height="400" frameborder="0" src="https://www.bing.com/maps/embed/viewer.aspx?v=3&amp;cp=<%= assigns[:coord] %>&amp;lvl=15&amp;w=500&amp;h=400&amp;sty=r&amp;typ=d&amp;pp=&amp;ps=&amp;dir=0&amp;mkt=en-us&amp;src=SHELL&amp;form=BMEMJS"></iframe>
+    <div style="margin: 12px 0 0 0;">
+    	<a target="_blank" href="https://www.bing.com/maps/?cp=<%= assigns[:coord] %>&amp;sty=r&amp;lvl=15&amp;sp=&amp;mm_embed=map">View Larger Map</a>&nbsp; |&nbsp; <a target="_blank" href="https://www.bing.com/maps/?cp=<%= assigns[:coord] %>&amp;sty=r&amp;lvl=15&amp;rtp=~pos.<%= assigns[:position] %>____&amp;mm_embed=dir">Get Directions</a>&nbsp; |&nbsp; <a target="_blank" href="https://www.bing.com/maps/?cp=rxcvkd4tg39s&amp;sty=b&amp;lvl=18&amp;sp=&amp;mm_embed=be">View Bird's Eye</a>
+    </div>
+  </div>
+</p>

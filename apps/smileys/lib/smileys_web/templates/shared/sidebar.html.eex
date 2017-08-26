@@ -1,0 +1,64 @@
+<div class="sidebar">
+	<div class="site-actions">
+		<%= if assigns[:canpost] do %>
+			<a href="/r/<%= assigns[:room].name %>/newpost">Say something here</a>
+		<% end %>
+		<%= if assigns[:cansubscribe] && assigns[:room] do %>
+			<a href="javascript:void(0)" class="room-subscribe" data-room="<%= assigns[:room].name %>">Subscribe here</a>
+		<% end %>
+		<a href="/room/new">Create a Room</a>
+		<%= if assigns[:ismod] do %>
+			<a href="/room/<%= assigns[:room].name %>/edit">Edit Room</a>
+			<a href="/room/<%= assigns[:room].name %>/manage">Manage Room</a>
+		<% end %>
+	</div>
+
+	<%= if assigns[:roomtype] do %>
+		<div class="sidebar-links sidebar-room">
+			<h5><%= assigns[:room].name %> Room</h5>
+		
+			<div>
+				<strong>Online: <span class="online-users"></span></strong>
+			</div>
+		</div>
+	<% end %>
+
+	<%= if assigns[:user] do %>
+		<div class="userlatestposts sidebar-links site-actions">
+			<h5>Your Latest</h5>
+			<%= if assigns[:userlatestposts] do %>
+				<%= for post <- assigns[:userlatestposts] do %>
+					<%= render SmileysWeb.SharedView, "userpost_status.html", %{:post => post} %>
+				<% end %>
+			<% end %>
+		</div>
+
+
+		<div class="sidebar-links subscriptions">
+			<h5>Your Subscriptions</h5>
+			<%= if assigns[:subscriptions] do %>
+				<%= for subscription <- assigns[:subscriptions] do %>
+					<div class="room-link room-<%= subscription.roomname %>">
+						<a href="/r/<%= subscription.roomname %>">/r/<%= subscription.roomname %></a> 
+						<span class="update"></span> 
+						<span class="controls"><a href="javascript:void(0)" class="room-unsubscribe" data-room="<%= subscription.roomname %>">unsub</a></span>
+					</div>
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
+
+	<div class="sidebar-links">
+		<h5>Related / New / Interesting Rooms</h5>
+		<div class="room-link"><a href="/h/all">/h/all</a></div>
+		<div class="room-link"><a href="/h/walloffame">/h/walloffame</a></div>
+		<%= if assigns[:new_rooms] do %>
+			<%= for post <- assigns[:new_rooms] do %>
+				<div class="room-link"><a href="/r/<%= post.name %>">/r/<%= post.name %></a></div>
+			<% end %>
+		<% end %>
+	</div>
+
+	<!--<div class="sidebar-links moderating">
+	</div>-->
+</div>

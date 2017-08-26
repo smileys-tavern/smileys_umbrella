@@ -1,0 +1,92 @@
+<div id="original-post" class="original-post" data-hash="<%= assigns[:post].hash %>" data-room="<%= assigns[:room].name %>" data-mode="<%= assigns[:mode] %>">
+	<div class="vote hash vote-<%= assigns[:post].hash %>" data-hash="<%= assigns[:post].hash %>">
+            <div class="arrow-up vote-up" data-hash="<%= assigns[:post].hash %>"></div>
+            <div class="vote-count vote-count-<%= assigns[:post].hash %>"><%= assigns[:post].votepublic %></div>
+            <div class="arrow-down vote-down" data-hash="<%= assigns[:post].hash %>"></div>
+    </div>
+    <div class="op-title">
+		<a href="/r/<%= assigns[:room].name %>">/r/<%= assigns[:room].name %></a>
+        <%= assigns[:post].title %> - <strong><%= assigns[:opname] %></strong> 
+        <%= if assigns[:parent] do %>
+            <a href="/r/<%= assigns[:room].name %>/comments/<%= assigns[:post].hash %>/focus/<%= assigns[:parent].hash %>">Parent</a> | 
+        <% end %>
+        <a href="/r/<%= assigns[:room].name %>/comments/<%= assigns[:post].hash %>/<%= assigns[:post].title %>/view/new">View New</a> | 
+        <a href="/r/<%= assigns[:room].name %>/comments/<%= assigns[:post].hash %>/<%= assigns[:post].title %>">View Hot</a> 
+	</div>
+
+    <div class="op-content">
+        <div class="op-body">
+            <%= if assigns[:opmeta] do %>
+                <%= if assigns[:opmeta].image do %>
+                    <div><img src="<%= assigns[:opmeta].image %>" class="post-image" /></div><br />
+                <% end %>
+
+                <%= if assigns[:opmeta].link do %>
+                    <p><a href="<%= assigns[:opmeta].link %>"><%= assigns[:opmeta].link %></a></p>
+                <% end %>
+
+                <%= if assigns[:opmeta].tags do %>
+                    <p>Tags Used: <strong><%= assigns[:opmeta].tags %></strong></p>
+                <% end %>
+            <% end %>
+
+            <p>
+                <%= if assigns[:post].body do %>
+                    <%= raw assigns[:post].body |> String.replace("\r", "<br/>") %>
+                <%= end %>
+            </p>
+        </div>
+    </div>
+    <div class="op-content">
+        <div class="op-actions">
+            <a href="javascript:void(0)" class="reply" data-hash="<%= assigns[:post].hash %>">Comment</a>
+
+            <%= if assigns[:ismod] do %>
+                <a href="javascript:void(0)" class="moddelete mod-action" data-hash="<%= assigns[:post].hash %>">Delete</a>
+            <% end %>
+
+            <div class="hidden interactive">| <a href="javascript:void(0)" class="load-thread" data-hash="<%= assigns[:post].hash %>">New</a></div>
+        </div>
+    </div>
+
+    <div class="op-reply" id="comment-reply-<%= assigns[:post].hash %>" data-commentdepth="0"></div>
+</div>
+
+<div class="comments">
+    <%= if assigns[:comments] do %>
+    	<%= for comment <- assigns[:comments] do %>
+          <%= render SmileysWeb.SharedView, "comment.html", %{:ismod => assigns[:ismod], :user => assigns[:user], :comment => comment, :op => assigns[:op], :room => assigns[:room]} %>
+        <% end %>
+    <% end %>
+</div>
+
+<div class="end-spacer"></div>
+
+<div id="comment-reply-form" class="hidden">
+    <div class="comment-reply-form">
+        <textarea rows="5"></textarea>
+        <div class="comment-reply-form-actions">
+            <a href="javascript:void(0)" class="comment-reply-send">Send Reply</a> | <a href="javascript:void(0)" class="comment-reply-cancel">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div id="comment-delete-form" class="hidden">
+    <div class="comment-reply-form">
+        <textarea rows="5">Reason: </textarea>
+        <div class="comment-reply-form-actions">
+            <a href="javascript:void(0)" class="comment-delete-send">Submit</a> | <a href="javascript:void(0)" class="comment-reply-cancel">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div id="comment-edit-form" class="hidden">
+    <div class="comment-reply-form">
+        <textarea rows="5"></textarea>
+        <div class="comment-reply-form-actions">
+            <a href="javascript:void(0)" class="comment-edit-send">Finish</a> | <a href="javascript:void(0)" class="comment-reply-cancel">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<%= render SmileysWeb.SharedView, "sidebar.html", assigns %>

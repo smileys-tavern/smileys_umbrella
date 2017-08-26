@@ -1,0 +1,49 @@
+<%= render SmileysWeb.SharedView, "manageroom_menu.html", assigns %>
+
+<%= if assigns[:userroomallow] do %>
+	<div class="mod-section">
+		Allow person:
+		<div class="form-halfpage">
+		<%= form_for @changeset, @action, fn f -> %>
+		  <%= if @changeset.action do %>
+		    <div class="alert alert-danger">
+		      <p>Something went wrong. Errors are listed below.</p>
+		    </div>
+		  <% end %>
+
+		  <div class="form-group">
+		    <%= label f, :username, class: "control-label" %>
+		    <%= text_input f, :username, class: "form-control" %>
+		    <%= error_tag f, :username %>
+		  </div>
+
+		  <div class="form-group">
+		    <input class="form-control" id="user_room_allow_roomname" name="user_room_allow[roomname]" type="hidden" value="<%= assigns[:room].name %>">
+		  </div>
+
+		  <div class="form-group">
+		    <%= submit "Submit", class: "btn btn-primary" %>
+		  </div>
+		<% end %>
+		</div>
+	</div>
+<% end %>
+
+<div class="mod-section">
+	<%= if assigns[:userroomallow] do %>
+		Allowed people:
+		<div>
+			<%= for user <- assigns[:userroomallow] do %>
+				<div class="col-lg-4">
+					<%= user.username %> <a href="/room/<%= assigns[:room].name %>/removeuser/<%= user.username %>">X</a>
+				</div>
+			<%= end %>
+			<div class="end-float">
+				<%= paginate @conn, @kerosene %>
+			</div>
+		</div>
+		<div class="end-float"></div>
+	<%= else %>
+		Not much to do in public rooms yet.
+	<% end %>
+</div>
