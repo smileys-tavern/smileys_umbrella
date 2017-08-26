@@ -33,24 +33,44 @@ Gulp is used to expediate many common tasks particularly for builds and deployme
 The project is first initialized as an umbrella app but as separate releases per app in the exrm style:
 
 ### One time requirement
+```
 mix release.init --release-per-app
+```
 
 ### Only for apps that have static assets (js/css/images):
+```
 cd apps/smileys/assets
+```
+```
 ./node_modules/brunch/bin/brunch b -p
+```
 
 ### Back in the base dir of smileys_umbrella:
+```
 MIX_ENV=prod mix phoenix.digest
+```
 
 ### First release:
+```
 MIX_ENV=prod mix release --env=prod --name=smileys
+```
+```
 MIX_ENV=prod mix release --env=prod --name=smileysapi
+```
+```
 MIX_ENV=prod mix release --env=prod --name=smileyscaretaker
+```
 
 ### On subsequent releases:
+```
 MIX_ENV=prod mix release --env=prod --upgrade --name=smileys
+```
+```
 MIX_ENV=prod mix release --env=prod --upgrade --name=smileysapi
+```
+```
 MIX_ENV=prod mix release --env=prod --upgrade --name=smileyscaretaker
+```
 
 
 ### Releasing the releases
