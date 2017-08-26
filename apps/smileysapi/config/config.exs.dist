@@ -1,0 +1,46 @@
+# This file is responsible for configuring your application
+# and its dependencies with the aid of the Mix.Config module.
+#
+# This configuration file is loaded before any dependency and
+# is restricted to this project.
+use Mix.Config
+
+# General application configuration
+config :smileysapi,
+  namespace: Smileysapi,
+  ecto_repos: [SmileysData.Repo]
+
+# Configures the endpoint
+config :smileysapi, Smileysapi.Web.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "secretkeybase",
+  render_errors: [view: Smileysapi.Web.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Smileysapi.PubSub,
+           adapter: Phoenix.PubSub.PG2]
+
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+config :guardian, Guardian,
+  permissions: %{
+    default: [:user],
+    admin: [:admin],
+    khan: [:admin, :khan]
+  },
+  allowed_algos: ["HS512"], # optional
+  allowed_drift: 2000,
+  verify_module: Guardian.JWT,  # optional
+  issuer: "Smileysweb.Web",
+  ttl: { 3, :years },
+  verify_issuer: false, # optional
+  secret_key: %{
+    "k" => "supersecretkey",
+    "kty" => "oct"
+  },
+  serializer: SmileysData.GuardianSerializer
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env}.exs"
