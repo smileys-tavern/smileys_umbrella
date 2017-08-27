@@ -51,7 +51,7 @@
           <ul class="nav nav-pills pull-right">
             <%= if assigns[:user] do %>
               <li><a href="/u/<%= assigns[:user].name %>"><%= assigns[:user].name %></a></li>
-              <li><%= link "Log out", to: session_path(@conn, :delete), method: :delete %></li>
+              <li><%= SmileysWeb.Coherence.ViewHelpers.signout_link(@conn, "Log out") %></li>
             <%= else %>
               <li><a href="/sessions/new">Sign in</a></li>
               <li><a href="/registrations/new">Register</a></li>
