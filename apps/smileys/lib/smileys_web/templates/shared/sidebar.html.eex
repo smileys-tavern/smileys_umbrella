@@ -6,7 +6,9 @@
 		<%= if assigns[:cansubscribe] && assigns[:room] do %>
 			<a href="javascript:void(0)" class="room-subscribe" data-room="<%= assigns[:room].name %>">Subscribe here</a>
 		<% end %>
-		<a href="/room/new">Create a Room</a>
+		<%= if assigns[:user] do %>
+			<a href="/room/new">Create a Room</a>
+		<% end %>
 		<%= if assigns[:ismod] do %>
 			<a href="/room/<%= assigns[:room].name %>/edit">Edit Room</a>
 			<a href="/room/<%= assigns[:room].name %>/manage">Manage Room</a>

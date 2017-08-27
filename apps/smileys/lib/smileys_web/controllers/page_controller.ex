@@ -76,15 +76,19 @@ defmodule SmileysWeb.PageController do
   	if room.type == "private" do
   		if !current_user do
   			conn |> put_status(401) |> render(SmileysWeb.ErrorView, "401.html")
-  		end
+  		else
+    		user_in_allow_list = case SmileysData.QueryUserRoomAllow.user_allowed_in_room(current_user.name, room.name) do
+          {:user_not_allowed, _} ->
+            false
+          _ ->
+            true
+        end
 
-  		case SmileysData.QueryUserRoomAllow.user_allowed_in_room(current_user.name, room.name) do
-        {:user_not_allowed, _} ->
-          if !is_mod do
-            conn 
-              |> put_status(401) 
-              |> render(SmileysWeb.ErrorView, "401.html")
-          end
+        if !is_mod || !user_in_allow_list do
+          conn 
+            |> put_status(401) 
+            |> render(SmileysWeb.ErrorView, "401.html")
+        end
       end
     end
 

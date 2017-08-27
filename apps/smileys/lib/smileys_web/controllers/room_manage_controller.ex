@@ -59,7 +59,7 @@ defmodule SmileysWeb.RoomManageController do
         |> render(SmileysWeb.ErrorView, "401.html")
     end
 
-    userRoomAllow = SmileysData.QueryUserRoomAllow.user_allowed_in_room(username, conn.assigns.room.name)
+    {:ok, userRoomAllow} = SmileysData.QueryUserRoomAllow.user_allowed_in_room(username, conn.assigns.room.name)
 
     userRoomAllowRepo = SmileysData.QueryUserRoomAllow.user_room_allow_by_id(userRoomAllow.id)
 

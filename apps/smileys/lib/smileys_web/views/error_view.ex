@@ -1,6 +1,10 @@
 defmodule SmileysWeb.ErrorView do
   use SmileysWeb, :view
 
+  def render("401.html", _assigns) do
+    "Not allowed entry"
+  end
+
   def render("404.html", _assigns) do
     "Page not found"
   end
