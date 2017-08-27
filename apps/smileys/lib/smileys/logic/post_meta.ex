@@ -43,23 +43,23 @@ defmodule Smileys.Logic.PostMeta do
 		case String.trim(tag) do
 			"image" ->
 				# TODO: thumbnail
-				image_html = Phoenix.View.render_to_string Smileys.SharedView, "image.html", %{:url => meta["link"]}
+				image_html = Phoenix.View.render_to_string SmileysWeb.SharedView, "image.html", %{:url => meta["link"]}
 				process_tags(meta, tail, [{:post, image_html}|acc], acc_tags)
 			"youtube" ->
 				uri = URI.parse(meta["link"])
 				url = URI.decode_query(uri.query)
-				youtube_html = Phoenix.View.render_to_string Smileys.SharedView, "embed_youtube.html", %{:hash => url["v"]}
+				youtube_html = Phoenix.View.render_to_string SmileysWeb.SharedView, "embed_youtube.html", %{:hash => url["v"]}
 				process_tags(meta, tail, [{:post, youtube_html}|acc], acc_tags)
 			"vidme" ->
 				url = String.replace(meta["link"], "vid.me", "vid.me/e")
-				vidme_html = Phoenix.View.render_to_string Smileys.SharedView, "embed_vidme.html", %{:url => url}
+				vidme_html = Phoenix.View.render_to_string SmileysWeb.SharedView, "embed_vidme.html", %{:url => url}
 				process_tags(meta, tail, [{:post, vidme_html}|acc], acc_tags)
 			"bmap" ->
 				uri = URI.parse(meta["link"])
 				url = URI.decode_query(uri.query)
 				cond do
 					url["cp"] ->
-						bmap_html = Phoenix.View.render_to_string Smileys.SharedView, "embed_bing_map.html", %{:coord => url["cp"], :position => String.replace(url["cp"], "~", "_")}
+						bmap_html = Phoenix.View.render_to_string SmileysWeb.SharedView, "embed_bing_map.html", %{:coord => url["cp"], :position => String.replace(url["cp"], "~", "_")}
 						process_tags(meta, tail, [{:post, bmap_html}|acc], acc_tags)
 					true ->
 						process_tags(meta, tail, acc, acc_tags)
