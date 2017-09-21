@@ -1,0 +1,14 @@
+%FeederEx.Entry{
+	author: nil, 
+	categories: [], 
+	duration: nil, 
+	enclosure: nil,
+    id: "http://www.cnn.com/videos/world/2017/09/18/rohingya-muslims-bangladesh-border-control-pkg-field-cnni.cnn",
+    image: nil,
+    link: "http://rss.cnn.com/~r/rss/cnn_topstories/~3/dtTuarm6YB8/rohingya-muslims-bangladesh-border-control-pkg-field-cnni.cnn",
+    subtitle: nil,
+    summary: 
+    	"Bangladesh border guards take a CNN crew on patrol to witness Rohingya villages burning on the Myanmar side of the country's border. Alexandra Field reports.<div class=\"feedflare\">\n<a href=\"http://rss.cnn.com/~ff/rss/cnn_topstories?a=dtTuarm6YB8:vfoWZMRoPFk:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/rss/cnn_topstories?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://rss.cnn.com/~ff/rss/cnn_topstories?a=dtTuarm6YB8:vfoWZMRoPFk:7Q72WNTAKBA\"><img src=\"http://feeds.feedburner.com/~ff/rss/cnn_topstories?d=7Q72WNTAKBA\" border=\"0\"></img></a> <a href=\"http://rss.cnn.com/~ff/rss/cnn_topstories?a=dtTuarm6YB8:vfoWZMRoPFk:V_sGLiPBpWU\"><img src=\"http://feeds.feedburner.com/~ff/rss/cnn_topstories?i=dtTuarm6YB8:vfoWZMRoPFk:V_sGLiPBpWU\" border=\"0\"></img></a> <a href=\"http://rss.cnn.com/~ff/rss/cnn_topstories?a=dtTuarm6YB8:vfoWZMRoPFk:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/rss/cnn_topstories?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://rss.cnn.com/~ff/rss/cnn_topstories?a=dtTuarm6YB8:vfoWZMRoPFk:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/rss/cnn_topstories?i=dtTuarm6YB8:vfoWZMRoPFk:gIN9vFwOqvQ\" border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/rss/cnn_topstories/~4/dtTuarm6YB8\" height=\"1\" width=\"1\" alt=\"\"/>",
+   title: "Rohingya Muslims flee burning villages",
+   updated: "Mon, 18 Sep 2017 22:08:18 GMT"
+}

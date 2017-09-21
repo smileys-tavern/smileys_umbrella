@@ -1,4 +1,4 @@
-defmodule Smileysprocesses.Posts do
+defmodule Smileyscaretaker.Posts do
   @moduledoc """
   Processes related to post maintainence. Initial simple post decay methods used. Very rough.. TODO: refactor post decay
   to be more versatile (based on post/room params fast and slow decays, run on an easier to follow curve instead of relying on
