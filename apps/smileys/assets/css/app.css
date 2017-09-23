@@ -24,13 +24,17 @@ button {
     -moz-appearance: button;
 }
 
+nav a {
+	color: #fff;
+}
+
 .end-float { clear: both; }
 .end-spacer { height: 80px; width: 1px; }
 
 .header {
-  border-bottom: 3px solid #a94442;
-  background-color: rgba(18, 19, 18, 0.89);
-  color: #663609;
+  border-bottom: 2px solid #000;
+  background-color: rgba(53, 53, 53, 0.89);
+  color: #000;
   height: 53px;
   padding: 7px 15px;
   font-weight: bold;
@@ -47,10 +51,13 @@ button {
 
 .main-content {
 	position: relative;
+	padding-top: 5px;
+	padding-left: 5px;
 }
 
 .frontpage {
 	padding: 16px;
+	padding-top: 0px;
 }
 
 .hidden {
@@ -125,7 +132,7 @@ button {
 	height: 60px;
 	width: 60px;
 	margin: 0 5px;
-	background-color: #f8c36d;
+	background-color: #e29739;
 	text-align: center;
 	color: #5a4d4d;
 	font-size: 18px;
@@ -151,7 +158,7 @@ button {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   
-  border-bottom: 15px solid #a94442;
+  border-bottom: 15px solid #ababab;
 }
 .arrow-up:hover {
   border-bottom: 15px solid #000;
@@ -163,7 +170,7 @@ button {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   
-  border-top: 15px solid #a94442;
+  border-top: 15px solid #ababab;
 }
 .arrow-down:hover {
   border-top: 15px solid #000;
@@ -339,20 +346,21 @@ button {
 }
 .sidebar .site-actions a {
 	display: block;
-	border-left: 5px double #444240;
-	border-right: 5px double #444240;
+	border-left: 1px dotted #444240;
+	border-right: 1px dotted #444240;
 	border-top: 1px dotted #444240;
 	border-bottom: 1px dotted #444240;
+	background-color: #377ab7;
 	text-align: center;
 	padding: 3px;
 	text-decoration: none;
-	color: #444240;
+	color: #fff;
 	font-weight: bold;
 	font-size: 18px;
 	margin-bottom: 10px;
 }
 .sidebar .site-actions a:hover {
-	background-color: #ffcc59;
+	background-color: #104473;
 }
 
 .site-actions {
@@ -362,7 +370,7 @@ button {
 .sidebar-links {
 	margin: 20px;
 	text-align: center;
-	border-top: 5px solid #3e6be8;
+	border-top: 9px solid #585454;
 }
 .sidebar-links a{
 	color: #317ab7;
@@ -379,7 +387,7 @@ button {
 	padding: 0 5px;
 }
 .userlatestposts .count {
-	color: #a94442;
+	color: #ffa440;
 }
 .userlatestposts .activity {
 	color: #3e6be8;
@@ -464,10 +472,11 @@ form.link, form.button {
 .search-activate {
 	height: 30px;
 	width: 70px;
+	color: #000;
 }
 .search-results {
 	position: absolute;
-	top: 64px;
+	top: 66px;
 	left: 20px;
 	width: 370px;
 	height: auto;
@@ -484,10 +493,10 @@ form.link, form.button {
 	position: relative;
 }
 .search-results a:hover {
-	background-color: rgb(204, 204, 204);
+	background-color: #defbdc;
 }
 .search-result {
-	border-bottom: 2px solid #a94442;
+	border-bottom: 2px solid #ababab;
 	min-height: 50px;
 }
 .search-result-title {
@@ -515,7 +524,7 @@ form.link, form.button {
 	left: 20px;
 	min-height: 34px;
 	width: 370px;
-	border-bottom: 2px solid #a94442;
+	border-bottom: 2px solid #ababab;
 	text-align: right;
 	padding: 2px 0 0 10px;
 	font-size: 17px;

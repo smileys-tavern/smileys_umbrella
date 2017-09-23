@@ -14582,8 +14582,11 @@ var _user$project$SmileysSearch$renderSearchResult = function (result) {
 				_0: _elm_lang$html$Html$text(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						A3(_elm_lang$core$String$slice, 0, 80, result.title),
-						' .. by ')),
+						A3(_elm_lang$core$String$slice, 0, 60, result.title),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' - ',
+							A2(_elm_lang$core$Basics_ops['++'], result.body, '.. by ')))),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -14717,7 +14720,9 @@ var _user$project$SmileysSearch$PostSummary = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {title: a, hash: b, votepublic: c, name: d, thumb: e, parenttype: f, link: g, imageurl: h, tags: i, roomname: j, posturl: k};
+											return function (l) {
+												return {title: a, hash: b, votepublic: c, name: d, body: e, thumb: f, parenttype: g, link: h, imageurl: i, tags: j, roomname: k, posturl: l};
+											};
 										};
 									};
 								};
@@ -14751,13 +14756,28 @@ var _user$project$SmileysSearch$postSummaryDecoder = A2(
 										_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
 										A2(
 											_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
-											_elm_lang$core$Json_Decode$succeed(_user$project$SmileysSearch$PostSummary),
-											A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string)),
-										A2(_elm_lang$core$Json_Decode$field, 'hash', _elm_lang$core$Json_Decode$string)),
-									A2(_elm_lang$core$Json_Decode$field, 'votepublic', _elm_lang$core$Json_Decode$int)),
+											A2(
+												_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
+												_elm_lang$core$Json_Decode$succeed(_user$project$SmileysSearch$PostSummary),
+												A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string)),
+											A2(_elm_lang$core$Json_Decode$field, 'hash', _elm_lang$core$Json_Decode$string)),
+										A2(_elm_lang$core$Json_Decode$field, 'votepublic', _elm_lang$core$Json_Decode$int)),
+									A2(
+										_elm_lang$core$Json_Decode$field,
+										'name',
+										_elm_lang$core$Json_Decode$oneOf(
+											{
+												ctor: '::',
+												_0: _elm_lang$core$Json_Decode$string,
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$Json_Decode$null(''),
+													_1: {ctor: '[]'}
+												}
+											}))),
 								A2(
 									_elm_lang$core$Json_Decode$field,
-									'name',
+									'body',
 									_elm_lang$core$Json_Decode$oneOf(
 										{
 											ctor: '::',

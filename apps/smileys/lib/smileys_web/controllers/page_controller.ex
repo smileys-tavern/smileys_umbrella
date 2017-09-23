@@ -11,7 +11,7 @@ defmodule SmileysWeb.PageController do
 
 
   def index(conn, _params) do
-    posts = SmileysData.QueryPost.summary(10)
+    {posts, _} = SmileysData.QueryPost.summary(10)
 
     reputable_rooms = SmileysData.QueryRoom.list_by(:reputation, 5)
 
@@ -40,7 +40,7 @@ defmodule SmileysWeb.PageController do
 	   	|> render(SmileysWeb.ErrorView, "404.html")
   	end
 
-  	posts = case room_name do
+  	{posts, _} = case room_name do
   		"all" -> 
   		  SmileysData.QueryPost.summary(30)
   		"walloffame" ->
@@ -92,14 +92,14 @@ defmodule SmileysWeb.PageController do
       end
     end
 
-  	posts = cond do
+  	{posts, kerosene} = cond do
   		(params["mode"] && params["mode"] == "new") ->
-	  		SmileysData.QueryPost.summary_by_room(30, :new, room.id)
+	  		SmileysData.QueryPost.summary_by_room(25, :new, room.id, params)
   		true ->
-		  	SmileysData.QueryPost.summary_by_room(30, :vote, room.id)
+		  	SmileysData.QueryPost.summary_by_room(25, :vote, room.id, params)
 	  end
 
-  	render conn, "room.html", room: room, posts: posts, ismod: is_mod, roomtype: "room"
+  	render conn, "room.html", room: room, posts: posts, ismod: is_mod, roomtype: "room", kerosene: kerosene
   end
 
   def comments(conn, %{"room" => _room, "hash" => hash, "focushash" => focushash} = _params) do

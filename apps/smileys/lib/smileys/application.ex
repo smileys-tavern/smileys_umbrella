@@ -14,7 +14,13 @@ defmodule Smileys.Application do
       supervisor(SmileysWeb.Endpoint, []),
       # Start your own worker by calling: Smileys.Worker.start_link(arg1, arg2, arg3)
       # worker(Smileys.Worker, [arg1, arg2, arg3]),
-      supervisor(SmileysWeb.Presence, [])
+      supervisor(SmileysWeb.Presence, []),
+
+      supervisor(SmileysSearch.Service.get(), [Keyword.new([
+        {:host, Application.get_env(:giza_sphinxsearch, :host)},
+        {:port, Application.get_env(:giza_sphinxsearch, :port)},
+        {:sql_port, Application.get_env(:giza_sphinxsearch, :sql_port)}
+      ])])
 
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
       #  {:user,       Application.get_env(:smileys_graph, :user)}, 

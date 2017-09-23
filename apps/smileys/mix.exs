@@ -49,8 +49,8 @@ defmodule Smileys.Mixfile do
       {:poison, "~> 3.0", override: true},
       {:timex, "~> 3.1.15", override: true},
       {:timex_ecto, "~> 3.1.1", override: true},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:hackney, "~> 1.9", override: true},
+      {:decimal, "~> 1.4", override: true},
       {:coherence, "~> 0.5.0"},
       {:jose, "~> 1.8"},
       {:guardian, "~> 0.14.4"},
@@ -63,11 +63,11 @@ defmodule Smileys.Mixfile do
       {:bamboo, "~> 0.7.0"},
       {:bamboo_smtp, "~> 1.2.1"},
       {:recaptcha, "~> 2.0"},
-      {:giza_sphinxsearch, "~> 0.0.1"},
       {:scout_apm, "~> 0.3.2"},
+
       # Smileys
-      {:smileysdata, git: "https://github.com/Tyler-pierce/smileysdata.git", branch: "master"},
-      {:smileyssearch, git: "https://github.com/Tyler-pierce/smileyssearch.git", branch: "master"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.3"},
+      {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.2"}
       #{:smileysdata, path: "../../../smileys_data"},
       #{:smileyssearch, path: "../../../smileys_search"}
     ]

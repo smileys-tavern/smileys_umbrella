@@ -36,6 +36,7 @@ type alias PostSummary =
      hash : String,
      votepublic : Int,
      name : String, 
+     body : String,
      thumb : String, 
      parenttype : String,
      link : String, 
@@ -97,6 +98,7 @@ postSummaryDecoder =
         |: (field "hash" string)
         |: (field "votepublic" int)
         |: (field "name" (oneOf [ string, null "" ]))
+        |: (field "body" (oneOf [ string, null "" ]))
         |: (field "thumb" (oneOf [ string, null "" ]))
         |: (field "parenttype" (oneOf [ string, null "" ]))
         |: (field "link" (oneOf [ string, null "" ]))
@@ -311,7 +313,7 @@ renderSearchResult : PostSummary -> Html Msg
 renderSearchResult result =
     let
       children =
-        [ div [ class "search-result-title" ] [ Html.text ((String.slice 0 80 result.title) ++ " .. by "), span [ class "search-result-username" ] [ Html.text result.name ] ] 
+        [ div [ class "search-result-title" ] [ Html.text ((String.slice 0 60 result.title) ++ " - " ++ result.body ++ ".. by "), span [ class "search-result-username" ] [ Html.text result.name ] ] 
         , div [ class "search-result-room"] [ Html.text ("/r/" ++ String.slice 0 80 result.roomname) ]
         , div [ class "search-result-votes" ] [ Html.text ("Votes " ++ toString (result.votepublic)) ] 
         ]

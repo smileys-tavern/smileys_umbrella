@@ -5,7 +5,7 @@
 	<%= raw assigns[:room].description %> 
   <%= if assigns[:roomtype] == "room" do %>
     <a href="/r/<%= assigns[:room].name %>/view/new">View New</a> | <a href="/r/<%= assigns[:room].name %>">View Hot</a>
-  <%= end %>
+  <% end %>
 </div>
 
 <div class="posts">
@@ -13,9 +13,10 @@
 	<%= for post <- assigns[:posts] do %>
       <%= render SmileysWeb.SharedView, "post_summary.html", [{:post, post}, {:room, assigns[:room].name}] %>
     <% end %>
-  <%= else %>
+  <% else %>
     <div>Nothing here yet!</div>
   <% end %>
 </div>
+<%= paginate @conn, @kerosene %>
 
 <%= render SmileysWeb.SharedView, "sidebar.html", assigns %>

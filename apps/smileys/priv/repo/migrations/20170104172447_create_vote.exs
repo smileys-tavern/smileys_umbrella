@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreateVote do
+defmodule SmileysData.Repo.Migrations.CreateVote do
   use Ecto.Migration
 
   def change do

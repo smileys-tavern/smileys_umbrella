@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreateModeratorListing do
+defmodule SmileysData.Repo.Migrations.CreateModeratorListing do
   use Ecto.Migration
 
   def change do

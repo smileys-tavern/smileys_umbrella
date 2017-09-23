@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreateUserSubscription do
+defmodule SmileysData.Repo.Migrations.CreateUserSubscription do
   use Ecto.Migration
 
   def change do

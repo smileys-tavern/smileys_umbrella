@@ -4,7 +4,7 @@
 	<%= for post <- assigns[:posts] do %>
 	  <%= render SmileysWeb.SharedView, "post_summary.html", [{:post, post}] %>
 	<% end %>
-<%= else %>
+<% else %>
 	<div>Nothing here yet!</div>
 <% end %>
 

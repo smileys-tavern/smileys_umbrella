@@ -33,7 +33,7 @@
             <p>
                 <%= if assigns[:post].body do %>
                     <%= raw assigns[:post].body |> String.replace("\r", "<br/>") %>
-                <%= end %>
+                <% end %>
             </p>
         </div>
     </div>

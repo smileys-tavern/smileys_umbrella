@@ -13,7 +13,7 @@
 			<div class="col-lg-4">
 				<%= user.username %> <a href="/room/<%= assigns[:room].name %>/removeuser/<%= user.username %>">X</a>
 			</div>
-		<%= end %>
+		<% end %>
 		<div class="end-float">
 			<%= paginate @conn, @kerosene %>
 		</div>

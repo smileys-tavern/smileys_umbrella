@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreateCoherenceUser do
+defmodule SmileysData.Repo.Migrations.CreateCoherenceUser do
   use Ecto.Migration
   def change do
     create table(:users) do

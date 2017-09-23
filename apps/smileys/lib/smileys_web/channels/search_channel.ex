@@ -23,4 +23,16 @@ defmodule SmileysWeb.SearchChannel do
 
     {:noreply, socket}
   end
+
+  def handle_in("search_suggest", %{"term" => _term}, socket) do
+    #suggest_results = case SmileysSearch.QueryPost.suggest(term) do
+    #  {:ok, results} ->
+    #    user = current_resource(socket)
+    #    SmileysWeb.Endpoint.broadcast("user:" <> user.id, "suggest_result", %{results: results})
+    #  {:error, _} ->
+    #    []
+    #end
+
+    {:noreply, socket}
+  end
 end

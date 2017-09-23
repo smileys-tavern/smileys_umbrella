@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreateUserRoomAllow do
+defmodule SmileysData.Repo.Migrations.CreateUserRoomAllow do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule Smileys.Repo.Migrations.CreatePostMeta do
+defmodule SmileysData.Repo.Migrations.CreatePostMeta do
   use Ecto.Migration
 
   def change do
