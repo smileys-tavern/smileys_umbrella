@@ -53,8 +53,8 @@ defmodule Smileyscaretaker.Mixfile do
       {:cloudex, "~> 0.1.10"},
 
       # Smileys
-      {:smileysdata, path: "../../../smileys_data"}
-      #{:smileysdata, git: "https://github.com/Tyler-pierce/smileysdata.git", branch: "master"}
+      #{:smileysdata, path: "../../../smileys_data"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.3"}
     ]
   end
 end
