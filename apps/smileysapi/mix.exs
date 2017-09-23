@@ -8,7 +8,7 @@ defmodule Smileysapi.Mixfile do
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
      lockfile: "../../mix.lock",
-     elixir: "~> 1.4",
+     elixir: "~> 1.5.1",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      start_permanent: Mix.env == :prod,
@@ -37,7 +37,6 @@ defmodule Smileysapi.Mixfile do
      {:phoenix_ecto, "~> 3.2"},
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.10"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:httpoison, "~> 0.11.0", override: true},
      {:poison, "~> 3.0", override: true},
      {:hackney, "~> 1.9", override: true},
@@ -50,13 +49,12 @@ defmodule Smileysapi.Mixfile do
      {:cachex, "~> 2.0"},
      {:cloudex, "~> 0.1.10"},
      {:kerosene, "~> 0.5.0"},
-     {:giza_sphinxsearch, "~> 0.0.1"},
      {:scout_apm, "~> 0.3.2"},
      {:absinthe, "~> 1.3.1"},
      {:absinthe_plug, "~> 1.1"},
      # Smileys
-     {:smileysdata, git: "https://github.com/Tyler-pierce/smileysdata.git", branch: "master"},
-     {:smileyssearch, git: "https://github.com/Tyler-pierce/smileyssearch.git", branch: "master"}
+     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.3"},
+     {:smileyssearch, git: "https://github.com/Tyler-pierce/smileyssearch.git", tag: "0.0.2"}
      #{:smileysdata, path: "../../../smileys_data"},
      #{:smileyssearch, path: "../../../smileys_search"}
    ]
