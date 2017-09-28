@@ -4,7 +4,7 @@ defmodule Smileyscaretaker.Mixfile do
   def project do
     [
       app: :smileyscaretaker,
-      version: "0.0.1",
+      version: "0.0.2",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
@@ -16,6 +16,7 @@ defmodule Smileyscaretaker.Mixfile do
       deps: deps()
     ]
   end
+
 
   # Configuration for the OTP application.
   #
@@ -54,7 +55,7 @@ defmodule Smileyscaretaker.Mixfile do
 
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.3"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.4"}
     ]
   end
 end

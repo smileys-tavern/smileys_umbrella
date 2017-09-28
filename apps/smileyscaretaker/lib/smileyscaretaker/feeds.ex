@@ -75,7 +75,7 @@ defmodule Smileyscaretaker.Feeds do
   		map_feed([%{feeds | :author => ""}|tail], acc, count)
   	end
 
-  	defp map_feed([%FeederEx.Entry{author: author, categories: categories, enclosure: enclosure, id: url, link: _link, title: title, summary: summary, updated: date_string}|tail], acc, count) do
+  	defp map_feed([%FeederEx.Entry{author: author, categories: categories, enclosure: enclosure, id: id, link: link, title: title, summary: summary, updated: date_string}|tail], acc, count) do
   		img = case enclosure do
   			nil ->
   				nil
@@ -93,7 +93,20 @@ defmodule Smileyscaretaker.Feeds do
   				[]
   			_ ->
   				[categories]
+  		end
 
+  		url = case link do
+  			nil ->
+  				id
+  			_ ->
+  				link
+  		end
+
+  		summary_formated = case summary do
+  			nil ->
+  				summary
+  			_ ->
+  				String.replace(summary, "\n", "<br />")
   		end
 
   		entry = %SmileysFeed{
@@ -103,7 +116,7 @@ defmodule Smileyscaretaker.Feeds do
   			img: img,
   			date: date_string,
   			link: url,
-  			summary: summary
+  			summary: summary_formated
   		}
   		map_feed(tail, [entry|acc], count + 1)
   	end
@@ -126,8 +139,7 @@ defmodule Smileyscaretaker.Feeds do
 
 		{thumb, image} = cond do
 			uploaded_image ->
-				{Cloudex.Url.for(uploaded_image.public_id, %{width: 60, height: 60, format: "jpg"}), 
-				 Cloudex.Url.for(uploaded_image.public_id, %{})}
+				{Cloudex.Url.for(uploaded_image.public_id, %{width: 60, height: 60, format: "jpg"}), nil}
 			true ->
 				{nil, nil}
 		end

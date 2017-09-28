@@ -16,7 +16,7 @@ end %>
   
   <div class="preview-square">
     <%= cond do 
-       assigns[:post][:tags] && String.contains?(assigns[:post][:tags], ["nsfw", "NSFW", "18"]) ->
+       assigns[:post][:tags] && String.contains?(assigns[:post][:tags], ["nsfw", "NSFW"]) ->
         raw "NSFW"
 
        assigns[:post][:thumb] && String.length( assigns[:post][:thumb]) -> 
@@ -36,13 +36,18 @@ end %>
           <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:hash] %>/<%= assigns[:post][:title] %>">
             <%= assigns[:post][:title] %>
           </a>
-        <%= else %>
+        <% else %>
           <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:ophash] %>/focus/<%= assigns[:post][:hash] %>">
             <%= assigns[:post][:title] %>
           </a>
         <% end %>
         <%= if assigns[:post][:name] do %> by <%= assigns[:post][:name] %><% end %></div>
       <div class="actions">
+        <%= if assigns[:post][:parenttype] == "room" do %>
+          <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:hash] %>/<%= assigns[:post][:title] %>">
+            Comment
+          </a>
+        <% end %>
         <%= if roomname && assigns[:post][:parenttype] != "room" do %>
           <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:ophash] %>/focus/<%= assigns[:post][:hash] %>">Focus</a> 
         <% end %>

@@ -15112,7 +15112,9 @@ var _user$project$SmileysSearch$update = F2(
 				var _p6 = _p3._0;
 				if (_elm_lang$core$Native_Utils.eq(
 					_p6,
-					_elm_lang$core$Native_Utils.chr('\r'))) {
+					_elm_lang$core$Native_Utils.chr('\r')) && (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$String$length(model.search),
+					0) > 0)) {
 					var channel = A2(
 						_fbonetti$elm_phoenix_socket$Phoenix_Channel$onClose,
 						_elm_lang$core$Basics$always(

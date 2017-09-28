@@ -142,7 +142,7 @@ update msg model =
                 )
 
         Presses code ->
-             if (code == '\r') then
+             if (code == '\r' && (String.length(model.search) > 0)) then
                 let
                     channel =
                         Phoenix.Channel.init ("search:" ++ model.search)

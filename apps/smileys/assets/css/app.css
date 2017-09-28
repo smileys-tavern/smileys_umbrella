@@ -146,7 +146,7 @@ nav a {
 	margin-left: 110px;
 }
 .title .text {
-	height: 40px;
+	min-height: 40px;
 }
 .title .actions {
 	height: 20px;
