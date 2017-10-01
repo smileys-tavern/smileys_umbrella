@@ -35,6 +35,20 @@ export var App = {
 		User.init()
 
 		Room.init()
+
+		var that = this
+
+		$('.menu-toggle').on('click', function(){
+			that.toggleMenu()
+		})
+	},
+
+	toggleMenu: function() {
+		if ($('.sidebar').css("display") == "block") {
+			$('.sidebar').css("display", "none")
+		} else {
+			$('.sidebar').css("display", "block")
+		}
 	},
 
 	tempAlert: function(text) {

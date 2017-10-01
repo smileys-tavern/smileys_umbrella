@@ -27,9 +27,37 @@ button {
 nav a {
 	color: #fff;
 }
+nav ul{
+	padding-right: 40px;
+}
 
 .end-float { clear: both; }
 .end-spacer { height: 80px; width: 1px; }
+
+.menu-toggle {
+  padding-left: 1.25em;
+  position: absolute;
+  top: 16px;
+  right: 27px;
+  display: none;
+}
+.menu-toggle:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.21em;
+  bottom: 0.21em;
+  width: 1.9em;
+  height: 18px;
+  background: linear-gradient(
+    to bottom, 
+    white, white 20%, 
+    rgba(53, 53, 53, 0.89) 20%, rgba(53, 53, 53, 0.89) 40%, 
+    white 40%, white 60%, 
+    rgba(53, 53, 53, 0.89) 60%, rgba(53, 53, 53, 0.89) 80%, 
+    white 80%, white 100%
+  );
+}
 
 .header {
   border-bottom: 2px solid #000;
@@ -343,6 +371,7 @@ nav a {
  	right: 0;
  	width: 20%; /* match this with .posts with room for margins */
  	height: auto;
+ 	background-color: #fff;
 }
 .sidebar .site-actions a {
 	display: block;
@@ -566,9 +595,15 @@ form.link, form.button {
 /* Responsive: Portrait tablets and down */
 @media screen and (max-width: 1240px) {
 	.sidebar {
- 		position: relative;
- 		width: 95%;
+ 		width: 100%;
+ 		display: none;
+ 		z-index: 100;
+ 		border-bottom: 2px solid rgba(53, 53, 53, 0.89);
  	}
+
+ 	.menu-toggle {
+		display: block;
+	}
 
  	.smileys-latest,
  	.post,

@@ -57,6 +57,7 @@
               <li><a href="/registrations/new">Register</a></li>
             <% end %>
           </ul>
+          <a href="javascript:void(0)" class="menu-toggle"></a>
         </nav>
       </header>
 
