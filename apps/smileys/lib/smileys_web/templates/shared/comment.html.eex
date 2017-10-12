@@ -10,7 +10,7 @@
             <strong>
                 <%= if assigns[:comment].name do %>
                     <a href="/u/<%= assigns[:comment].name %>"><%= assigns[:comment].name %></a>
-                <%= else %> 
+                <% else %> 
                     amysteriousstranger
                 <% end %>:
             </strong> 

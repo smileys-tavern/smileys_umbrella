@@ -4,6 +4,13 @@ defmodule SmileysWeb.PostController do
   plug Smileys.Plugs.SetUser
   plug Smileys.Plugs.SetIsModerator
 
+  alias SmileysData.{QueryPost, QueryUser}
+  alias Smileys.Logic.PostHelpers
+  alias Smileys.User.Activity, as: UserActivity
+  alias Smileys.User.ActivityRegistry, as: UserActivityRegistry
+  alias Smileys.Post.Activity, as: PostActivity
+  alias Smileys.Post.ActivityRegistry, as: PostActivityRegistry
+
 
   def comment(conn, %{"hash" => hash, "depth" => depth, "ophash" => ophash, "body" => body} = _params) do
     user = case conn.assigns.user do
@@ -14,12 +21,31 @@ defmodule SmileysWeb.PostController do
     end
     
     # TODO: try to cast depth as an int coming in instead of here
-    {comment_hash, comment_html} = case SmileysData.QueryPost.create_comment(hash, ophash, body, String.to_integer(depth), user) do
+    {comment_hash, comment_html} = case QueryPost.create_comment(hash, ophash, body, String.to_integer(depth), user) do
       {:ok, comment_result} ->
-        SmileysWeb.Endpoint.broadcast("post:" <> ophash, "activity", %{msg: "Comment!", hash: hash, ophash: ophash})
+        reply_to = comment_result.reply_to
+        op_user = QueryUser.user_by_id(reply_to.posterid)
+
+        _ = UserActivityRegistry.update_user_bucket!(
+          :user_activity_reg,
+          %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: PostHelpers.create_link(reply_to, comment_result.room.name), comments: 1}
+        )
+
+        %PostActivity{comments: comment_count} = PostActivityRegistry.increment_post_bucket_comments!(
+          :post_activity_reg,
+          comment_result.op.hash,
+          %PostActivity{comments: 1}
+        )
+
+        SmileysWeb.Endpoint.broadcast("room:" <> comment_result.room.name, "activity", %{comments: comment_count, hash: comment_result.op.hash})
 
         {comment_result.comment.hash,
-         Phoenix.View.render_to_string(SmileysWeb.SharedView, "comment.html", %{:user => user, :comment => comment_result.comment, :room => comment_result.room, :op => comment_result.op})}
+         Phoenix.View.render_to_string(SmileysWeb.SharedView, "comment.html", %{
+          :user    => user, 
+          :comment => comment_result.comment, 
+          :room    => comment_result.room, 
+          :op      => comment_result.op})
+        }
       {:body_invalid, _} ->
         SmileysWeb.Endpoint.broadcast("user:" <> user.name, "warning", %{msg: "Comment contains invalid characters."})
         {"", ""}

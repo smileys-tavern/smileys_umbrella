@@ -89,6 +89,17 @@ export var Channels = {
           }
         })
 
+        channel.on("activity", payload => {
+            var commentCount = `${payload.comments}`
+            var hash         = `${payload.hash}`
+
+            var commentCountObj = $("#post-activity-comments-" + hash)
+
+            if (commentCountObj.length) {
+              commentCountObj.text(commentCount)
+            }
+          })
+
         if (is_current_room) {
           // Enable voting
           $('body').on('click', '.vote-up', function() {
@@ -196,6 +207,19 @@ export var Channels = {
 
             User.showVote($('.vote-' + hash), direction)
           });
+
+          channel.on("activity", payload => {
+            var html = `${payload.html}`
+            var hash = `${payload.hash}`
+
+            var postActivity = $("#user-activity-" + hash)
+
+            if (postActivity.length) {
+              postActivity.replaceWith(html)
+            } else {
+              $(".userlatestposts").append(html)
+            }
+          })
         })
 	  		.receive("error", resp => { that.errorJoiningChannel("User " + this.userName, resp) })
 

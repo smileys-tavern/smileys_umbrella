@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= if assigns[:op] do %>
       <meta name="description" content="Smiley's post: <%= assigns[:op].title %> ">
-    <%= else %>
+    <% else %>
       <meta name="description" content="This is a place to have discussions and hang out, people watch, joke around maybe.">
     <% end %>
     <meta name="author" content="Smiley">
@@ -14,7 +14,7 @@
     <title>
       <%= if assigns[:title] do %>
         <%= assigns[:title] %>
-      <%= else %>
+      <% else %>
         Smiley's. Welcome to Smiley's Pub. It is what it is
       <% end %>
     </title>
@@ -52,7 +52,7 @@
             <%= if assigns[:user] do %>
               <li><a href="/u/<%= assigns[:user].name %>"><%= assigns[:user].name %></a></li>
               <li><%= SmileysWeb.Coherence.ViewHelpers.signout_link(@conn, "Log out") %></li>
-            <%= else %>
+            <% else %>
               <li><a href="/sessions/new">Sign in</a></li>
               <li><a href="/registrations/new">Register</a></li>
             <% end %>

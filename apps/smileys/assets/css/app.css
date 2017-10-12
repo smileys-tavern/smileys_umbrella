@@ -576,6 +576,34 @@ form.link, form.button {
 }
 
 /**
+ * Activity
+ */
+.user-activity{
+	margin-bottom: -1px !important;
+	border-bottom: none ;
+}
+.user-activity-comment{
+	background-color: #E29739;
+}
+.user-activity-vote{
+	background-color: #ababab;
+}
+.post-activity-comment{
+	background-color: #E29739;
+}
+.user-activity-url{
+	text-decoration: underline;
+}
+
+.activity-count {
+	border-radius: 8px;
+	height: 16px;
+	padding-left: 4px;
+	padding-right: 4px;
+	color: #fff;
+}
+
+/**
  * Video Hacks
  */
 .videoWrapper {

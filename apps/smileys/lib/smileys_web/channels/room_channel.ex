@@ -43,7 +43,8 @@ defmodule SmileysWeb.RoomChannel do
       nil ->
         {:no_user, 0}
       _ ->
-        SmileysData.QueryVote.upvote(post, user)
+        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
+        Smileys.Vote.Action.upvote(post, user, post_user, room_name)
     end
     
     _vote = case result_vote do
@@ -75,7 +76,8 @@ defmodule SmileysWeb.RoomChannel do
       nil ->
         {:no_user, 0}
       _ ->
-        SmileysData.QueryVote.downvote(post, user)
+        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
+        Smileys.Vote.Action.downvote(post, user, post_user, room_name)
     end
 
     _vote = case result_vote do

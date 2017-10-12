@@ -6,8 +6,11 @@ defmodule SmileysWeb.PageController do
   plug Smileys.Plugs.SetUser
   plug Smileys.Plugs.SetCanSubscribe
   plug Smileys.Plugs.SetUserSubscriptions
-  plug Smileys.Plugs.SetUserLatestPosts
+  plug Smileys.Plugs.SetUserActivity
   plug Smileys.Plugs.SetIsModerator
+
+  alias Smileys.Post.Activity, as: PostActivity
+  alias Smileys.Post.ActivityRegistry, as: PostActivityRegistry
 
 
   def index(conn, _params) do
@@ -99,7 +102,12 @@ defmodule SmileysWeb.PageController do
 		  	SmileysData.QueryPost.summary_by_room(25, :vote, room.id, params)
 	  end
 
-  	render conn, "room.html", room: room, posts: posts, ismod: is_mod, roomtype: "room", kerosene: kerosene
+    posts_decorated = List.foldl(posts, [], fn(post, acc) -> 
+      %PostActivity{comments: comments} = PostActivityRegistry.retrieve_post_bucket!(:post_activity_reg, post.hash)
+      [Map.put(post, :comment_count, comments)|acc] 
+    end)
+
+  	render conn, "room.html", room: room, posts: posts_decorated, ismod: is_mod, roomtype: "room", kerosene: kerosene
   end
 
   def comments(conn, %{"room" => _room, "hash" => hash, "focushash" => focushash} = _params) do

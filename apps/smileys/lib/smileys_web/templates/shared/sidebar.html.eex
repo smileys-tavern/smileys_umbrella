@@ -26,15 +26,15 @@
 	<% end %>
 
 	<%= if assigns[:user] do %>
-		<div class="userlatestposts sidebar-links site-actions">
-			<h5>Your Latest</h5>
-			<%= if assigns[:userlatestposts] do %>
-				<%= for post <- assigns[:userlatestposts] do %>
-					<%= render SmileysWeb.SharedView, "userpost_status.html", %{:post => post} %>
+		<%= if assigns[:useractivity] do %>
+			<div class="userlatestposts sidebar-links site-actions">
+				<h5>Your Latest</h5>
+				
+				<%= for activity <- assigns[:useractivity] do %>
+					<%= render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity} %>
 				<% end %>
-			<% end %>
-		</div>
-
+			</div>
+		<% end %>
 
 		<div class="sidebar-links subscriptions">
 			<h5>Your Subscriptions</h5>

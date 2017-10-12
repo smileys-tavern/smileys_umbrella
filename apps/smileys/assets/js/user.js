@@ -34,12 +34,6 @@ export var User = {
 	    })
   	})
 
-    $('.userlatestposts .hash').each(function(){
-      var hash = $(this).data('hash')
-
-      Channels.joinPostActivity(hash)
-    })
-
   	this.showAllVotesOnPage(Cache.userGetVotes())
   },
 

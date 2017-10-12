@@ -20,7 +20,10 @@ defmodule Smileys.Application do
         {:host, Application.get_env(:giza_sphinxsearch, :host)},
         {:port, Application.get_env(:giza_sphinxsearch, :port)},
         {:sql_port, Application.get_env(:giza_sphinxsearch, :sql_port)}
-      ])])
+      ])]),
+
+      worker(Smileys.User.ActivityRegistry, [:user_activity_reg]),
+      worker(Smileys.Post.ActivityRegistry, [:post_activity_reg])
 
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
       #  {:user,       Application.get_env(:smileys_graph, :user)}, 

@@ -44,6 +44,9 @@ end %>
         <%= if assigns[:post][:name] do %> by <%= assigns[:post][:name] %><% end %></div>
       <div class="actions">
         <%= if assigns[:post][:parenttype] == "room" do %>
+          <%= if assigns[:post][:comment_count] do %>
+            <span class="post-activity-comment activity-count" id="post-activity-comments-<%= assigns[:post][:hash] %>"><%= assigns[:post][:comment_count] %></span>
+          <% end %>
           <a href="/r/<%= roomname %>/comments/<%= assigns[:post][:hash] %>/<%= assigns[:post][:title] %>">
             Comment
           </a>

@@ -4,6 +4,10 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
+  alias Smileys.User.Activity
+
+  intercept ["activity"]
+
 
   def join("user:" <> _user_name, %{"guardian_token" => token}, socket) do
     case sign_in(socket, token) do
@@ -53,6 +57,14 @@ defmodule SmileysWeb.UserChannel do
     thread_html = build_thread_html(thread, room, op)
 
     {:reply, {:ok, %{thread: thread_html}}, socket}
+  end
+
+  def handle_out("activity", %Activity{hash: post_hash} = activity_payload, socket) do
+    activity_html = Phoenix.View.render_to_string(SmileysWeb.SharedView, "user_activity.html", %{activity: activity_payload})
+    
+    push socket, "activity", %{html: activity_html, hash: post_hash}
+    
+    {:noreply, socket}    
   end
 
   defp build_thread_html(thread, room, op) do
