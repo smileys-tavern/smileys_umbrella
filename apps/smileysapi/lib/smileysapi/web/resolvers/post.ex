@@ -32,13 +32,13 @@ defmodule Smileysapi.Resolver.Post do
   			:vote
   	end
 
-    posts = SmileysData.QueryPost.summary(limit, order_by, room.id, offset) 
+    posts = SmileysData.QueryPost.summary(limit, order_by, room.id, %{page: offset, room: room_name}, false) 
 
     {:ok, posts}
   end
 
   def get_from_all(_params, _info) do
-	  posts = SmileysData.QueryPost.summary(30, :vote, :nil, 0)
+	  posts = SmileysData.QueryPost.summary(30, :vote, :nil, %{}, false)
 
     {:ok, posts}
   end

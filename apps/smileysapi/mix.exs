@@ -53,8 +53,8 @@ defmodule Smileysapi.Mixfile do
      {:absinthe, "~> 1.3.1"},
      {:absinthe_plug, "~> 1.1"},
      # Smileys
-     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.3"},
-     {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.2"}
+     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.5"},
+     {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
      #{:smileysdata, path: "../../../smileys_data"},
      #{:smileyssearch, path: "../../../smileys_search"}
    ]
