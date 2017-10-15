@@ -7,6 +7,7 @@ defmodule SmileysUmbrella.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps()]
   end
+  
 
   # Dependencies can be Hex packages:
   #
@@ -21,6 +22,6 @@ defmodule SmileysUmbrella.Mixfile do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps folder
   defp deps do
-    [{:distillery, "~> 1.4"}]
+    [{:distillery, git: "https://github.com/bitwalker/distillery", branch: "master"}]
   end
 end

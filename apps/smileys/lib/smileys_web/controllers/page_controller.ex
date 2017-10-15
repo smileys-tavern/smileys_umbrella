@@ -103,7 +103,7 @@ defmodule SmileysWeb.PageController do
 	  end
 
     posts_decorated = List.foldl(posts, [], fn(post, acc) -> 
-      %PostActivity{comments: comments} = PostActivityRegistry.retrieve_post_bucket!(:post_activity_reg, post.hash)
+      %PostActivity{comments: comments} = PostActivityRegistry.retrieve_post_bucket!({:global, :post_activity_reg}, post.hash)
       [Map.put(post, :comment_count, comments)|acc] 
     end)
 

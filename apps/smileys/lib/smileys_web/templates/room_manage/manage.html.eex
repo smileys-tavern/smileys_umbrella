@@ -43,7 +43,7 @@
 			</div>
 		</div>
 		<div class="end-float"></div>
-	<%= else %>
+	<% else %>
 		Not much to do in public rooms yet.
 	<% end %>
 </div>

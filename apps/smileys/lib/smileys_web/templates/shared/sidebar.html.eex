@@ -29,7 +29,7 @@
 		<%= if assigns[:useractivity] do %>
 			<div class="userlatestposts sidebar-links site-actions">
 				<h5>Your Latest</h5>
-				
+
 				<%= for activity <- assigns[:useractivity] do %>
 					<%= render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity} %>
 				<% end %>
@@ -41,6 +41,10 @@
 			<%= if assigns[:subscriptions] do %>
 				<%= for subscription <- assigns[:subscriptions] do %>
 					<div class="room-link room-<%= subscription.roomname %>">
+						<span class="room-activity-<%= subscription.roomname %>">
+							<span class="room-activity-new-posts activity-count"><%= subscription.new_posts %></span>
+							<span class="room-activity-subs activity-count"><%= subscription.subs %></span>
+						</span>
 						<a href="/r/<%= subscription.roomname %>">/r/<%= subscription.roomname %></a> 
 						<span class="update"></span> 
 						<span class="controls"><a href="javascript:void(0)" class="room-unsubscribe" data-room="<%= subscription.roomname %>">unsub</a></span>

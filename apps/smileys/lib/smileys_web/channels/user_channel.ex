@@ -4,7 +4,9 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
-  alias Smileys.User.Activity
+  alias Smileys.User.Activity, as: UserActivity
+  alias Smileys.Room.Activity, as: RoomActivity
+  alias Smileys.Room.ActivityRegistry, as: RoomActivityRegistry
 
   intercept ["activity"]
 
@@ -26,6 +28,14 @@ defmodule SmileysWeb.UserChannel do
     if SmileysData.QuerySubscription.can_user_subscribe_to_room(user, room) do
       case SmileysData.QuerySubscription.create_user_subscription(user, room) do
         {:ok, subscription} ->
+          room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
+            {:global, :room_activity_reg},
+            room_name,
+            %RoomActivity{subs: 1}
+          )
+
+          SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
+
           {:reply, {:ok, %{room: subscription.roomname}}, socket}
         _ ->
           {:reply, {:ok, %{room: nil}}, socket}
@@ -59,7 +69,7 @@ defmodule SmileysWeb.UserChannel do
     {:reply, {:ok, %{thread: thread_html}}, socket}
   end
 
-  def handle_out("activity", %Activity{hash: post_hash} = activity_payload, socket) do
+  def handle_out("activity", %UserActivity{hash: post_hash} = activity_payload, socket) do
     activity_html = Phoenix.View.render_to_string(SmileysWeb.SharedView, "user_activity.html", %{activity: activity_payload})
     
     push socket, "activity", %{html: activity_html, hash: post_hash}

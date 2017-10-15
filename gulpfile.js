@@ -40,7 +40,7 @@ for (var i = 0 ; i < smileysNodes.length ; ++i) {
 gulp.task('sftp_vm_args', function(){
 	smileysNodes.forEach(function(server, i) {
 		return gulp.src('gulp/vm.args.' + i)
-			.pipe(gulpSSH[i].sftp('write', '/home/ubuntu/public/vm.args'))
+			.pipe(gulpSSH[i].sftp('write', '/home/ubuntu/vm.args'))
 	});
 });
 
@@ -76,7 +76,7 @@ gulp.task('create_vm_args', function(){
     var nodeConf = nodeConfs[smileysNodes[i].name]
 
   	var vmArgs = '-name ' + smileysNodes[i].name + '\n\n' +
-  		'-setcookie "' + nodeConf.cookie + '"\n\n' +
+  		'-setcookie ' + nodeConf.cookie + '\n\n' +
   		'-kernel inet_dist_listen_min 9100 inet_dist_listen_max 9155\n\n' +
   		'-config ' + nodeConf.dir + nodeConf.name + '.config\n\n' +
   		'-smp auto\n\n';

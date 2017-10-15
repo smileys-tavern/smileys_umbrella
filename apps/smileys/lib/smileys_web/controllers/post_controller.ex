@@ -27,17 +27,17 @@ defmodule SmileysWeb.PostController do
         op_user = QueryUser.user_by_id(reply_to.posterid)
 
         _ = UserActivityRegistry.update_user_bucket!(
-          :user_activity_reg,
+          {:global, :user_activity_reg},
           %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: PostHelpers.create_link(reply_to, comment_result.room.name), comments: 1}
         )
 
         %PostActivity{comments: comment_count} = PostActivityRegistry.increment_post_bucket_comments!(
-          :post_activity_reg,
+          {:global, :post_activity_reg},
           comment_result.op.hash,
           %PostActivity{comments: 1}
         )
 
-        SmileysWeb.Endpoint.broadcast("room:" <> comment_result.room.name, "activity", %{comments: comment_count, hash: comment_result.op.hash})
+        SmileysWeb.Endpoint.broadcast("room:" <> comment_result.room.name, "post-activity", %{comments: comment_count, hash: comment_result.op.hash})
 
         {comment_result.comment.hash,
          Phoenix.View.render_to_string(SmileysWeb.SharedView, "comment.html", %{

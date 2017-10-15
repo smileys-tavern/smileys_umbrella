@@ -12,7 +12,7 @@ defmodule Smileys.Vote.Action do
 	"""
 	def upvote(%Post{} = post, %User{} = user, %User{} = post_user, room_name) do
 		_ = ActivityRegistry.update_user_bucket!(
-          :user_activity_reg,
+          {:global, :user_activity_reg},
           %Activity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: 1}
         )
 
@@ -24,7 +24,7 @@ defmodule Smileys.Vote.Action do
 	"""
 	def downvote(%Post{} = post, %User{} = user, %User{} = post_user, room_name) do
 		_ = ActivityRegistry.update_user_bucket!(
-          :user_activity_reg,
+          {:global, :user_activity_reg},
           %Activity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: -1}
         )
 

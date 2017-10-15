@@ -591,6 +591,12 @@ form.link, form.button {
 .post-activity-comment{
 	background-color: #E29739;
 }
+.room-activity-new-posts{
+	background-color: #E29739;
+}
+.room-activity-subs{
+	background-color: #3984E2;
+}
 .user-activity-url{
 	text-decoration: underline;
 }

@@ -89,7 +89,7 @@ export var Channels = {
           }
         })
 
-        channel.on("activity", payload => {
+        channel.on("post-activity", payload => {
             var commentCount = `${payload.comments}`
             var hash         = `${payload.hash}`
 
@@ -98,7 +98,21 @@ export var Channels = {
             if (commentCountObj.length) {
               commentCountObj.text(commentCount)
             }
-          })
+        })
+
+        channel.on("activity", payload => {
+            var new_posts = `${payload.new_posts}`
+            var hot_posts = `${payload.hot_posts}`
+            var subs      = `${payload.subs}`
+
+            var roomStatObj = $(".room-activity-" + room_name)
+
+            if (roomStatObj.length) {
+              roomStatObj.find(".room-activity-new-posts").text(new_posts)
+              // TODO roomStatObj.find(".hot-posts").text(new_posts)
+              roomStatObj.find(".room-activity-subs").text(subs)
+            }
+        })
 
         if (is_current_room) {
           // Enable voting

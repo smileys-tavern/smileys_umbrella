@@ -113,7 +113,7 @@ defmodule Smileys.User.ActivityRegistry do
 
   def handle_info({:DOWN, ref, :process, _pid, _reason}, {user_names, refs}) do
   	{user_name, refs} = Map.pop(refs, ref)
-	user_names   = Map.delete(user_names, user_name)
+	user_names        = Map.delete(user_names, user_name)
 
 	{:noreply, {user_names, refs}}
   end

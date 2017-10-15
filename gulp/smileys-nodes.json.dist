@@ -1,26 +1,26 @@
 {
-	"smileys1@servername1.com": 
+	"smileys@servername1.com": 
 	{
 		"version": "0.0.2",
 		"name": "smileys",
 		"dir": "/home/ubuntu/",
 		"cookie": "somesharedcookie"
 	},
-	"smileys2@servername2.com": 
+	"smileys@servername2.com": 
 	{
 		"version": "0.0.2",
 		"name": "smileys",
 		"dir": "/home/ubuntu/",
 		"cookie": "somesharedcookie"
 	},
-	"smileys3@servername3.com": 
+	"smileys@servername3.com": 
 	{
 		"version": "0.0.2",
 		"name": "smileys",
 		"dir": "/home/ubuntu/",
 		"cookie": "somesharedcookie"
 	},
-	"smileys4@servername4.com": 
+	"smileys@servername4.com": 
 	{
 		"version": "0.0.2",
 		"name": "smileys",
@@ -28,14 +28,14 @@
 		"cookie": "somesharedcookie"
 	},
 
-	"smileysapi1@apiservername1.com":
+	"smileysapi@apiservername1.com":
 	{
 		"version": "0.0.1",
 		"name": "smileysapi",
 		"dir": "/home/ubuntu/",
 		"cookie": "somesharedcookie"
 	},
-	"smileysapi2@apiservername2.com":
+	"smileysapi@apiservername2.com":
 	{
 		"version": "0.0.1",
 		"name": "smileysapi",
@@ -43,7 +43,7 @@
 		"cookie": "somesharedcookie"
 	},
 
-	"smileyscaretaker1@caretakerserver1.com":
+	"smileyscaretaker@caretakerserver1.com":
 	{
 		"version": "0.0.1",
 		"name": "smileyscaretaker",

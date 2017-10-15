@@ -29,3 +29,5 @@ erl_crash.dump
 /apps/smileysbartools/config/*.exs
 
 /rel
+
+/node_modules

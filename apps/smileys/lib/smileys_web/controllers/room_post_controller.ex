@@ -2,6 +2,8 @@ defmodule SmileysWeb.RoomPostController do
   use SmileysWeb, :controller
 
   alias SmileysData.{Post, PostMeta}
+  alias Smileys.Room.Activity, as: RoomActivity
+  alias Smileys.Room.ActivityRegistry, as: RoomActivityRegistry
 
   plug Smileys.Plugs.SetCanPost
   plug Smileys.Plugs.SetUser
@@ -127,6 +129,14 @@ defmodule SmileysWeb.RoomPostController do
 
         case SmileysData.QueryPost.create_new_post(current_user, post_params_2, meta_params, image_upload) do
           {:ok, _} ->
+            room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
+              {:global, :room_activity_reg},
+              room_name,
+              %RoomActivity{new_posts: 1}
+            )
+
+            SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
+
             conn
               |> put_flash(:info, "Posted successfully.")
               |> redirect(to: "/r/" <> room.name)
@@ -151,7 +161,7 @@ defmodule SmileysWeb.RoomPostController do
                 first_error_text
             end
           !body_check ->
-            "Your post is only allowed basic characters and punctuation currently"
+            "Your post contains unallowed characters"
           true ->
             "There was an issue with your post data or meta data"
         end
