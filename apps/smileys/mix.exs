@@ -4,7 +4,7 @@ defmodule Smileys.Mixfile do
   def project do
     [
       app: :smileys,
-      version: "0.0.6",
+      version: "0.0.7",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
