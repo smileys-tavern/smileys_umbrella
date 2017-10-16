@@ -1,6 +1,8 @@
 defmodule Smileyscaretaker.Feeds do
 	alias Smileyscaretaker.Structs.SmileysFeed
 	alias SmileysData.{QueryRoom, QueryPost, QueryPostMeta, RegisteredBot, QueryUser}
+	alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
+	alias SmileysData.State.Room.Activity, as: RoomActivity
 
 	def create_post_from_feed(%SmileysFeed{img: img_url, categories: tags, link: feed_url, author: author} = feed, %RegisteredBot{username: bot_username, callback_module: callback_module}) do
 		# Check whether it exists based on feed_url and do not process duplicate
@@ -51,7 +53,20 @@ defmodule Smileyscaretaker.Feeds do
 			    	end
 			    }
 
-			    QueryPost.create_new_post(bot_user_alias, post, meta_params, image_upload)
+			    case QueryPost.create_new_post(bot_user_alias, post, meta_params, image_upload) do
+			    	{:ok, post} ->
+			    		room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
+			              {:global, :room_activity_reg},
+			              room.name,
+			              %RoomActivity{new_posts: 1}
+			            )
+
+			            SmileyscaretakerWeb.Endpoint.broadcast("room:" <> room.name, "activity", room_activity)
+
+			    		{:ok, post}
+			    	{:error, error} ->
+			    		{:error, error}
+			    end
 			_ ->
 				{:ok, {:duplicate, %{}}}
 		end

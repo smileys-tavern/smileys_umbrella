@@ -2,8 +2,8 @@ defmodule SmileysWeb.RoomPostController do
   use SmileysWeb, :controller
 
   alias SmileysData.{Post, PostMeta}
-  alias Smileys.Room.Activity, as: RoomActivity
-  alias Smileys.Room.ActivityRegistry, as: RoomActivityRegistry
+  alias SmileysData.State.Room.Activity, as: RoomActivity
+  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
 
   plug Smileys.Plugs.SetCanPost
   plug Smileys.Plugs.SetUser

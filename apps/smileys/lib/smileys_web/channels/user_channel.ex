@@ -4,9 +4,9 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
-  alias Smileys.User.Activity, as: UserActivity
-  alias Smileys.Room.Activity, as: RoomActivity
-  alias Smileys.Room.ActivityRegistry, as: RoomActivityRegistry
+  alias SmileysData.State.User.Activity, as: UserActivity
+  alias SmileysData.State.Room.Activity, as: RoomActivity
+  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
 
   intercept ["activity"]
 

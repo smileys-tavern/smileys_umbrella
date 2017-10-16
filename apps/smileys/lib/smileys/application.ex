@@ -22,9 +22,9 @@ defmodule Smileys.Application do
         {:sql_port, Application.get_env(:giza_sphinxsearch, :sql_port)}
       ])]),
 
-      worker(Smileys.User.ActivityRegistry, [{:global, :user_activity_reg}]),
-      worker(Smileys.Post.ActivityRegistry, [{:global, :post_activity_reg}]),
-      worker(Smileys.Room.ActivityRegistry, [{:global, :room_activity_reg}])
+      worker(SmileysData.State.User.ActivityRegistry, [{:global, :user_activity_reg}]),
+      worker(SmileysData.State.Post.ActivityRegistry, [{:global, :post_activity_reg}]),
+      worker(SmileysData.State.Room.ActivityRegistry, [{:global, :room_activity_reg}])
 
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
       #  {:user,       Application.get_env(:smileys_graph, :user)}, 

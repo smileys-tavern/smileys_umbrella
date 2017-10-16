@@ -1,7 +1,7 @@
 defmodule Smileys.Plugs.SetUserSubscriptions do
   import Plug.Conn
 
-  alias Smileys.Room.ActivityRegistry, as: RoomActivityRegistry
+  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
 
   def init(default), do: default 
 

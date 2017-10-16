@@ -30,14 +30,23 @@ defmodule Smileyscaretaker.Automation.RegisteredBots do
   	# hit scraper url
 	case HTTPoison.get(meta.meta) do
     	{:ok, %{body: body}} ->
-    	    {:ok, feed, _} = FeederEx.parse(body)
 
-    	    # Each feed can return multiple entries, all of which are mapped here
-    	    mapped_feeds = Feeds.map_feed(feed)
+    	    feed = case FeederEx.parse(body) do
+    	    	{:ok, feed, _} ->
+    	    		feed
+    	    	feeder_response ->
+    	    		IO.inspect feeder_response
+    	    		nil
+    	    end
 
-    	    result = handle_mapped_feeds(mapped_feeds, bot, [])
+    	    if feed do
+	    	    # Each feed can return multiple entries, all of which are mapped here
+	    	    mapped_feeds = Feeds.map_feed(feed)
 
-    	    IO.inspect result
+	    	    result = handle_mapped_feeds(mapped_feeds, bot, [])
+
+	    	    IO.inspect result
+	    	end
     	_ ->
     		IO.inspect("No match on scraper request")
     end

@@ -9,10 +9,11 @@ defmodule Smileyscaretaker.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      # supervisor(SmileyscaretakerWeb.Endpoint, []),
+      supervisor(SmileyscaretakerWeb.Endpoint, []),
       supervisor(SmileysData.Repo, []),
       worker(Smileyscaretaker.Scheduler, []),
-      worker(Smileyscaretaker.Automation.RegisteredBots, [%{}])
+      worker(Smileyscaretaker.Automation.RegisteredBots, [%{}]),
+      worker(SmileysData.State.Room.ActivityRegistry, [{:global, :room_activity_reg}])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

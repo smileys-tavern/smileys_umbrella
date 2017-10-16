@@ -66,7 +66,7 @@ defmodule Smileys.Mixfile do
       {:scout_apm, "~> 0.3.2"},
 
       # Smileys
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.6"},
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.7"},
       {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
       #{:smileysdata, path: "../../../smileys_data"}
       #{:smileyssearch, path: "../../../smileys_search"}

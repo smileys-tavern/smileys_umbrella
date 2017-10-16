@@ -1,7 +1,7 @@
 defmodule Smileys.Plugs.SetUserActivity do
   import Plug.Conn
 
-  alias Smileys.User.{Activity, ActivityRegistry}
+  alias SmileysData.State.User.{Activity, ActivityRegistry}
 
   def init(default), do: default 
 

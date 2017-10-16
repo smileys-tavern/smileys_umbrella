@@ -9,8 +9,8 @@ defmodule SmileysWeb.PageController do
   plug Smileys.Plugs.SetUserActivity
   plug Smileys.Plugs.SetIsModerator
 
-  alias Smileys.Post.Activity, as: PostActivity
-  alias Smileys.Post.ActivityRegistry, as: PostActivityRegistry
+  alias SmileysData.State.Post.Activity, as: PostActivity
+  alias SmileysData.State.Post.ActivityRegistry, as: PostActivityRegistry
 
 
   def index(conn, _params) do
