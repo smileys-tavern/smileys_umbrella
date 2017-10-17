@@ -64,6 +64,7 @@ defmodule Smileys.Mixfile do
       {:bamboo_smtp, "~> 1.2.1"},
       {:recaptcha, "~> 2.0"},
       {:scout_apm, "~> 0.3.2"},
+      {:syn, "1.6.1"},
 
       # Smileys
       {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.7"},

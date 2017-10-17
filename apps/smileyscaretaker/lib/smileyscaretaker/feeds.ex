@@ -56,7 +56,7 @@ defmodule Smileyscaretaker.Feeds do
 			    case QueryPost.create_new_post(bot_user_alias, post, meta_params, image_upload) do
 			    	{:ok, post} ->
 			    		room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-			              {:global, :room_activity_reg},
+			              {:via, :syn, :room_activity_reg},
 			              room.name,
 			              %RoomActivity{new_posts: 1}
 			            )

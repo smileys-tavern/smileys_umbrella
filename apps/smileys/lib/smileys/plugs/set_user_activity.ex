@@ -10,7 +10,7 @@ defmodule Smileys.Plugs.SetUserActivity do
       nil ->
         assign(conn, :useractivity, [])
       user ->
-        activity = ActivityRegistry.retrieve_user_bucket!({:global, :user_activity_reg}, user.name)
+        activity = ActivityRegistry.retrieve_user_bucket!({:via, :syn, :user_activity_reg}, user.name)
 
         IO.inspect activity
 

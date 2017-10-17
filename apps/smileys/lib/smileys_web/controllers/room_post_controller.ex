@@ -94,7 +94,6 @@ defmodule SmileysWeb.RoomPostController do
     end
 
 
-
     # special body check for USER input stuff
     body_check = cond do
       SmileysData.QueryPost.validate_post_body(post_params_1["body"]) ->
@@ -130,7 +129,7 @@ defmodule SmileysWeb.RoomPostController do
         case SmileysData.QueryPost.create_new_post(current_user, post_params_2, meta_params, image_upload) do
           {:ok, _} ->
             room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-              {:global, :room_activity_reg},
+              {:via, :syn, :room_activity_reg},
               room_name,
               %RoomActivity{new_posts: 1}
             )

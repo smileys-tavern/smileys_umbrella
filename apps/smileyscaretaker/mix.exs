@@ -52,6 +52,7 @@ defmodule Smileyscaretaker.Mixfile do
       {:quantum, "~> 2.0.0"},
       {:feeder_ex, "~> 1.1"},
       {:cloudex, "~> 0.1.10"},
+      {:syn, "1.6.1"},
 
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}

@@ -29,7 +29,7 @@ defmodule SmileysWeb.UserChannel do
       case SmileysData.QuerySubscription.create_user_subscription(user, room) do
         {:ok, subscription} ->
           room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-            {:global, :room_activity_reg},
+            {:via, :syn, :room_activity_reg},
             room_name,
             %RoomActivity{subs: 1}
           )

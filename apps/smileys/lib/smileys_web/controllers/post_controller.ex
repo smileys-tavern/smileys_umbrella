@@ -27,14 +27,14 @@ defmodule SmileysWeb.PostController do
         op_user = QueryUser.user_by_id(reply_to.posterid)
 
         {url, _, comments, votes} = UserActivityRegistry.update_user_bucket!(
-          {:global, :user_activity_reg},
+          {:via, :syn, :user_activity_reg},
           %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: PostHelpers.create_link(reply_to, comment_result.room.name), comments: 1}
         )
 
         SmileysWeb.Endpoint.broadcast("user:" <> op_user.name, "activity", %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: url, comments: comments, votes: votes})
 
         %PostActivity{comments: comment_count} = PostActivityRegistry.increment_post_bucket_comments!(
-          {:global, :post_activity_reg},
+          {:via, :syn, :post_activity_reg},
           comment_result.op.hash,
           %PostActivity{comments: 1}
         )
