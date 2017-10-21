@@ -99,4 +99,9 @@ defmodule SmileysWeb.RoomChannel do
 
     {:noreply, socket}
   end
+
+  # Accept events from an external app within the umbrella
+  def handle_in("activity_external", %{"room" => room_name, "activity" => activity}) do
+    SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", activity)
+  end
 end

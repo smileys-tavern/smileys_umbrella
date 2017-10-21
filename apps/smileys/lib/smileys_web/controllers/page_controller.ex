@@ -107,7 +107,7 @@ defmodule SmileysWeb.PageController do
       [Map.put(post, :comment_count, comments)|acc] 
     end)
 
-  	render conn, "room.html", room: room, posts: posts_decorated, ismod: is_mod, roomtype: "room", kerosene: kerosene
+  	render conn, "room.html", room: room, posts: Enum.reverse(posts_decorated), ismod: is_mod, roomtype: "room", kerosene: kerosene
   end
 
   def comments(conn, %{"room" => _room, "hash" => hash, "focushash" => focushash} = _params) do

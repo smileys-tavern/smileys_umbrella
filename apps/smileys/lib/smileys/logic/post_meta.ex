@@ -3,7 +3,7 @@ defmodule Smileys.Logic.PostMeta do
 	def upload_image(image_data, tags) do
 		upload_options = cond do
 			String.length(tags) > 0 ->
-				%{tags: tags}
+				%{tags: String.split(tags, [", ", ","])}
 			true ->
 				%{}
 		end
@@ -11,14 +11,14 @@ defmodule Smileys.Logic.PostMeta do
 		uploaded_image = case Cloudex.upload(image_data.path, upload_options) do
 			[ok: cloudinary] ->
 				cloudinary
-			[error: _error] ->
+			[error: error] ->
 				nil
 		end
 
 		{thumb, image} = cond do
 			uploaded_image ->
 				{Cloudex.Url.for(uploaded_image.public_id, %{width: 60, height: 60, format: "jpg"}), 
-				 Cloudex.Url.for(uploaded_image.public_id, %{})}
+				 Cloudex.Url.for(uploaded_image.public_id, %{flags: "keep_iptc"})}
 			true ->
 				{nil, nil}
 		end

@@ -18,7 +18,7 @@
         Smiley's. Welcome to Smiley's Pub. It is what it is
       <% end %>
     </title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+
     <%= if Guardian.Plug.current_token(@conn) do %>
       <meta name='guardian_token' content="<%= Guardian.Plug.current_token(@conn) %>">
     <% end %>
@@ -41,6 +41,7 @@
 
 
   <body>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <div class="container">
       <header class="header">
         <h1><a href="/">Smiley's</a></h1>

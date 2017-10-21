@@ -93,17 +93,6 @@ defmodule SmileysWeb.RoomPostController do
         |> render("create.html", user: current_user, changeset: changeset, changeset_meta: changeset_meta, action: "new")
     end
 
-
-    # special body check for USER input stuff
-    body_check = cond do
-      SmileysData.QueryPost.validate_post_body(post_params_1["body"]) ->
-        true
-      String.length(post_params_1["body"]) == 0 ->
-        true
-      true ->
-        false
-    end
-
     # special image check
     valid_image = cond do
       image_param ->
@@ -113,7 +102,7 @@ defmodule SmileysWeb.RoomPostController do
     end
 
     cond do 
-      changeset.valid? && changeset_meta.valid? && valid_image && body_check ->
+      changeset.valid? && changeset_meta.valid? && valid_image ->
       
         tag_data = Smileys.Logic.PostMeta.process_tags(meta_params, meta_params["tags"])
 
@@ -124,9 +113,11 @@ defmodule SmileysWeb.RoomPostController do
             Smileys.Logic.PostMeta.upload_image(image_param_valid, tag_data[:tags])
         end
 
-        post_params_2 = %{post_params_1 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_1["body"], tag_data)}
+        post_params_2 = %{post_params_1 | "body" => HtmlSanitizeEx.strip_tags(post_params_1["body"])}
 
-        case SmileysData.QueryPost.create_new_post(current_user, post_params_2, meta_params, image_upload) do
+        post_params_3 = %{post_params_2 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_2["body"], tag_data)}
+
+        case SmileysData.QueryPost.create_new_post(current_user, post_params_3, meta_params, image_upload) do
           {:ok, _} ->
             room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
               {:via, :syn, :room_activity_reg},
@@ -159,8 +150,6 @@ defmodule SmileysWeb.RoomPostController do
               _ ->
                 first_error_text
             end
-          !body_check ->
-            "Your post contains unallowed characters"
           true ->
             "There was an issue with your post data or meta data"
         end

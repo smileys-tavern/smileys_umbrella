@@ -32,7 +32,13 @@ defmodule Smileysapi.Resolver.Post do
   			:vote
   	end
 
-    posts = SmileysData.QueryPost.summary(limit, order_by, room.id, %{page: offset, room: room_name}, false) 
+
+    {posts, _kerosene} = case room do
+      nil ->
+        []
+      _ ->
+        SmileysData.QueryPost.summary(limit, order_by, room.id, %{page: offset, room: room_name}, false) 
+    end
 
     {:ok, posts}
   end

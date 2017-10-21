@@ -4,7 +4,7 @@ defmodule Smileys.Mixfile do
   def project do
     [
       app: :smileys,
-      version: "0.0.7",
+      version: "0.0.9",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
@@ -67,7 +67,7 @@ defmodule Smileys.Mixfile do
       {:syn, "1.6.1"},
 
       # Smileys
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.7"},
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.8"},
       {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
       #{:smileysdata, path: "../../../smileys_data"}
       #{:smileyssearch, path: "../../../smileys_search"}

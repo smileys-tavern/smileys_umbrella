@@ -42,12 +42,12 @@ mix release.init --release-per-app
 cd apps/smileys/assets
 ```
 ```
-./node_modules/brunch/bin/brunch b -p
+./node_modules/brunch/bin/brunch build --production
 ```
 
 ### Back in the base dir of smileys_umbrella:
 ```
-MIX_ENV=prod mix phoenix.digest
+MIX_ENV=prod mix phx.digest
 ```
 
 ### First release:

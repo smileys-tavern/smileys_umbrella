@@ -61,7 +61,7 @@ defmodule Smileyscaretaker.Feeds do
 			              %RoomActivity{new_posts: 1}
 			            )
 
-			            SmileyscaretakerWeb.Endpoint.broadcast("room:" <> room.name, "activity", room_activity)
+			            SmileyscaretakerWeb.Endpoint.broadcast("room:" <> room.name, "activity_external", %{"room" => room.name, "activity" => room_activity})
 
 			    		{:ok, post}
 			    	{:error, error} ->
