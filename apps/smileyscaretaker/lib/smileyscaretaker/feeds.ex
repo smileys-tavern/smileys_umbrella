@@ -1,7 +1,8 @@
 defmodule Smileyscaretaker.Feeds do
 	alias Smileyscaretaker.Structs.SmileysFeed
 	alias SmileysData.{QueryRoom, QueryPost, QueryPostMeta, RegisteredBot, QueryUser}
-	alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
+	
+	alias SmileysData.State.Activity
 	alias SmileysData.State.Room.Activity, as: RoomActivity
 
 	def create_post_from_feed(%SmileysFeed{img: img_url, categories: tags, link: feed_url, author: author} = feed, %RegisteredBot{username: bot_username, callback_module: callback_module}) do
@@ -55,11 +56,7 @@ defmodule Smileyscaretaker.Feeds do
 
 			    case QueryPost.create_new_post(bot_user_alias, post, meta_params, image_upload) do
 			    	{:ok, post} ->
-			    		room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-			              {:via, :syn, :room_activity_reg},
-			              room.name,
-			              %RoomActivity{new_posts: 1}
-			            )
+			    		room_activity = Activity.update_item(%RoomActivity{new_posts: 1, room: room.name})
 
 			            SmileyscaretakerWeb.Endpoint.broadcast("room:" <> room.name, "activity_external", %{"room" => room.name, "activity" => room_activity})
 

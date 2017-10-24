@@ -15,21 +15,14 @@ defmodule Smileyscaretaker.Application do
       # Start the endpoint when the application starts
       supervisor(SmileyscaretakerWeb.Endpoint, []),
       supervisor(SmileysData.Repo, []),
+
+      supervisor(SmileysData.State.UserActivitySupervisor, []),
+      supervisor(SmileysData.State.RoomActivitySupervisor, []),
+      supervisor(SmileysData.State.PostActivitySupervisor, []),
+
       worker(Smileyscaretaker.Scheduler, []),
       worker(Smileyscaretaker.Automation.RegisteredBots, [%{}])
     ]
-
-    if :syn.find_by_key(:user_activity_reg) == :undefined do
-      SmileysData.State.User.ActivityRegistry.start_link({:via, :syn, :user_activity_reg})
-    end
-
-    if :syn.find_by_key(:post_activity_reg) == :undefined do
-      SmileysData.State.Post.ActivityRegistry.start_link({:via, :syn, :post_activity_reg})
-    end
-
-    if :syn.find_by_key(:room_activity_reg) == :undefined do
-      SmileysData.State.Room.ActivityRegistry.start_link({:via, :syn, :room_activity_reg})
-    end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

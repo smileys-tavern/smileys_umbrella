@@ -6,12 +6,16 @@ defmodule Smileysapi.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    :syn.start()
+
+    :syn.init()
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
       supervisor(SmileysData.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Smileysapi.Web.Endpoint, [])
+      supervisor(Smileysapi.Web.Endpoint, []),
       # Start your own worker by calling: Smileysapi.Worker.start_link(arg1, arg2, arg3)
       # worker(Smileysapi.Worker, [arg1, arg2, arg3]),
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
@@ -19,6 +23,9 @@ defmodule Smileysapi.Application do
       #  {:password,   Application.get_env(:smileys_graph, :password)}, 
       #  {:connection, Application.get_env(:smileys_graph, :connection)},
       #  {:name, SmileysData.Graph}])])
+      supervisor(SmileysData.State.UserActivitySupervisor, []),
+      supervisor(SmileysData.State.RoomActivitySupervisor, []),
+      supervisor(SmileysData.State.PostActivitySupervisor, [])
     ]
 
     children_final = case Application.get_env(:smileys_features, :graph) do

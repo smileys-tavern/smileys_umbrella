@@ -24,7 +24,11 @@ defmodule Smileys.Application do
         {:host, Application.get_env(:giza_sphinxsearch, :host)},
         {:port, Application.get_env(:giza_sphinxsearch, :port)},
         {:sql_port, Application.get_env(:giza_sphinxsearch, :sql_port)}
-      ])])
+      ])]),
+
+      supervisor(SmileysData.State.UserActivitySupervisor, []),
+      supervisor(SmileysData.State.RoomActivitySupervisor, []),
+      supervisor(SmileysData.State.PostActivitySupervisor, [])
 
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
       #  {:user,       Application.get_env(:smileys_graph, :user)}, 
@@ -32,18 +36,6 @@ defmodule Smileys.Application do
       #  {:connection, Application.get_env(:smileys_graph, :connection)},
       #  {:timeout, 10000}])])
     ]
-
-    if :syn.find_by_key(:user_activity_reg) == :undefined do
-      SmileysData.State.User.ActivityRegistry.start_link({:via, :syn, :user_activity_reg})
-    end
-
-    if :syn.find_by_key(:post_activity_reg) == :undefined do
-      SmileysData.State.Post.ActivityRegistry.start_link({:via, :syn, :post_activity_reg})
-    end
-
-    if :syn.find_by_key(:room_activity_reg) == :undefined do
-      SmileysData.State.Room.ActivityRegistry.start_link({:via, :syn, :room_activity_reg})
-    end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

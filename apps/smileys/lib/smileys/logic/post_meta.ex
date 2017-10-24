@@ -11,7 +11,7 @@ defmodule Smileys.Logic.PostMeta do
 		uploaded_image = case Cloudex.upload(image_data.path, upload_options) do
 			[ok: cloudinary] ->
 				cloudinary
-			[error: error] ->
+			[error: _] ->
 				nil
 		end
 

@@ -9,8 +9,8 @@ defmodule SmileysWeb.PageController do
   plug Smileys.Plugs.SetUserActivity
   plug Smileys.Plugs.SetIsModerator
 
+  alias SmileysData.State.Activity
   alias SmileysData.State.Post.Activity, as: PostActivity
-  alias SmileysData.State.Post.ActivityRegistry, as: PostActivityRegistry
 
 
   def index(conn, _params) do
@@ -102,8 +102,9 @@ defmodule SmileysWeb.PageController do
 		  	SmileysData.QueryPost.summary_by_room(25, :vote, room.id, params)
 	  end
 
-    posts_decorated = List.foldl(posts, [], fn(post, acc) -> 
-      %PostActivity{comments: comments} = PostActivityRegistry.retrieve_post_bucket!({:via, :syn, :post_activity_reg}, post.hash)
+    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
+      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
+
       [Map.put(post, :comment_count, comments)|acc] 
     end)
 

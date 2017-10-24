@@ -4,9 +4,9 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
-  alias SmileysData.State.User.Activity, as: UserActivity
+  alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
-  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
+  alias SmileysData.State.User.Activity, as: UserActivity
 
   intercept ["activity"]
 
@@ -28,11 +28,7 @@ defmodule SmileysWeb.UserChannel do
     if SmileysData.QuerySubscription.can_user_subscribe_to_room(user, room) do
       case SmileysData.QuerySubscription.create_user_subscription(user, room) do
         {:ok, subscription} ->
-          room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-            {:via, :syn, :room_activity_reg},
-            room_name,
-            %RoomActivity{subs: 1}
-          )
+          room_activity = Activity.update_item(%RoomActivity{room: room_name, subs: 1})
 
           SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
 
@@ -48,6 +44,10 @@ defmodule SmileysWeb.UserChannel do
 
     case SmileysData.QuerySubscription.delete_user_subscription(user, room_name) do
       {:ok, roomname} ->
+        room_activity = Activity.update_item(%RoomActivity{room: room_name, subs: -1})
+
+        SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
+
         {:reply, {:ok, %{room: roomname}}, socket}
       _ ->
         {:noreply, socket}

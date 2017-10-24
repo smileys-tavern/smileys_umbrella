@@ -6,10 +6,10 @@ defmodule SmileysWeb.PostController do
 
   alias SmileysData.{QueryPost, QueryUser}
   alias Smileys.Logic.PostHelpers
+
+  alias SmileysData.State.Activity
   alias SmileysData.State.User.Activity, as: UserActivity
-  alias SmileysData.State.User.ActivityRegistry, as: UserActivityRegistry
   alias SmileysData.State.Post.Activity, as: PostActivity
-  alias SmileysData.State.Post.ActivityRegistry, as: PostActivityRegistry
 
 
   def comment(conn, %{"hash" => hash, "depth" => depth, "ophash" => ophash, "body" => body} = _params) do
@@ -26,18 +26,13 @@ defmodule SmileysWeb.PostController do
         reply_to = comment_result.reply_to
         op_user = QueryUser.user_by_id(reply_to.posterid)
 
-        {url, _, comments, votes} = UserActivityRegistry.update_user_bucket!(
-          {:via, :syn, :user_activity_reg},
+        %UserActivity{url: url, comments: comments, votes: votes} = Activity.update_item(
           %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: PostHelpers.create_link(reply_to, comment_result.room.name), comments: 1}
         )
 
         SmileysWeb.Endpoint.broadcast("user:" <> op_user.name, "activity", %UserActivity{user_name: op_user.name, hash: reply_to.hash, url: url, comments: comments, votes: votes})
 
-        %PostActivity{comments: comment_count} = PostActivityRegistry.increment_post_bucket_comments!(
-          {:via, :syn, :post_activity_reg},
-          comment_result.op.hash,
-          %PostActivity{comments: 1}
-        )
+        %PostActivity{comments: comment_count} = Activity.update_item(%PostActivity{hash: comment_result.op.hash, comments: 1})
 
         SmileysWeb.Endpoint.broadcast("room:" <> comment_result.room.name, "post-activity", %{comments: comment_count, hash: comment_result.op.hash})
 

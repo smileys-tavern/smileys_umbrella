@@ -2,8 +2,9 @@ defmodule SmileysWeb.RoomPostController do
   use SmileysWeb, :controller
 
   alias SmileysData.{Post, PostMeta}
+
+  alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
-  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
 
   plug Smileys.Plugs.SetCanPost
   plug Smileys.Plugs.SetUser
@@ -119,11 +120,7 @@ defmodule SmileysWeb.RoomPostController do
 
         case SmileysData.QueryPost.create_new_post(current_user, post_params_3, meta_params, image_upload) do
           {:ok, _} ->
-            room_activity = RoomActivityRegistry.increment_room_bucket_activity!(
-              {:via, :syn, :room_activity_reg},
-              room_name,
-              %RoomActivity{new_posts: 1}
-            )
+            room_activity = Activity.update_item(%RoomActivity{room: room_name, new_posts: 1})
 
             SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
 

@@ -1,7 +1,8 @@
 defmodule Smileys.Plugs.SetUserActivity do
   import Plug.Conn
 
-  alias SmileysData.State.User.{Activity, ActivityRegistry}
+  alias SmileysData.State.Activity
+  alias SmileysData.State.User.Activity, as: UserActivity
 
   def init(default), do: default 
 
@@ -10,11 +11,9 @@ defmodule Smileys.Plugs.SetUserActivity do
       nil ->
         assign(conn, :useractivity, [])
       user ->
-        activity = ActivityRegistry.retrieve_user_bucket!({:via, :syn, :user_activity_reg}, user.name)
-        
-        assign(conn, :useractivity, Enum.map(activity, fn {hash, {url, _, comments, votes}} -> 
-          %Activity{hash: hash, url: url, comments: comments, votes: votes}
-        end))
+        activity = Activity.retrieve(%UserActivity{user_name: user.name})
+
+        assign(conn, :useractivity, Enum.map(activity, fn {_, activity} -> activity end))
     end
   end
 end

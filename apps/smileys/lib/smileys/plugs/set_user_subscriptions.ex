@@ -1,7 +1,8 @@
 defmodule Smileys.Plugs.SetUserSubscriptions do
   import Plug.Conn
 
-  alias SmileysData.State.Room.ActivityRegistry, as: RoomActivityRegistry
+  alias SmileysData.State.Activity
+  alias SmileysData.State.Room.Activity, as: RoomActivity
 
   def init(default), do: default 
 
@@ -11,7 +12,7 @@ defmodule Smileys.Plugs.SetUserSubscriptions do
     subscriptions = SmileysData.QuerySubscription.user_subscriptions(user)
 
     subscriptions_decorated = List.foldl(subscriptions, [], fn(subscription, acc) -> 
-      room_activity = RoomActivityRegistry.retrieve_room_bucket!({:via, :syn, :room_activity_reg}, subscription.roomname)
+      room_activity = Activity.retrieve_item(%RoomActivity{room: subscription.roomname})
 
       [Map.merge(subscription, room_activity)|acc]
     end)
