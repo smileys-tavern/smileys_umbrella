@@ -6,6 +6,8 @@ defmodule SmileysWeb.RoomPostController do
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
 
+  alias Smileys.Logic.PostHelpers
+
   plug Smileys.Plugs.SetCanPost
   plug Smileys.Plugs.SetUser
 
@@ -21,7 +23,7 @@ defmodule SmileysWeb.RoomPostController do
 
   	current_user = case current_user do
   		nil ->
-        %{name: "amysteriousstranger", reputation: 1, id: 5}
+        %{name: "amysteriousstranger", reputation: 1, id: 5, user_token: conn.assigns.mystery_token}
       _ ->
         current_user
   	end
@@ -40,7 +42,7 @@ defmodule SmileysWeb.RoomPostController do
 
   	current_user = case conn.assigns.user do
       nil ->
-        %{:id => 5, :reputation => 1, :name => "amysteriousstranger"}
+        %{:id => 5, :reputation => 1, :name => "amysteriousstranger", user_token: conn.assigns.mystery_token}
       user ->
         user 
     end
@@ -119,19 +121,30 @@ defmodule SmileysWeb.RoomPostController do
         post_params_3 = %{post_params_2 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_2["body"], tag_data)}
 
         case SmileysData.QueryPost.create_new_post(current_user, post_params_3, meta_params, image_upload) do
-          {:ok, _} ->
+          {:ok, {:ok, post}} ->
             room_activity = Activity.update_item(%RoomActivity{room: room_name, new_posts: 1})
 
             SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
 
+            if current_user.name == "amysteriousstranger" do
+              SmileysData.QueryPost.add_anonymous_record(current_user.user_token, post.id)
+            end
+
             conn
               |> put_flash(:info, "Posted successfully.")
-              |> redirect(to: "/r/" <> room.name)
-          {:post_freqency_violation, _} ->
+              |> redirect(to: PostHelpers.create_link(post, room_name))
+          {:ok, {:post_frequency_violation, limit}} ->
+              limit_format = case limit do
+                true ->
+                  "Unknown Limit"
+                limit_string ->
+                  Integer.to_string(div(String.to_integer(limit_string), 60)) <> " Minutes"
+              end
+
               conn
-                |> put_flash(:error, "You have posted too recently. We have a short limit on posting frequency which will lessen after using the site more.")
+                |> put_flash(:error, "There is a short limit on posting frequency which will be removed after using the site more (" <> limit_format <> ")")
                 |> render("create.html", changeset: changeset, changeset_meta: changeset_meta, action: "new", user: current_user)
-          {:error, changeset} ->
+          {:ok, {:error, changeset}} ->
               render(conn, "create.html", changeset: changeset, action: "new")
         end
       true ->

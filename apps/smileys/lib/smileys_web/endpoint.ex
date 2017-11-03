@@ -7,8 +7,15 @@ defmodule SmileysWeb.Endpoint do
   #
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
+  gzip = case Application.get_env(:smileys, :gzip) do 
+    :on ->
+      true
+    _ ->
+      false
+  end
+
   plug Plug.Static,
-    at: "/", from: :smileys, gzip: true,
+    at: "/", from: :smileys, gzip: gzip,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the

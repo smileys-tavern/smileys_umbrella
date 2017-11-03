@@ -122,16 +122,25 @@ var _user$project$SmileysSearch$term = _elm_lang$core$Json_Encode$object(
 				_0: 'offset',
 				_1: _elm_lang$core$Json_Encode$int(0)
 			},
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'user_token',
+					_1: _elm_lang$core$Json_Encode$string('')
+				},
+				_1: {ctor: '[]'}
+			}
 		}
 	});
 var _user$project$SmileysSearch$initPhxSocket = function (websocketUrl) {
 	return _fbonetti$elm_phoenix_socket$Phoenix_Socket$init(websocketUrl);
 };
 var _user$project$SmileysSearch$pageSize = 25;
-var _user$project$SmileysSearch$Flags = function (a) {
-	return {websocketUrl: a};
-};
+var _user$project$SmileysSearch$Flags = F2(
+	function (a, b) {
+		return {websocketUrl: a, userToken: b};
+	});
 var _user$project$SmileysSearch$SearchResults = F2(
 	function (a, b) {
 		return {results: a, amt: b};
@@ -296,23 +305,26 @@ var _user$project$SmileysSearch$searchDecoder = A2(
 			'results',
 			_elm_lang$core$Json_Decode$list(_user$project$SmileysSearch$postSummaryDecoder))),
 	A2(_elm_lang$core$Json_Decode$field, 'amt', _elm_lang$core$Json_Decode$int));
-var _user$project$SmileysSearch$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {search: a, results: b, amount_results: c, user_input: d, status: e, current_channel: f, page: g, phxSocket: h};
+var _user$project$SmileysSearch$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {search: a, results: b, amount_results: c, user_input: d, status: e, current_channel: f, page: g, user_token: h, phxSocket: i};
 	});
 var _user$project$SmileysSearch$init = function (flags) {
 	var _p0 = flags;
 	var websocketUrl = _p0.websocketUrl;
+	var userToken = _p0.userToken;
 	var _p1 = {
-		ctor: '_Tuple2',
+		ctor: '_Tuple3',
 		_0: _user$project$SmileysSearch$initPhxSocket(websocketUrl),
-		_1: _user$project$SmileysSearch$initSearchResults
+		_1: _user$project$SmileysSearch$initSearchResults,
+		_2: userToken
 	};
 	var phxSocket = _p1._0;
 	var searchResults = _p1._1;
+	var user_token = _p1._2;
 	return {
 		ctor: '_Tuple2',
-		_0: A8(
+		_0: A9(
 			_user$project$SmileysSearch$Model,
 			'',
 			searchResults,
@@ -321,6 +333,7 @@ var _user$project$SmileysSearch$init = function (flags) {
 			'',
 			'',
 			0,
+			user_token,
 			phxSocket),
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
@@ -499,7 +512,15 @@ var _user$project$SmileysSearch$requestSearch = function (model) {
 					_0: 'offset',
 					_1: _elm_lang$core$Json_Encode$int(model.page * _user$project$SmileysSearch$pageSize)
 				},
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'user_token',
+						_1: _elm_lang$core$Json_Encode$string(model.user_token)
+					},
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 	var push_ = A2(
@@ -533,7 +554,7 @@ var _user$project$SmileysSearch$update = F2(
 							phxSocket: A4(
 								_fbonetti$elm_phoenix_socket$Phoenix_Socket$on,
 								'search_result',
-								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+								A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token),
 								_user$project$SmileysSearch$ReceiveSearchResults,
 								phxSocket)
 						}),
@@ -550,12 +571,12 @@ var _user$project$SmileysSearch$update = F2(
 						_fbonetti$elm_phoenix_socket$Phoenix_Channel$onClose,
 						_elm_lang$core$Basics$always(
 							_user$project$SmileysSearch$ShowLeftMessage(
-								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))),
+								A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token))),
 						A2(
 							_fbonetti$elm_phoenix_socket$Phoenix_Channel$onJoin,
 							_elm_lang$core$Basics$always(_user$project$SmileysSearch$RequestSearch),
 							_fbonetti$elm_phoenix_socket$Phoenix_Channel$init(
-								A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))));
+								A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token))));
 					var _p5 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$join, channel, model.phxSocket);
 					var phxSocket = _p5._0;
 					var phxCmd = _p5._1;
@@ -565,7 +586,7 @@ var _user$project$SmileysSearch$update = F2(
 							model,
 							{
 								phxSocket: phxSocket,
-								current_channel: A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+								current_channel: A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token),
 								page: 0
 							}),
 						_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
@@ -618,12 +639,12 @@ var _user$project$SmileysSearch$update = F2(
 					_fbonetti$elm_phoenix_socket$Phoenix_Channel$onClose,
 					_elm_lang$core$Basics$always(
 						_user$project$SmileysSearch$ShowLeftMessage(
-							A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))),
+							A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token))),
 					A2(
 						_fbonetti$elm_phoenix_socket$Phoenix_Channel$onJoin,
 						_elm_lang$core$Basics$always(_user$project$SmileysSearch$RequestSearch),
 						_fbonetti$elm_phoenix_socket$Phoenix_Channel$init(
-							A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search))));
+							A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token))));
 				var _p9 = A2(_fbonetti$elm_phoenix_socket$Phoenix_Socket$join, channel, model.phxSocket);
 				var phxSocket = _p9._0;
 				var phxCmd = _p9._1;
@@ -633,7 +654,7 @@ var _user$project$SmileysSearch$update = F2(
 						model,
 						{
 							phxSocket: phxSocket,
-							current_channel: A2(_elm_lang$core$Basics_ops['++'], 'search:', model.search),
+							current_channel: A2(_elm_lang$core$Basics_ops['++'], 'user:', model.user_token),
 							page: 0
 						}),
 					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$SmileysSearch$PhoenixMsg, phxCmd)
@@ -780,8 +801,13 @@ var _user$project$SmileysSearch$main = _elm_lang$html$Html$programWithFlags(
 	{init: _user$project$SmileysSearch$init, view: _user$project$SmileysSearch$view, update: _user$project$SmileysSearch$update, subscriptions: _user$project$SmileysSearch$subscriptions})(
 	A2(
 		_elm_lang$core$Json_Decode$andThen,
-		function (websocketUrl) {
-			return _elm_lang$core$Json_Decode$succeed(
-				{websocketUrl: websocketUrl});
+		function (userToken) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (websocketUrl) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{userToken: userToken, websocketUrl: websocketUrl});
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'websocketUrl', _elm_lang$core$Json_Decode$string));
 		},
-		A2(_elm_lang$core$Json_Decode$field, 'websocketUrl', _elm_lang$core$Json_Decode$string)));
+		A2(_elm_lang$core$Json_Decode$field, 'userToken', _elm_lang$core$Json_Decode$string)));

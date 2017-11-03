@@ -6,6 +6,7 @@ import {App} from "./app"
 export var User = {
 
   init: function() {
+
   	Channels.joinUser()
 
   	$('body').on('click', '.room-subscribe', function(){
@@ -33,6 +34,16 @@ export var User = {
 	        $('.room-' + room_name).remove()
 	    })
   	})
+
+    $('body').on('mouseover', '.activity-count', function(){
+      var parts = $(this).text().split(" ")
+
+      if (parts.length > 2) {
+        $(this).text(parts[0])
+      } else {
+        $(this).text($(this).text() + " " + $(this).data('hover'))
+      }
+    })
 
   	this.showAllVotesOnPage(Cache.userGetVotes())
   },

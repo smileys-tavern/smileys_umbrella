@@ -18,7 +18,13 @@ defmodule SmileysWeb.PageController do
 
     reputable_rooms = SmileysData.QueryRoom.list_by(:reputation, 5)
 
-    render conn, "index.html", new_posts: posts, reputable_rooms: reputable_rooms
+    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
+      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
+
+      [Map.put(post, :comment_count, comments)|acc] 
+    end)
+
+    render conn, "index.html", new_posts: posts_decorated, reputable_rooms: reputable_rooms
   end
 
   def profile(conn, %{"username" => user_name} = _params) do
@@ -54,7 +60,14 @@ defmodule SmileysWeb.PageController do
   		  	|> render(Smileys.ErrorView, "404.html")
   	end
 
-  	render conn, "house.html", room: room, posts: posts, roomtype: "house"
+
+    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
+      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
+
+      [Map.put(post, :comment_count, comments)|acc] 
+    end)
+
+  	render conn, "house.html", room: room, posts: posts_decorated, roomtype: "house"
   end
 
   def room(conn, %{"room" => room_name} = params) do

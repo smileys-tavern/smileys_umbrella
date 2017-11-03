@@ -36,6 +36,11 @@
         end %>]
       </script>
     <% end %>
+    <%= if assigns[:mystery_token] do %>
+      <script>
+        var mystery_token = '<%= assigns[:mystery_token] %>'
+      </script>
+    <% end %>
   </head>
 
 

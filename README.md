@@ -1,6 +1,6 @@
 ## SmileysUmbrella
 
-The umbrella contains all (and only) the deployable services that comprise the Smiley's experience.  Setting it up to run locally can be straightforward but be a lot of work the first time probably, as some services may be unfamiliar.
+The umbrella contains all (and only) the deployable services that comprise the Smiley's experience. The libraries aren't tied to any domain but smileys.pub demonstrates what the apps here do.  There are examples for api usage here http://smileys.pub/r/aboutsmileys and latest feature releases here http://smileys.pub/r/smileysupdates
 
 
 ### Smileys
@@ -15,7 +15,7 @@ The api.smileys.pub api that provides a GraphQL interface to access many of the 
 
 ### Smileysprocesses
 
-The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered.
+The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered and runs bots that parse rss feeds. In the future it would handle timed tasks on behalf of users as well.
 
 
 ### Smileysbartools (future)

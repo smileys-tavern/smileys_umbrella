@@ -1,0 +1,1 @@
+<span class="comment-action comment-action-<%= assigns[:action_type] %>"><%= assigns[:action_string] %></span>

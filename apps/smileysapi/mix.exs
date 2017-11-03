@@ -57,7 +57,7 @@ defmodule Smileysapi.Mixfile do
      {:syn, "1.6.1"},
 
      # Smileys
-     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.9"},
+     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.10"},
      {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
      #{:smileysdata, path: "../../../smileys_data"},
      #{:smileyssearch, path: "../../../smileys_search"}

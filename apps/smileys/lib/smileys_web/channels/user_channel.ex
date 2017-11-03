@@ -7,6 +7,7 @@ defmodule SmileysWeb.UserChannel do
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
   alias SmileysData.State.User.Activity, as: UserActivity
+  alias SmileysData.State.User.Notification, as: UserNotification
 
   intercept ["activity"]
 
@@ -18,6 +19,10 @@ defmodule SmileysWeb.UserChannel do
       {:error, _reason} ->
         Logger.error "Auth error, expected token to auth user"
     end
+  end
+
+  def join("user:" <> _mystery_token, _message, socket) do
+    {:ok, socket}
   end
 
   def handle_in("subscribe", %{"roomname" => room_name}, socket) do 
@@ -69,8 +74,53 @@ defmodule SmileysWeb.UserChannel do
     {:reply, {:ok, %{thread: thread_html}}, socket}
   end
 
+  def handle_in("search_for", %{"term" => term, "offset" => offset, "user_token" => user_token}, socket) do
+
+    user = current_resource(socket)
+
+    {search_results, amount} = case SmileysSearch.QueryPost.posts_all(term, offset) do
+      {:ok, results, amount_results} ->
+        {results, amount_results}
+      {:error, _} ->
+        {[], 0}
+    end
+
+    posts = SmileysData.QueryPost.post_summary_by_ids(search_results)
+
+    channel_id = case user do
+      nil ->
+        user_token
+      user ->
+        user.name
+    end
+
+    SmileysWeb.Endpoint.broadcast("user:" <> channel_id, "search_result", %{results: posts, amt: amount})
+
+    {:noreply, socket}
+  end
+
+  def handle_in("search_suggest", %{"term" => _term, "user_token" => _user_token}, socket) do
+    #suggest_results = case SmileysSearch.QueryPost.suggest(term) do
+    #  {:ok, results} ->
+    #    user = current_resource(socket)
+    #    SmileysWeb.Endpoint.broadcast("user:" <> user.id, "suggest_result", %{results: results})
+    #  {:error, _} ->
+    #    []
+    #end
+
+    {:noreply, socket}
+  end
+
   def handle_out("activity", %UserActivity{hash: post_hash} = activity_payload, socket) do
     activity_html = Phoenix.View.render_to_string(SmileysWeb.SharedView, "user_activity.html", %{activity: activity_payload})
+    
+    push socket, "activity", %{html: activity_html, hash: post_hash}
+    
+    {:noreply, socket}    
+  end
+
+  def handle_out("activity", %UserNotification{hash: post_hash} = activity_payload, socket) do
+    activity_html = Phoenix.View.render_to_string(SmileysWeb.SharedView, "user_notification.html", %{notification: activity_payload})
     
     push socket, "activity", %{html: activity_html, hash: post_hash}
     

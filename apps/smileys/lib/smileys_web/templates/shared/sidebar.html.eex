@@ -30,9 +30,14 @@
 			<div class="userlatestposts sidebar-links site-actions">
 				<h5>Your Latest</h5>
 
-				<%= for activity <- assigns[:useractivity] do %>
-					<%= render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity} %>
-				<% end %>
+				<%= for activity <- assigns[:useractivity] do
+					case activity do 
+						%SmileysData.State.User.Activity{} ->
+							render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity}
+						%SmileysData.State.User.Notification{} ->
+							render SmileysWeb.SharedView, "user_notification.html", %{:notification => activity}
+				     end
+				end %>
 			</div>
 		<% end %>
 
@@ -42,8 +47,8 @@
 				<%= for subscription <- assigns[:subscriptions] do %>
 					<div class="room-link room-<%= subscription.roomname %>">
 						<span class="room-activity-<%= subscription.roomname %>">
-							<span class="room-activity-new-posts activity-count"><%= subscription.new_posts %></span>
-							<span class="room-activity-subs activity-count"><%= subscription.subs %></span>
+							<span class="room-activity-new-posts activity-count" data-hover="New Posts"><%= subscription.new_posts %></span>
+							<span class="room-activity-subs activity-count" data-hover="New Subs"><%= subscription.subs %></span>
 						</span>
 						<a href="/r/<%= subscription.roomname %>">/r/<%= subscription.roomname %></a> 
 						<span class="update"></span> 

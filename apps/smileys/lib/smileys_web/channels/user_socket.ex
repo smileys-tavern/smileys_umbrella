@@ -9,7 +9,6 @@ defmodule SmileysWeb.UserSocket do
   channel "post:*", SmileysWeb.PostChannel
   channel "user:*", SmileysWeb.UserChannel
   channel "room:*", SmileysWeb.RoomChannel
-  channel "search:*", SmileysWeb.SearchChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

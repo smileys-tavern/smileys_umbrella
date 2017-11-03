@@ -17,7 +17,8 @@ import Json.Decode.Extra exposing ((|:))
 import Dict
 
 type alias Flags =
-  { websocketUrl : String
+  { websocketUrl : String,
+    userToken : String
   }
 
 -- TODO: change file name from Smileys.elm to Search.elm or something after starting module #2
@@ -54,6 +55,7 @@ type alias Model =
      status : String,
      current_channel : String,
      page : Int,
+     user_token : String,
      phxSocket : Phoenix.Socket.Socket Msg
     }
 
@@ -72,15 +74,14 @@ initSearchResults =
 init : Flags -> (Model, Cmd Msg)
 init flags =
   let
-    { websocketUrl } =
+    { websocketUrl, userToken } =
       flags
   in
     let
-        (phxSocket, searchResults) =
-            ( initPhxSocket websocketUrl
-            , initSearchResults)
+        (phxSocket, searchResults, user_token) =
+            ( initPhxSocket websocketUrl, initSearchResults, userToken)
     in
-        (Model "" searchResults 0 ' ' "" "" 0 phxSocket, Cmd.none)
+        (Model "" searchResults 0 ' ' "" "" 0 user_token phxSocket, Cmd.none)
 
 -- Update
 searchDecoder : JD.Decoder SearchResults
@@ -109,7 +110,7 @@ postSummaryDecoder =
 
 term : JE.Value
 term =
-    JE.object [ ( "term", JE.string "searchfor" ), ( "offset", JE.int 0 ) ]
+    JE.object [ ( "term", JE.string "searchfor" ), ( "offset", JE.int 0 ), ( "user_token", JE.string "" ) ]
 
 type Msg
     = UpdateSearchTerm String
@@ -136,7 +137,7 @@ update msg model =
             in
                 ( { model 
                   | phxSocket = phxSocket 
-                  |> Phoenix.Socket.on "search_result" ("search:" ++ model.search) ReceiveSearchResults
+                  |> Phoenix.Socket.on "search_result" ("user:" ++ model.user_token) ReceiveSearchResults
                   }
                 , Cmd.map PhoenixMsg phxCmd
                 )
@@ -145,16 +146,16 @@ update msg model =
              if (code == '\r' && (String.length(model.search) > 0)) then
                 let
                     channel =
-                        Phoenix.Channel.init ("search:" ++ model.search)
+                        Phoenix.Channel.init ("user:" ++ model.user_token)
                             |> Phoenix.Channel.onJoin (always (RequestSearch))
-                            |> Phoenix.Channel.onClose (always (ShowLeftMessage ("search:" ++ model.search)))
+                            |> Phoenix.Channel.onClose (always (ShowLeftMessage ("user:" ++ model.user_token)))
 
                     ( phxSocket, phxCmd ) =
                         Phoenix.Socket.join channel model.phxSocket
                 in
                     ( { model 
                       | phxSocket = phxSocket
-                      , current_channel = ("search:" ++ model.search)
+                      , current_channel = ("user:" ++ model.user_token)
                       , page = 0
                       }
                     , Cmd.map PhoenixMsg phxCmd
@@ -194,16 +195,16 @@ update msg model =
         JoinChannel ->
             let
                 channel =
-                    Phoenix.Channel.init ("search:" ++ model.search)
+                    Phoenix.Channel.init ("user:" ++ model.user_token)
                         |> Phoenix.Channel.onJoin (always (RequestSearch))
-                        |> Phoenix.Channel.onClose (always (ShowLeftMessage ("search:" ++ model.search)))
+                        |> Phoenix.Channel.onClose (always (ShowLeftMessage ("user:" ++ model.user_token)))
 
                 ( phxSocket, phxCmd ) =
                     Phoenix.Socket.join channel model.phxSocket
             in
                 ( { model 
                   | phxSocket = phxSocket
-                  , current_channel = ("search:" ++ model.search)
+                  , current_channel = ("user:" ++ model.user_token)
                   , page = 0
                   }
                 , Cmd.map PhoenixMsg phxCmd
@@ -287,7 +288,7 @@ requestSearch : Model -> (Model, Cmd Msg)
 requestSearch model =
     let
         payload =
-            (JE.object [ ( "term", JE.string model.search ), ( "offset", JE.int (model.page * pageSize) ) ])
+            (JE.object [ ( "term", JE.string model.search ), ( "offset", JE.int (model.page * pageSize) ), ( "user_token", JE.string model.user_token ) ])
         push_ =
             Phoenix.Push.init "search_for" model.current_channel
                 |> Phoenix.Push.withPayload payload

@@ -6,7 +6,7 @@
     </div>
     <div class="op-title">
 		<a href="/r/<%= assigns[:room].name %>">/r/<%= assigns[:room].name %></a>
-        <%= assigns[:post].title %> - <strong><%= assigns[:opname] %></strong> 
+        <%= assigns[:post].title %> - <strong><a href="/u/<%= assigns[:opname] %>"><%= assigns[:opname] %></a></strong> 
         <%= if assigns[:parent] do %>
             <a href="/r/<%= assigns[:room].name %>/comments/<%= assigns[:post].hash %>/focus/<%= assigns[:parent].hash %>">Parent</a> | 
         <% end %>
@@ -38,6 +38,8 @@
         </div>
     </div>
     <div class="op-content">
+        <span class="time-blatant">Posted <%= Timex.format!(assigns[:post].inserted_at, "{relative}", :relative) %></span>
+
         <div class="op-actions">
             <a href="javascript:void(0)" class="reply" data-hash="<%= assigns[:post].hash %>">Comment</a>
 

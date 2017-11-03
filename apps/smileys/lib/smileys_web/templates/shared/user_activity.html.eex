@@ -1,5 +1,5 @@
 <a class="user-activity" id="user-activity-<%= Map.get(assigns[:activity], :hash) %>" href="<%= Map.get(assigns[:activity], :url) %>">
-	<span class="user-activity-comment activity-count"><%= Map.get(assigns[:activity], :comments) %></span>
-	<span class="user-activity-vote activity-count"><%= Map.get(assigns[:activity], :votes) %></span>
+	<span class="user-activity-comment activity-count" data-hover="New Replies"><%= Map.get(assigns[:activity], :comments) %></span>
+	<span class="user-activity-vote activity-count" data-hover="New Votes"><%= Map.get(assigns[:activity], :votes) %></span>
 	<span class="user-activity-url"><%= String.slice(Map.get(assigns[:activity], :url), 0, 30) %></span>
 </a>

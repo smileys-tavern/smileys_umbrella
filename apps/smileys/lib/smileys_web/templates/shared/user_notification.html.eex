@@ -1,0 +1,4 @@
+<a class="user-activity user-activity-notification" id="user-activity-<%= Map.get(assigns[:notification], :hash) %>" href="<%= Map.get(assigns[:notification], :url) %>">
+	<span class="user-activity-pingedby"><%= String.slice(Map.get(assigns[:notification], :pinged_by), 0, 30) %></span>
+	<span class="user-activity-url"><%= String.slice(Map.get(assigns[:notification], :url), 0, 30) %></span>
+</a>

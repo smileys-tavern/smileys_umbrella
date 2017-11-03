@@ -34,6 +34,9 @@ nav ul{
 .end-float { clear: both; }
 .end-spacer { height: 80px; width: 1px; }
 
+.time-subtle { color: #716a6a; font-size: 13px; }
+.time-blatant { color: #716a6a; font-size: 15px; }
+
 .menu-toggle {
   padding-left: 1.25em;
   position: absolute;
@@ -256,7 +259,7 @@ nav ul{
 .op-actions {
 	clear: both;
 	margin: 2px 0;
-	padding: 20px 60px 15px 0px;
+	padding: 10px 60px 15px 0px;
 
 }
 .op-actions a {
@@ -600,6 +603,12 @@ form.link, form.button {
 .user-activity-url{
 	text-decoration: underline;
 }
+.user-activity-notification{
+	background-color: #da4747 !important;
+}
+.user-activity-notification:hover{
+	background-color: #b34f4f !important;
+}
 
 .activity-count {
 	border-radius: 8px;
@@ -607,6 +616,13 @@ form.link, form.button {
 	padding-left: 4px;
 	padding-right: 4px;
 	color: #fff;
+	cursor: crosshair;
+}
+
+.comment-action-u {
+	background-color: #ffaaaa;
+	padding: 0 4px;
+	border-radius: 4px;
 }
 
 /**

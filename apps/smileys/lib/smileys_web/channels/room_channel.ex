@@ -10,7 +10,7 @@ defmodule SmileysWeb.RoomChannel do
   def join("room:" <> _room_name, %{"guardian_token" => token}, socket) do
     case sign_in(socket, token) do
       {:ok, authed_socket, _guardian_params} ->
-        send(self(), :after_join)
+        send(self(), {:after_join, nil})
 
         {:ok, %{result: "Joined"}, authed_socket}
       {:error, _reason} ->
@@ -19,18 +19,33 @@ defmodule SmileysWeb.RoomChannel do
   end
   
   # Readonly still allowed if no token
+  def join("room:" <> _room_name, %{"mystery_token" => mystery_token}, socket) do
+    send(self(), {:after_join, mystery_token})
+
+    {:ok, %{result: "Joined"}, socket}
+  end
+
   def join("room:" <> _room_name, _message, socket) do
+    send(self(), {:after_join, nil})
+
     {:ok, %{result: "Joined"}, socket}
   end
 
 
-  def handle_info(:after_join, socket) do
-    user = current_resource(socket)
+  def handle_info({:after_join, mystery_token}, socket) do
+    user = case current_resource(socket) do
+      nil ->
+        %{id: mystery_token}
+      logged_in_user ->
+        logged_in_user
+    end
   
-    push socket, "presence_state", Presence.list(socket)
-    {:ok, _} = Presence.track(socket, user.id, %{
-      online_at: inspect(System.system_time(:seconds))
-    })
+    if (user.id) do
+      push socket, "presence_state", Presence.list(socket)
+      {:ok, _} = Presence.track(socket, user.id, %{
+        online_at: inspect(System.system_time(:seconds))
+      })
+    end
     {:noreply, socket}
   end
 

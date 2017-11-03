@@ -28,6 +28,10 @@ import { User } from "./user"
 export var App = {
 
 	run: function() {
+		if (typeof mystery_token !== 'undefined') {
+      		Channels.mysteryToken = mystery_token
+    	}
+
 		Channels.init()
 
 		Post.init()

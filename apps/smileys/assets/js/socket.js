@@ -14,6 +14,8 @@ export var Channels = {
 
   userName: null,
 
+  mysteryToken: null,
+
   roomChannels: {},
 
   postChannel: null,
@@ -41,12 +43,15 @@ export var Channels = {
 
   	this.userName = userName
 
+    let userToken = (typeof mystery_token !== "undefined" ? mystery_token : userName)
+
     // Now with socket connection available, start up ELM module(s)
     var elmDiv = document.getElementById('search')
 
-    if (elmDiv) {
+    if (elmDiv && typeof userToken !== "undefined") {
       this.elm = Elm.SmileysSearch.embed(elmDiv, {
-          websocketUrl: socket.endPointURL().split("?")[0]
+          websocketUrl: socket.endPointURL().split("?")[0],
+          userToken: userToken
       })
     }
   },
@@ -59,7 +64,7 @@ export var Channels = {
 
   	var that = this
 
-  	let channel = this.socket.channel("room:" + room_name, {guardian_token: this.guardianToken})
+  	let channel = this.socket.channel("room:" + room_name, {guardian_token: this.guardianToken, mystery_token: this.mysteryToken})
 
     let listBy = (user, {}) => {
       return {
@@ -238,7 +243,23 @@ export var Channels = {
 	  		.receive("error", resp => { that.errorJoiningChannel("User " + this.userName, resp) })
 
 	  	this.userChannel = channel
-  	} else {
+  	} else if (this.mysteryToken) {
+      var that = this
+
+      let channel = this.socket.channel("user:" + this.mysteryToken, {})
+
+      channel.join()
+        .receive("ok", resp => { 
+          that.joinedChannel("User " + that.mysteryToken, resp)
+
+          channel.on("warning", payload => {
+            var msg = `${payload.msg}`
+
+            App.tempAlert(msg)
+          });
+        })
+        .receive("error", resp => { that.errorJoiningChannel("User " + that.mysteryToken, resp) })
+    } else {
   		console.log("Not logged in unable to join channel")
   	}
   },

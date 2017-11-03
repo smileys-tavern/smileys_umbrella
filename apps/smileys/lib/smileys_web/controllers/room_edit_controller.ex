@@ -1,7 +1,9 @@
 defmodule SmileysWeb.RoomEditController do
   use SmileysWeb, :controller
 
-  alias SmileysData.{Room}
+  alias SmileysData.{Room, UserRoomAllow}
+
+
 
   plug Smileys.Plugs.SetUser
   plug Smileys.Plugs.SetIsModerator
@@ -49,6 +51,12 @@ defmodule SmileysWeb.RoomEditController do
               _ ->
                 conn.assigns.user
             end
+
+            user_room_params = %{username: conn.assigns.user.name, roomname: room.name}
+
+            room_allow_changeset = UserRoomAllow.changeset(%UserRoomAllow{}, user_room_params)
+
+            _ = SmileysData.QueryUserRoomAllow.user_room_allow_create(room_allow_changeset)
 
             conn
               |> put_flash(:info, "Room created successfully.")

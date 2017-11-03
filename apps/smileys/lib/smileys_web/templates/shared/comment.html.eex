@@ -6,15 +6,13 @@
     </div>
 
     <div class="comment-text">
-    	<div class="text">
-            <strong>
-                <%= if assigns[:comment].name do %>
-                    <a href="/u/<%= assigns[:comment].name %>"><%= assigns[:comment].name %></a>
-                <% else %> 
-                    amysteriousstranger
-                <% end %>:
-            </strong> 
-            <span class="textbody"><%= assigns[:comment].body %></span>
+    	<div class="text">    
+            <%= if assigns[:comment].name do %>
+                <strong><a href="/u/<%= assigns[:comment].name %>"><%= assigns[:comment].name %></a></strong>
+            <% else %> 
+                <strong>amysteriousstranger</strong>
+            <% end %> <span class="time-subtle"><%= Timex.format!(assigns[:comment].inserted_at, "{relative}", :relative) %></span>:
+            <span class="textbody"><%= raw(assigns[:comment].body) %></span>
         </div>
     	<div class="actions">
             <%= if assigns[:comment].depth < 10 do %>

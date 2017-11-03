@@ -5,23 +5,26 @@ defmodule SmileysWeb.PostController do
   plug Smileys.Plugs.SetIsModerator
 
   alias SmileysData.{QueryPost, QueryUser}
-  alias Smileys.Logic.PostHelpers
+  alias Smileys.Logic.{PostHelpers, UserHelpers, PostScraper}
 
   alias SmileysData.State.Activity
   alias SmileysData.State.User.Activity, as: UserActivity
+  alias SmileysData.State.User.Notification, as: UserNotification
   alias SmileysData.State.Post.Activity, as: PostActivity
 
 
   def comment(conn, %{"hash" => hash, "depth" => depth, "ophash" => ophash, "body" => body} = _params) do
     user = case conn.assigns.user do
       nil ->
-        %{:name => "amysteriousstranger", :id => 5, :reputation => 1}
+        %{:name => "amysteriousstranger", :id => 5, :reputation => 1, :user_token => conn.assigns.mystery_token}
       logged_in_user ->
         logged_in_user
     end
+
+    {actions, body_action_enhanced} = PostScraper.scan_for_actions(HtmlSanitizeEx.strip_tags(body))
     
     # TODO: try to cast depth as an int coming in instead of here
-    {comment_hash, comment_html} = case QueryPost.create_comment(hash, ophash, body, String.to_integer(depth), user) do
+    {comment_hash, comment_html} = case QueryPost.create_comment(hash, ophash, body_action_enhanced, String.to_integer(depth), user) do
       {:ok, comment_result} ->
         reply_to = comment_result.reply_to
         op_user = QueryUser.user_by_id(reply_to.posterid)
@@ -36,6 +39,23 @@ defmodule SmileysWeb.PostController do
 
         SmileysWeb.Endpoint.broadcast("room:" <> comment_result.room.name, "post-activity", %{comments: comment_count, hash: comment_result.op.hash})
 
+        for (action <- actions) do
+          case action do
+            {:shout, shout_to_name} ->
+              user_notification = Activity.update_item(
+                %UserNotification{user_name: shout_to_name, hash: reply_to.hash, url: PostHelpers.create_link(comment_result.comment, comment_result.room.name), pinged_by: user.name}
+              )
+
+              SmileysWeb.Endpoint.broadcast("user:" <> shout_to_name, "activity", user_notification)
+            _ ->
+              {} # NoOp
+          end
+        end
+
+        if user.name == "amysteriousstranger" do
+          QueryPost.add_anonymous_record(user.user_token, comment_result.comment.id)
+        end
+
         {comment_result.comment.hash,
          Phoenix.View.render_to_string(SmileysWeb.SharedView, "comment.html", %{
           :user    => user, 
@@ -44,13 +64,19 @@ defmodule SmileysWeb.PostController do
           :op      => comment_result.op})
         }
       {:body_invalid, _} ->
-        SmileysWeb.Endpoint.broadcast("user:" <> user.name, "warning", %{msg: "Comment contains invalid characters."})
+        UserHelpers.broadcast_warning(user, "Post contains invalid characters.")
         {"", ""}
-      {:post_frequency_violation, _} ->
-        SmileysWeb.Endpoint.broadcast("user:" <> user.name, "warning", %{msg: "You have posted too recently. We have a short limit on posting frequency which will lessen after using the site more."})
+      {:post_frequency_violation, limit} ->
+        limit_format = case limit do
+          true ->
+            "Unknown Limit"
+          limit_string ->
+            Integer.to_string(div(String.to_integer(limit_string), 60)) <> " Minutes"
+        end
+        UserHelpers.broadcast_warning(user, "There is a short limit on posting frequency which will be removed after using the site more (" <> limit_format <> ")")
         {"", ""}
       {:error, _changeset} ->
-        SmileysWeb.Endpoint.broadcast("user:" <> user.name, "warning", %{msg: "There was an error commenting. Check length of comment."})
+        UserHelpers.broadcast_warning(user, "There was an error commenting. Check length of comment.")
         {"", ""}
     end
 
