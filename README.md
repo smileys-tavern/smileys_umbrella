@@ -5,22 +5,71 @@ The umbrella contains all (and only) the deployable services that comprise the S
 
 ### Smileys
 
-The smileys.pub website.  Contains routing and some logic for the service of the site.
+The smileys.pub website.  Contains routing and some logic for the service of the site.  The Smileys site is a reddit-like community site with nested threads sorted by activity and voting algorithms.  There is a provided interface (behaviour) for implementing new algorithms as a work in progress (as of version 0.0.11). Smileys.pub is served across 3 servers in order to fascilitate distributed testing and is aware of the api and caretaker as part of the same VM.
+
+The core functionality includes
+
+* Room creation
+  * Private Room - Only users you allow can read or post to these boards
+  * Restricted Room - Anyone can read or comment, but only users you allow can post original content
+  * Public Room - Anyone can read, comment or post original content
+  * Age limits are allowed that will be transfered to posts
+  * Can add additional moderators
+  * A title and description for the room or a banner image are allowable
+
+* Post Content
+  * Content can include a mix of content including a link, image, tags, a text body with a large character limit and title (required)
+  * Tags can have special meaning like embedding a video, image link or map, adding a NSFW thumbnail, or making search easier
+  * Content posting has a time limit for frequency per user until they have used the site enough reputably to post more
+  * Content receives a public vote that can be seen adjusting in real time, additionally there are private and alltime scores. The private score adjusts by whichever algorithm implemented and determines ranking
+  * Anonymous posting is allowed in most circumstances for original content and comments
+
+* Commenting
+  * Users and Anons can post comments in response to original content
+  * Comments are sorted according to algorithm the same was as Posts
+  * Special functionality is availabe via /[type code]/[subject]
+  * The only special functionality available at the moment is user pinging such as /u/subetei
+  * Commenting in Private rooms is hidden from search and your user page
+
+* Aggregate Pages
+  * Smileys generates some of it's own content via bots in Smileyscaretaker
+  * The currently implemented bots scrape RSS feeds and transfer these summaries into Posts, allowing visitors to link into the full content and comment and vote on it here if they wish.
+  * An example of one such is /r/news
+
+* Real Time Updates
+  * All voting, comment counts and responses to your content are updated to the visitors client in real time via efficient channels
+  * A rolling time window of content is kept in state at all times, so x hours of new content counts or user pings or responses to logged in users posts for example
+
+* Search
+  * Highly customizable. Right now does a basic and slightly optimized search of all site content which is indexed within 5 minutes of posting
+  * Search by room, post, user
+  * Sphinxsearch is used here via SphinxQL (queried by giza_sphinxsearch) with an Elm front facing client reading from a channel connection. It is very fast and reliable
 
 
 ### Smileysapi
 
-The api.smileys.pub api that provides a GraphQL interface to access many of the same features of the site.
+The api.smileys.pub api that provides a GraphQL interface to access many of the same features of the site.  It is in early stages (as of 0.0.2) and only has a few endpoints.  api.smileys.pub is served across 2 servers in order to fascilitate distributed testing and is aware of the website and caretaker as part of the same VM. Currently implemented:
+
+* Full site content search with various filters
+* Public info about user can be queried
+* Posts can be queried for all publicly available data
+
+Some work has been done to implement authentication so that content creation can be opened up but has not yet been completed.
 
 
 ### Smileysprocesses
 
-The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered and runs bots that parse rss feeds. In the future it would handle timed tasks on behalf of users as well.
+The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered and runs bots that parse rss feeds. In the future it would handle timed tasks on behalf of users as well. The caretaker is currently served on a single node but is aware of the api and site on the same VM.
+
+* Bots can be added programmatically or to the database to scrape content. You can see them on smileys.pub as philosophybot and newsbot for example
+* Vote algorithm behaviour is on timers to adjust content based on time alive
 
 
 ### Smileysbartools (future)
 
 Site for browsing bartools, the tools used to augment posts and site experience.
+
+Bartools is a planned feature later for a behavior of implementing elixir apps that can be used to augment posted content.  Things like games and polls and contracts via the voting channel could be implemented by this will be the idea.
 
 
 ### Deployment Tools
@@ -82,6 +131,10 @@ TODO
 
 Here are some desired features that may be given priority soon.
 
+### Collaborative editing
+
+A difficult problem to solve and scale
+
 ### Image transformation options
 
 When uploading through cloudinary API it is possible to provide cropping, rotation, borders, circular images, and more.  This feature would involve adding an image preview to the create post page and a set of controls in an Elm widget.
@@ -96,11 +149,11 @@ A complex feature warranting it's own design doc.  This would be the equivalent 
 
 ### Revisit point algorithm
 
-The current reputation based algorithm is fairly untested and should be modularized and then visited for potential strategy shifts. In case of code forks, a modularized system with an interface should allow for different strategies to be swapped in.  The objective at Smileys itself is it operates like a pub, which is not a fair and even democracy. People only want to listen to people that have something half interesting to say and there will always be a fair shake of social connectors, humerous folk and revolutionaries etc.. we should make sure folks subscriptions to the right loudmouths pay out properly and not promote a cycle of echo chambers and risk-free conversation; while the haters and newbies are around but are somewhat muted until they learn to contribute.
+The current reputation based algorithm is not battle tested and should be visited fully. A behaviour has been started to make plugging in algorithms easier but there is still work to be done on that.  The objective at Smileys itself is it operates like a pub, which is not a fair and even democracy. People only want to listen to people that have something half interesting to say and there will always be a fair shake of social connectors, humerous folk and revolutionaries etc.. we should make sure folks subscriptions to the right loudmouths pay out properly and not promote a cycle of echo chambers and risk-free conversation; while others voice would be somewhat quieter until they learn civility or whatever rules a room runs by.
 
 ### Feature Toggles
 
-We need configurable toggles for many of smileys futures, so that specialists and hobbyists can more easily set up locally. For example a postgres off switch would allow a set of data to be stubbed in. Or a sphinx toggle would allow only a few test searches to return faked results. Other candidates are orientdb, cloudinary (image uploading), and authentication. A rough toggle is already present in the api for the graph database.
+We need configurable toggles for many of smileys futures, so that specialists and hobbyists can more easily set up locally. For example a postgres off switch would allow a set of data to be stubbed in. Or a sphinx toggle would allow only a few test searches to return faked results. Other candidates are cloudinary (image uploading), and authentication. A rough toggle is already present in the api for the graph database which is a feature that will be taken out it appears.
 
 ### Mod tools
 
