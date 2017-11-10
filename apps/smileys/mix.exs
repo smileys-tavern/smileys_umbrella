@@ -4,12 +4,12 @@ defmodule Smileys.Mixfile do
   def project do
     [
       app: :smileys,
-      version: "0.0.9",
+      version: "0.0.11",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.4",
+      elixir: "~> 1.5.1",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -67,9 +67,9 @@ defmodule Smileys.Mixfile do
       {:syn, "1.6.1"},
 
       # Smileys
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.10"},
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.13"},
+      #{:smileysdata, path: "../../../smileys_data"},
       {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
-      #{:smileysdata, path: "../../../smileys_data"}
       #{:smileyssearch, path: "../../../smileys_search"}
     ]
   end

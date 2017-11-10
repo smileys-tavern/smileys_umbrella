@@ -12,25 +12,39 @@ defmodule Smileys.Vote.Action do
 	Vote a post positively
 	"""
 	def upvote(%Post{} = post, %User{} = user, %User{} = post_user, room_name) do
-		%UserActivity{url: url, comments: comments, votes: votes} = Activity.update_item(
-          %UserActivity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: 1}
-        )
+		result = QueryVote.upvote(post, user)
 
-		SmileysWeb.Endpoint.broadcast("user:" <> post_user.name, "activity", %UserActivity{user_name: post_user.name, hash: post.hash, url: url, comments: comments, votes: votes})
+		case result do
+			{:ok, _} ->
+				%UserActivity{url: url, comments: comments, votes: votes} = Activity.update_item(
+		          %UserActivity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: 1}
+		        )
 
-		QueryVote.upvote(post, user)
+				SmileysWeb.Endpoint.broadcast("user:" <> post_user.name, "activity", %UserActivity{user_name: post_user.name, hash: post.hash, url: url, comments: comments, votes: votes})
+
+				result
+			_ ->
+				result
+		end
 	end
 
 	@doc """
 	Vote a post negatively
 	"""
 	def downvote(%Post{} = post, %User{} = user, %User{} = post_user, room_name) do
-		%UserActivity{url: url, comments: comments, votes: votes} = Activity.update_item(
-          %UserActivity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: -1}
-        )
+		result = QueryVote.downvote(post, user)
 
-        SmileysWeb.Endpoint.broadcast("user:" <> post_user.name, "activity", %UserActivity{user_name: post_user.name, hash: post.hash, url: url, comments: comments, votes: votes})
+		case result do
+			{:ok, _} ->
+				%UserActivity{url: url, comments: comments, votes: votes} = Activity.update_item(
+		          %UserActivity{user_name: post_user.name, hash: post.hash, url: PostHelpers.create_link(post, room_name), votes: -1}
+		        )
 
-		QueryVote.downvote(post, user)
+		        SmileysWeb.Endpoint.broadcast("user:" <> post_user.name, "activity", %UserActivity{user_name: post_user.name, hash: post.hash, url: url, comments: comments, votes: votes})
+
+		        result
+		    _ ->
+		    	result
+		end
 	end
 end

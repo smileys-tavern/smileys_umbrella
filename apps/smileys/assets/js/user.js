@@ -36,13 +36,14 @@ export var User = {
   	})
 
     $('body').on('mouseover', '.activity-count', function(){
-      var parts = $(this).text().split(" ")
-
-      if (parts.length > 2) {
-        $(this).text(parts[0])
-      } else {
+      if ($(this).data('hover').length) {
         $(this).text($(this).text() + " " + $(this).data('hover'))
       }
+    })
+
+    $('body').on('mouseleave', '.activity-count', function(){
+      var parts = $(this).text().split(" ")
+      $(this).text(parts[0])
     })
 
   	this.showAllVotesOnPage(Cache.userGetVotes())

@@ -3,7 +3,7 @@ defmodule Smileysapi.Mixfile do
 
   def project do
     [app: :smileysapi,
-     version: "0.0.1",
+     version: "0.0.2",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
@@ -57,7 +57,7 @@ defmodule Smileysapi.Mixfile do
      {:syn, "1.6.1"},
 
      # Smileys
-     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.10"},
+     {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.13"},
      {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
      #{:smileysdata, path: "../../../smileys_data"},
      #{:smileyssearch, path: "../../../smileys_search"}

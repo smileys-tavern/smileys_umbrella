@@ -25,7 +25,8 @@ defmodule Smileysapi.Application do
       #  {:name, SmileysData.Graph}])])
       supervisor(SmileysData.State.UserActivitySupervisor, []),
       supervisor(SmileysData.State.RoomActivitySupervisor, []),
-      supervisor(SmileysData.State.PostActivitySupervisor, [])
+      supervisor(SmileysData.State.PostActivitySupervisor, []),
+      worker(SmileysData.State.Timer.ActivityExpire, [])
     ]
 
     children_final = case Application.get_env(:smileys_features, :graph) do

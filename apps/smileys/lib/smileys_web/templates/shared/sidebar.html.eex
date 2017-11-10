@@ -45,12 +45,12 @@
 			<h5>Your Subscriptions</h5>
 			<%= if assigns[:subscriptions] do %>
 				<%= for subscription <- assigns[:subscriptions] do %>
-					<div class="room-link room-<%= subscription.roomname %>">
+					<div class="room-link room-<%= subscription.roomname %> activity-container">
 						<span class="room-activity-<%= subscription.roomname %>">
 							<span class="room-activity-new-posts activity-count" data-hover="New Posts"><%= subscription.new_posts %></span>
 							<span class="room-activity-subs activity-count" data-hover="New Subs"><%= subscription.subs %></span>
 						</span>
-						<a href="/r/<%= subscription.roomname %>">/r/<%= subscription.roomname %></a> 
+						<a href="/r/<%= subscription.roomname %>">/r/<%= String.slice(subscription.roomname, 0, 24) %></a> 
 						<span class="update"></span> 
 						<span class="controls"><a href="javascript:void(0)" class="room-unsubscribe" data-room="<%= subscription.roomname %>">unsub</a></span>
 					</div>
