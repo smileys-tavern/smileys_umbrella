@@ -48,6 +48,7 @@ defmodule SmileysWeb.Router do
 
     get "/", PageController, :index
     get "/u/:username", PageController, :profile
+    get "/u/:username/settings", PageController, :settings
 
     get "/h/:room", PageController, :house
 
@@ -60,6 +61,9 @@ defmodule SmileysWeb.Router do
     get "/r/:room/comments/:hash/", PageController, :comments
     get "/r/:room/comments/:hash/view/:mode", PageController, :comments
     get "/r/:room/comments/:hash/focus/:focushash", PageController, :comments
+
+    get "/about", PageController, :about
+    get "/tos", PageController, :tos
 
     get "/room/new", RoomEditController, :new
     post "/room/new", RoomEditController, :create

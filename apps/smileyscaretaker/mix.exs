@@ -4,7 +4,7 @@ defmodule Smileyscaretaker.Mixfile do
   def project do
     [
       app: :smileyscaretaker,
-      version: "0.0.3",
+      version: "0.0.4",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
@@ -53,10 +53,11 @@ defmodule Smileyscaretaker.Mixfile do
       {:feeder_ex, "~> 1.1"},
       {:cloudex, "~> 0.1.10"},
       {:syn, "1.6.1"},
+      {:bamboo, "~> 0.8.0"},
 
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.13"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.16"}
     ]
   end
 end

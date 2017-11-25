@@ -4,7 +4,7 @@ defmodule Smileys.Mixfile do
   def project do
     [
       app: :smileys,
-      version: "0.0.11",
+      version: "0.0.12",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
@@ -60,14 +60,14 @@ defmodule Smileys.Mixfile do
       {:html_sanitize_ex, "~> 1.0.0"},
       {:cloudex, "~> 0.1.10"},
       {:kerosene, "~> 0.5.0"},
-      {:bamboo, "~> 0.7.0"},
-      {:bamboo_smtp, "~> 1.2.1"},
+      {:bamboo, "~> 0.8.0"},
       {:recaptcha, "~> 2.0"},
       {:scout_apm, "~> 0.3.2"},
       {:syn, "1.6.1"},
+      {:earmark, "~> 1.2"},
 
       # Smileys
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.13"},
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.16"},
       #{:smileysdata, path: "../../../smileys_data"},
       {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
       #{:smileyssearch, path: "../../../smileys_search"}

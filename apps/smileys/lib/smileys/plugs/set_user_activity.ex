@@ -3,7 +3,6 @@ defmodule Smileys.Plugs.SetUserActivity do
 
   alias SmileysData.State.Activity
   alias SmileysData.State.User.Activity, as: UserActivity
-  alias SmileysData.State.User.Activity, as: UserNotification
 
   def init(default), do: default 
 

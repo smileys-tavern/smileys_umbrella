@@ -82,8 +82,6 @@ nav ul{
 
 .main-content {
 	position: relative;
-	padding-top: 5px;
-	padding-left: 5px;
 }
 
 .frontpage {
@@ -370,7 +368,7 @@ nav ul{
  */
 .sidebar {
  	position: absolute;
- 	top: 10px;
+ 	top: 0;
  	right: 0;
  	width: 20%; /* match this with .posts with room for margins */
  	height: auto;
@@ -642,6 +640,19 @@ form.link, form.button {
 	height: 100%;
 }
 
+/**
+ * Settings
+ */
+.settings {
+	margin: 40px;
+}
+.setting {
+	margin: 25px 0;
+}
+#settings_result{
+	color: #42bd53
+}
+
 /* Responsive: Portrait tablets and down */
 @media screen and (max-width: 1240px) {
 	.sidebar {
@@ -663,7 +674,9 @@ form.link, form.button {
  		max-width: 100%;
  	}
  	.op-title {
- 		width: 78%;
+ 		width: 75%;
+ 		margin: -3px 0 17px 10px;
+ 		overflow-wrap: break-word;
  	}
 
  	.form-halfpage {

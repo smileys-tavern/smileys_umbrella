@@ -19,6 +19,10 @@ defmodule SmileyscaretakerWeb.Router do
     get "/", PageController, :index
   end
 
+  if Mix.env == :dev do
+    forward "/sent_emails", Bamboo.EmailPreviewPlug
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", SmileyscaretakerWeb do
   #   pipe_through :api

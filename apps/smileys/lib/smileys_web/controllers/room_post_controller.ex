@@ -118,9 +118,11 @@ defmodule SmileysWeb.RoomPostController do
 
         post_params_2 = %{post_params_1 | "body" => HtmlSanitizeEx.strip_tags(post_params_1["body"])}
 
-        post_params_3 = %{post_params_2 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_2["body"], tag_data)}
+        post_params_3 = %{post_params_2 | "body" => Earmark.as_html!(post_params_2["body"])}
 
-        case SmileysData.QueryPost.create_new_post(current_user, post_params_3, meta_params, image_upload) do
+        post_params_4 = %{post_params_2 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_3["body"], tag_data)}
+
+        case SmileysData.QueryPost.create_new_post(current_user, post_params_4, meta_params, image_upload) do
           {:ok, {:ok, post}} ->
             room_activity = Activity.update_item(%RoomActivity{room: room_name, new_posts: 1})
 

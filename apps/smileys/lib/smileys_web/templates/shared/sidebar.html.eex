@@ -70,6 +70,11 @@
 		<% end %>
 	</div>
 
+	<div class="sidebar-links">
+		<br />
+		<div class="room-link"><a href="/about">About Smiley's Pub</a></div>
+	</div>
+
 	<!--<div class="sidebar-links moderating">
 	</div>-->
 </div>

@@ -9,6 +9,8 @@ export var User = {
 
   	Channels.joinUser()
 
+    var that = this
+
   	$('body').on('click', '.room-subscribe', function(){
   		var room_name = $(this).data('room')
 
@@ -46,6 +48,14 @@ export var User = {
       $(this).text(parts[0])
     })
 
+    $('.settings').on('change', '#setting_email_subscription', function(){
+      var setting_value = $("#setting_email_subscription").find('option:selected').val()
+
+      Channels.userChannel.push("setting_update", {setting: "email_subscription", value: setting_value}).receive("ok", (response) => {
+          that.settingsUpdateMessage(response.message)
+      })
+    })
+
   	this.showAllVotesOnPage(Cache.userGetVotes())
   },
 
@@ -67,5 +77,13 @@ export var User = {
 
   unshowVote: function(voteWidget, direction) {
   	voteWidget.find('.vote-' + direction).removeClass("arrow-" + direction + "-used")
+  },
+
+  settingsUpdateMessage: function(message) {
+    $("#settings_result").text(message)
+
+    setTimeout(function(){
+      $("#settings_result").text("")
+    }, 2000)
   }
 }

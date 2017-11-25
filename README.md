@@ -1,5 +1,7 @@
 ## SmileysUmbrella
 
+**NOTE: entering cleanup mode! Features will stop until code cleanup complete.  Since using this as a learning project some code can now be upgraded using new knowledge.  The next few releases will be as such starting with smileys_data**
+
 The umbrella contains all (and only) the deployable services that comprise the Smiley's experience. The libraries aren't tied to any domain but smileys.pub demonstrates what the apps here do.  There are examples for api usage here http://smileys.pub/r/aboutsmileys and latest feature releases here http://smileys.pub/r/smileysupdates
 
 
@@ -36,6 +38,13 @@ The core functionality includes
   * The currently implemented bots scrape RSS feeds and transfer these summaries into Posts, allowing visitors to link into the full content and comment and vote on it here if they wish.
   * An example of one such is /r/news
 
+* Email Subscriptions
+  * Smileys Caretaker sends out emails asyncronously to every user with a subscription set
+  * Subscriptions will basically send the update info available in the sidebar, updating a user on:
+    * Shouts from other users
+    * Comment and vote activity on their very own latest posts
+    * New subscribers and posts on users Subscribed to rooms
+
 * Real Time Updates
   * All voting, comment counts and responses to your content are updated to the visitors client in real time via efficient channels
   * A rolling time window of content is kept in state at all times, so x hours of new content counts or user pings or responses to logged in users posts for example
@@ -44,6 +53,12 @@ The core functionality includes
   * Highly customizable. Right now does a basic and slightly optimized search of all site content which is indexed within 5 minutes of posting
   * Search by room, post, user
   * Sphinxsearch is used here via SphinxQL (queried by giza_sphinxsearch) with an Elm front facing client reading from a channel connection. It is very fast and reliable
+
+* House Rooms
+  * Accessed via /h/roomname
+  * /h/all for top content site wide
+  * /h/walloffame for all time upvoted content
+  * These are aggregate rooms for special purpose and cannot be posted to normally
 
 
 ### Smileysapi

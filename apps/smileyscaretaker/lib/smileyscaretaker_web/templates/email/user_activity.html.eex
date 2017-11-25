@@ -1,0 +1,6 @@
+<a class="user-activity activity-container" id="user-activity-<%= Map.get(assigns[:activity], :hash) %>" 
+	href="https://smileys.pub/<%= Map.get(assigns[:activity], :url) %>">
+	<span class="user-activity-comment activity-count" data-hover="Reply"><%= Map.get(assigns[:activity], :comments) %></span>
+	<span class="user-activity-vote activity-count" data-hover="Vote"><%= Map.get(assigns[:activity], :votes) %></span>
+	<span class="user-activity-url"><%= String.slice(Map.get(assigns[:activity], :url), 0, 24) %></span>
+</a>

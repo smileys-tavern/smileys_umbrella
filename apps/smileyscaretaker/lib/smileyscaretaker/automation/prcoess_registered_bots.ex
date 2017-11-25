@@ -1,5 +1,7 @@
 defmodule Smileyscaretaker.Automation.RegisteredBots do
   @moduledoc """
+  Runs a bot as a registered process
+  TODO: also run a feed as a process so one feed doesnt crash others
   """
   use GenServer
 
@@ -26,26 +28,25 @@ defmodule Smileyscaretaker.Automation.RegisteredBots do
   GenServer.handle_cast/3 callback
   """
   def handle_cast({:scraper, bot, meta}, completed_tasks_state) do
-
   	# hit scraper url
-	case HTTPoison.get(meta.meta) do
+	  case HTTPoison.get(meta.meta) do
     	{:ok, %{body: body}} ->
 
-    	    feed = case FeederEx.parse(body) do
-    	    	{:ok, feed, _} ->
-    	    		feed
-    	    	feeder_response ->
-    	    		IO.inspect feeder_response
-    	    		nil
-    	    end
+    	  feed = case FeederEx.parse(body) do
+    	  	{:ok, feed, _} ->
+    	   		feed
+    	   	feeder_response ->
+    	   		IO.inspect feeder_response
+    	   		nil
+    	  end
 
-    	    if feed do
-	    	    # Each feed can return multiple entries, all of which are mapped here
-	    	    mapped_feeds = Feeds.map_feed(feed)
+    	  if feed do
+	    	  # Each feed can return multiple entries, all of which are mapped here
+	    	  mapped_feeds = Feeds.map_feed(feed)
 
-	    	    result = handle_mapped_feeds(mapped_feeds, bot, [])
+	    	  result = handle_mapped_feeds(mapped_feeds, bot, [])
 
-	    	    IO.inspect result
+	    	  IO.inspect result
 	    	end
     	_ ->
     		IO.inspect("No match on scraper request")
@@ -71,12 +72,12 @@ defmodule Smileyscaretaker.Automation.RegisteredBots do
   end
 
   defp handle_mapped_feeds([], _, acc) do
-	acc
+	  acc
   end
 
   defp handle_mapped_feeds([feed|tail], %RegisteredBot{} = bot, acc) do
     result = Feeds.create_post_from_feed(feed, bot)
 
-	handle_mapped_feeds(tail, bot, [result|acc])
+	  handle_mapped_feeds(tail, bot, [result|acc])
   end
 end

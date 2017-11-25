@@ -18,13 +18,7 @@ defmodule SmileysWeb.PageController do
 
     reputable_rooms = SmileysData.QueryRoom.list_by(:reputation, 5)
 
-    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
-      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
-
-      [Map.put(post, :comment_count, comments)|acc] 
-    end)
-
-    render conn, "index.html", new_posts: posts_decorated, reputable_rooms: reputable_rooms
+    render conn, "index.html", new_posts: decorate_post_comment_count(posts), reputable_rooms: reputable_rooms
   end
 
   def profile(conn, %{"username" => user_name} = _params) do
@@ -37,6 +31,19 @@ defmodule SmileysWeb.PageController do
         conn
           |> put_status(:not_found)
           |> render(SmileysWeb.ErrorView, "404.html")
+    end
+  end
+
+  def settings(conn, %{"username" => user_name} = _params) do
+    current_user = conn.assigns.user
+
+    cond do
+      current_user.name == user_name ->
+        render conn, "settings.html"
+      true ->
+        conn
+          |> put_status(401)
+          |> render(SmileysWeb.ErrorView, "401.html")
     end
   end
 
@@ -60,14 +67,7 @@ defmodule SmileysWeb.PageController do
   		  	|> render(Smileys.ErrorView, "404.html")
   	end
 
-
-    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
-      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
-
-      [Map.put(post, :comment_count, comments)|acc] 
-    end)
-
-  	render conn, "house.html", room: room, posts: posts_decorated, roomtype: "house"
+  	render conn, "house.html", room: room, posts: decorate_post_comment_count(posts), roomtype: "house"
   end
 
   def room(conn, %{"room" => room_name} = params) do
@@ -81,32 +81,7 @@ defmodule SmileysWeb.PageController do
 	   	|> render(SmileysWeb.ErrorView, "404.html")
   	end
 
-    is_mod = cond do 
-      Map.has_key?(conn.assigns, :user) && conn.assigns.user ->
-        SmileysData.QueryRoom.room_is_moderator(current_user, room.id)
-      true ->
-        false
-    end
-
-    # See if user has permission to view room
-  	if room.type == "private" do
-  		if !current_user do
-  			conn |> put_status(401) |> render(SmileysWeb.ErrorView, "401.html")
-  		else
-    		user_in_allow_list = case SmileysData.QueryUserRoomAllow.user_allowed_in_room(current_user.name, room.name) do
-          {:user_not_allowed, _} ->
-            false
-          _ ->
-            true
-        end
-
-        if !is_mod || !user_in_allow_list do
-          conn 
-            |> put_status(401) 
-            |> render(SmileysWeb.ErrorView, "401.html")
-        end
-      end
-    end
+    {:ok, is_mod} = allowed_in_room(conn, current_user, room)
 
   	{posts, kerosene} = cond do
   		(params["mode"] && params["mode"] == "new") ->
@@ -115,19 +90,17 @@ defmodule SmileysWeb.PageController do
 		  	SmileysData.QueryPost.summary_by_room(25, :vote, room.id, params)
 	  end
 
-    posts_decorated = List.foldl(posts, [], fn(post, acc) ->
-      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
-
-      [Map.put(post, :comment_count, comments)|acc] 
-    end)
-
-  	render conn, "room.html", room: room, posts: Enum.reverse(posts_decorated), ismod: is_mod, roomtype: "room", kerosene: kerosene
+  	render conn, "room.html", room: room, posts: decorate_post_comment_count(posts), ismod: is_mod, roomtype: "room", kerosene: kerosene
   end
 
   def comments(conn, %{"room" => _room, "hash" => hash, "focushash" => focushash} = _params) do
+    current_user = conn.assigns.user
+
   	post = SmileysData.QueryPost.post_by_hash(focushash)
 
   	op = SmileysData.QueryPost.post_by_hash(hash)
+
+    roomData = SmileysData.QueryRoom.room_by_id(post.superparentid)
 
     parentpost = case post.parenttype do
       "room" ->
@@ -136,9 +109,9 @@ defmodule SmileysWeb.PageController do
         SmileysData.QueryPost.post_by_id(post.parentid)
     end
 
-  	original_poster = SmileysData.QueryUser.user_by_id(post.posterid)
+    _ = allowed_in_room(conn, current_user, roomData)
 
-  	roomData = SmileysData.QueryRoom.room_by_id(post.superparentid)
+  	original_poster = SmileysData.QueryUser.user_by_id(post.posterid)
 
   	comments = SmileysData.QueryPost.get_thread("focus", post.id)
 
@@ -146,6 +119,8 @@ defmodule SmileysWeb.PageController do
   end
 
   def comments(conn, %{"room" => _room, "hash" => hash} = params) do
+    current_user = conn.assigns.user
+
   	post = SmileysData.QueryPost.post_by_hash(hash)
 
     if !post do
@@ -162,6 +137,8 @@ defmodule SmileysWeb.PageController do
 
   	roomData = SmileysData.QueryRoom.room_by_id(post.superparentid)
 
+    _ = allowed_in_room(conn, current_user, roomData)
+
   	{comments, mode} = cond do
   		params["mode"] && params["mode"] == "new" ->
   			{SmileysData.QueryPost.get_thread("new", post.id), "new"}
@@ -170,6 +147,55 @@ defmodule SmileysWeb.PageController do
   	end
 
   	render conn, "post.html", post: post, op: op, title: roomData.name, mode: mode, roomtype: "room", room: roomData, comments: comments, opname: original_poster.name, opmeta: op_meta
+  end
+
+  def about(conn, _params) do
+    render conn, "about.html"
+  end
+
+  def tos(conn, _params) do
+    render conn, "tos.html"
+  end
+
+  defp decorate_post_comment_count(posts) do
+    posts_decorated = Enum.map(posts, fn(post) ->
+      %PostActivity{comments: comments} = Activity.retrieve_item(%PostActivity{hash: post.hash})
+
+      Map.put(post, :comment_count, comments)
+    end)
+
+    posts_decorated
+  end
+
+  defp allowed_in_room(conn, current_user, room) do
+    is_mod = cond do 
+      Map.has_key?(conn.assigns, :user) && current_user ->
+        SmileysData.QueryRoom.room_is_moderator(current_user, room.id)
+      true ->
+        false
+    end
+
+    # See if user has permission to view room
+    if room.type == "private" do
+      if !current_user do
+        conn |> put_status(401) |> render(SmileysWeb.ErrorView, "401.html")
+      else
+        user_in_allow_list = case SmileysData.QueryUserRoomAllow.user_allowed_in_room(current_user.name, room.name) do
+          {:user_not_allowed, _} ->
+            false
+          _ ->
+            true
+        end
+
+        if !is_mod && !user_in_allow_list do
+          conn 
+            |> put_status(401) 
+            |> render(SmileysWeb.ErrorView, "401.html")
+        end
+      end
+    end
+
+    {:ok, is_mod}
   end
 end
 

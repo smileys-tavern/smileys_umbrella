@@ -4,6 +4,8 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
+  alias SmileysData.QueryUser
+
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
   alias SmileysData.State.User.Activity, as: UserActivity
@@ -97,6 +99,19 @@ defmodule SmileysWeb.UserChannel do
     SmileysWeb.Endpoint.broadcast("user:" <> channel_id, "search_result", %{results: posts, amt: amount})
 
     {:noreply, socket}
+  end
+
+  def handle_in("setting_update", %{"setting" => setting, "value" => value}, socket) do
+    case setting do
+      "email_subscription" ->
+        user = current_resource(socket)
+
+        _ = QueryUser.update_user_email_subscription(user, value)
+
+        {:reply, {:ok, %{message: "Saved!"}}, socket}
+      _ ->
+        {:reply, {:error, %{message: "Unknown setting"}}}
+    end
   end
 
   def handle_in("search_suggest", %{"term" => _term, "user_token" => _user_token}, socket) do

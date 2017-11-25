@@ -1,0 +1,43 @@
+<h2>Smileys Pub Weekly</h2>
+
+<div class="sidebar">
+	<div class="userlatestposts sidebar-links site-actions">
+		<h5>Your Latest</h5>
+		<%= if !Enum.empty?(assigns[:useractivity]) do %>
+			<%= for activity <- assigns[:useractivity] do
+				case activity do 
+					%SmileysData.State.User.Activity{} ->
+						render SmileyscaretakerWeb.EmailView, "user_activity.html", %{:activity => activity}
+					%SmileysData.State.User.Notification{} ->
+						render SmileyscaretakerWeb.EmailView, "user_notification.html", %{:notification => activity}
+			    end
+			end %>
+		<% else %>
+			<strong>No Recent activity on your posts and you were not pinged</strong>
+		<% end %>
+	</div>
+
+	<div class="sidebar-links subscriptions">
+		<h5>Your Subscriptions</h5>
+		<%= if !Enum.empty?(assigns[:subscriptions]) do %>
+			<%= for subscription <- assigns[:subscriptions] do %>
+				<div class="room-link room-<%= subscription.roomname %> activity-container">
+					<span class="room-activity-<%= subscription.roomname %>">
+						<span class="room-activity-new-posts activity-count" data-hover="New Posts"><%= subscription.new_posts %></span>
+						<span class="room-activity-subs activity-count" data-hover="New Subs"><%= subscription.subs %></span>
+					</span>
+					<a href="https://smileys.pub/r/<%= subscription.roomname %>">/r/<%= subscription.roomname %></a>
+				</div>
+			<% end %>
+		<% else %>
+			<strong>No Subscriptions! Subscribe to a room and you can keep up with new goings on</strong>
+		<% end %>
+	</div>
+
+	<div class="sidebar-links">
+		<h5>Manage email settings</h5>
+		<div class="room-link">
+			<a href="https://smileys.pub/u/<%= assigns[:user].name %>/settings">/u/<%= assigns[:user].name %> Settings</a>
+		</div>
+	</div>
+</div>

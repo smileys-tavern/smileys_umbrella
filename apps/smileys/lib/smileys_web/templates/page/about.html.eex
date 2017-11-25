@@ -1,0 +1,28 @@
+<h2>Welcome to Smiley's Pub.  Here's how it is done</h2>
+
+<hr></hr>
+
+<div class="posts">
+	<h3>Contribute to the Scene</h3>
+
+	<p>Search for a room that has the conversation you are looking for, or lurk around the house pages like <a href="/h/all">/h/all</a> or <a href="/h/walloffame">/h/walloffame</a> to get a feel for what's around.  If you are a social kind of folk, start a room if there isn't one you like and find some moderators to keep it going the way you want.</p>
+
+	<h3>Guide</h3>
+
+	<p><strong>Formating Posts:</strong> You can use something called Markdown. Here is a nice guide with everything you need https://guides.github.com/features/mastering-markdown/</p>
+
+	<p><strong>User Pinging:</strong> If you need someone to get on your post you can use the Smiley's call to action syntax.  For user pinging that looks like <strong>/u/username</strong>.  That works in any comment.</p>
+
+	<p>
+		<strong>Embedding content:</strong> Tags in new posts are used to make search easier for the most part.  However some have a special meaning:
+		<ul>
+			<li>nsfw: instead of a thumb you will warn people that something is a little unsafe to view in front of others. A great tag to use if you want to avoid being banned.</li>
+			<li>image: if you linked an outside image this orders the post to embed it on smileys in the post</li>
+			<li>map: embeds a map link. Only Bing is supported at the moment</li>
+			<li>youtube/vimeo: embeds a video that was linked instead of just linking to it</li>
+		</ul>
+	</p>
+</div>
+
+<%= render SmileysWeb.SharedView, "sidebar.html", assigns %>
+

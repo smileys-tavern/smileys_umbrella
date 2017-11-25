@@ -1,0 +1,14 @@
+<div class="settings">
+  <h2><%= assigns[:user].name %> Settings <span id="settings_result"></span></h2>
+
+  <div class="setting">
+  	<label for="setting_email_subscription">Email Subscription:</label> 
+  	<select id="setting_email_subscription" name="setting_email_subscription">
+  		<option value="none" <%= if assigns[:user].subscription_email == :nil do %>selected<% end %>>None</option>
+  		<option value="daily" <%= if assigns[:user].subscription_email == "daily" do %>selected<% end %>>Daily</option>
+  		<option value="weekly" <%= if assigns[:user].subscription_email == "weekly" do %>selected<% end %>>Weekly</option>
+  	</select>
+  </div>
+</div>
+
+<%= render SmileysWeb.SharedView, "sidebar.html", assigns %>
