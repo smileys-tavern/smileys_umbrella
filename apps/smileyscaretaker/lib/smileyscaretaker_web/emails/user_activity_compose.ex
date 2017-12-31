@@ -1,7 +1,7 @@
 defmodule SmileyscaretakerWeb.Emails.UserActivityCompose do
   use Bamboo.Phoenix, view: SmileyscaretakerWeb.EmailView
 
-  alias SmileysData.QuerySubscription
+  alias SmileysData.Query.User.Subscription, as: QuerySubscription
 
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
@@ -12,7 +12,7 @@ defmodule SmileyscaretakerWeb.Emails.UserActivityCompose do
 
     activity_list = Enum.map(activity, fn {_, activity} -> activity end)
 
-    subscriptions = QuerySubscription.user_subscriptions(user)
+    subscriptions = QuerySubscription.get(user)
 
     subscriptions_decorated = List.foldl(subscriptions, [], fn(subscription, acc) -> 
       room_activity = Activity.retrieve_item(%RoomActivity{room: subscription.roomname})
@@ -30,7 +30,7 @@ defmodule SmileyscaretakerWeb.Emails.UserActivityCompose do
 
     activity_list = Enum.map(activity, fn {_, activity} -> activity end)
 
-    subscriptions = QuerySubscription.user_subscriptions(user)
+    subscriptions = QuerySubscription.get(user)
 
     subscriptions_decorated = List.foldl(subscriptions, [], fn(subscription, acc) -> 
       room_activity = Activity.retrieve_item(%RoomActivity{room: subscription.roomname})

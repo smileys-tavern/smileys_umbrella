@@ -1,1 +1,0 @@
-# TODO: make a supervisor and have each bot run on a separate process. Probably Task is the correct thing to use but genserver fine

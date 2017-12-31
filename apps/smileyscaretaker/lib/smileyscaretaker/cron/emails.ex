@@ -1,11 +1,11 @@
-defmodule Smileyscaretaker.Emails do
-	alias SmileysData.QueryUser
+defmodule Smileyscaretaker.Cron.Emails do
+	alias SmileysData.Query.User.Subscription, as: QueryUserSubscription
 	alias SmileyscaretakerWeb.Emails.UserActivityCompose
 	alias Smileyscaretaker.Mailer
 
 
 	def send_to_daily_subscribers() do
-	  users = QueryUser.users_by_email_subscription_type("daily")
+	  users = QueryUserSubscription.by_email_subscription_type("daily")
 
 	  for (user <- users) do
 	  	UserActivityCompose.daily(user) |> Mailer.deliver_later
@@ -13,7 +13,7 @@ defmodule Smileyscaretaker.Emails do
 	end
 
 	def send_to_weekly_subscribers() do
-	  users = QueryUser.users_by_email_subscription_type("weekly")
+	  users = QueryUserSubscription.by_email_subscription_type("weekly")
 
 	  for (user <- users) do
 	  	UserActivityCompose.weekly(user) |> Mailer.deliver_later

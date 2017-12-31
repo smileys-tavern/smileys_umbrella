@@ -10,6 +10,8 @@ defmodule Smileyscaretaker.Application do
 
     :syn.init()
 
+    HTTPoison.start()
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts

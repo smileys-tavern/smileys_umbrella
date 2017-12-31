@@ -1,24 +1,30 @@
-defmodule Smileyscaretaker.Feeds do
+defmodule Smileyscaretaker.Feeds.Post do
 	alias Smileyscaretaker.Structs.SmileysFeed
-	alias SmileysData.{QueryRoom, QueryPost, QueryPostMeta, RegisteredBot, QueryUser}
+	
+	alias SmileysData.Query.Post, as: QueryPost
+	alias SmileysData.Query.Post.Helper, as: QueryPostHelper
+	alias SmileysData.Query.Room, as: QueryRoom 
+	alias SmileysData.Query.Post.Meta, as: QueryPostMeta
+	alias SmileysData.Query.User, as: QueryUser
+	alias SmileysData.RegisteredBot
 	
 	alias SmileysData.State.Activity
 	alias SmileysData.State.Room.Activity, as: RoomActivity
 
-	def create_post_from_feed(%SmileysFeed{img: img_url, categories: tags, link: feed_url, author: author} = feed, %RegisteredBot{username: bot_username, callback_module: callback_module}) do
+	def create_post_from_feed(%SmileysFeed{img: img_url, categories: tags, link: feed_url, author: author} = feed, %RegisteredBot{username: bot_username, callback_module: room_name}) do
 		# Check whether it exists based on feed_url and do not process duplicate
-		case QueryPostMeta.postmeta_by_link(feed_url) do
+		case QueryPostMeta.by_link(feed_url) do
 			nil ->
-				bot_user_alias = QueryUser.user_by_name(bot_username)
+				bot_user_alias = QueryUser.by_name(bot_username)
 
-		      	room = QueryRoom.room(callback_module)
+		      	room = QueryRoom.by_name(room_name)
 
 				post = %{
 					"title" => feed.title,
 		        	"posterid" => bot_user_alias.id,
 		        	"voteprivate" => bot_user_alias.reputation,
 		        	"votepublic"  => 0,
-		        	"hash" => QueryPost.create_hash(bot_user_alias.id, room.name),
+		        	"hash" => QueryPostHelper.create_hash(bot_user_alias.id, room.name),
 		        	"superparentid" => room.id,
 		        	"parentid" => room.id,
 		        	"parenttype" => "room",
@@ -54,7 +60,7 @@ defmodule Smileyscaretaker.Feeds do
 			    	end
 			    }
 
-			    case QueryPost.create_new_post(bot_user_alias, post, meta_params, image_upload) do
+			    case QueryPost.create_new(bot_user_alias, post, meta_params, image_upload) do
 			    	{:ok, post} ->
 			    		room_activity = Activity.update_item(%RoomActivity{new_posts: 1, room: room.name})
 

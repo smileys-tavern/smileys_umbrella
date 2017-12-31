@@ -37,19 +37,5 @@ defmodule Smileysapi.Schema do
   		arg :field_weights, list_of(:sphinx_field)
   		resolve &Resolver.Search.get_posts/2
   	end
-
-    @desc "Add a graph vertex to smileys graph on behalf of the current user"
-    field :graph_insert, type: :graph_result do
-      arg :v, :vertex
-      arg :e, :edge
-      resolve &Resolver.Graph.insert/2
-    end
-
-    @desc "Select a graph vertex or set of vertices"
-    field :graph_select, type: :graph_result_select do
-      arg :v, :vertex
-      arg :e, :edge
-      resolve &Resolver.Graph.select/2
-    end
   end
 end

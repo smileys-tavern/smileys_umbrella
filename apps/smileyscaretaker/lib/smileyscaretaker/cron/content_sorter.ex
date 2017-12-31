@@ -1,4 +1,4 @@
-defmodule Smileyscaretaker.ContentSorter do
+defmodule Smileyscaretaker.Cron.ContentSorter do
 
 	alias SmileysData.ContentSorting.EigenSorter, as: Sorter
 

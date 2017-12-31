@@ -1,7 +1,11 @@
 defmodule Smileysapi.Resolver.Post do
 
+  alias SmileysData.Query.Post.Summary, as: QueryPostSummary
+  alias SmileysData.Query.Post, as: QueryPost
+  alias SmileysData.Query.Room, as: QueryRoom
+
   def get(%{room: room_name} = params, _info) do
-  	room = SmileysData.QueryRoom.room(room_name)
+  	room = QueryRoom.by_name(room_name)
 
     # TODO refactor to matching function clauses
   	limit = case params do
@@ -37,20 +41,20 @@ defmodule Smileysapi.Resolver.Post do
       nil ->
         []
       _ ->
-        SmileysData.QueryPost.summary(limit, order_by, room.id, %{page: offset, room: room_name}, false) 
+        QueryPostSummary.get(limit, order_by, room.id, %{page: offset, room: room_name}, false) 
     end
 
     {:ok, posts}
   end
 
   def get_from_all(_params, _info) do
-	  posts = SmileysData.QueryPost.summary(30, :vote, :nil, %{}, false)
+	  posts = QueryPostSummary.get(30, :vote, :nil, %{}, false)
 
     {:ok, posts}
   end
 
   def one(%{hash: hash}, _info) do
-  	case SmileysData.QueryPost.post_by_hash(hash) do
+  	case QueryPost.by_hash(hash) do
   		nil  -> {:error, "Post by hash #{hash} not found"}
     	post -> {:ok, post}
   	end
