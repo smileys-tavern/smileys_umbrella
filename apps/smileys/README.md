@@ -26,13 +26,10 @@ Handles image hosting for smileys internal uploads. An api key, secret and cloud
 
 A service that indexes the database for the use of search.  Currently only the site search on smileys.pub and the api make use of it.  It can be set up as a remote service or run on the same machine.  It is presently optional to set up for smileys to work.  Requires a host and port be configured.
 
+## Postgres
+
+The database of choice for Smileys.  Mainly because of features perhaps needed in the future, and because the WITH implementation is faster and implemented earlier which is required for the recursive thread queries.
 
 ## Email / Coherence / Guardian
 
 Smileys emails a confirmation message for registrations if the user uses email signup. Email setup requires Bamboo SMTP adapter configuration set up and coherence mailer config (smileys.pub is using sendgrid). Coherence provides generated forms for login / registration / logout etc and a lot of infrastructure for handling sessions.  Guardian is our access provider and helps store the user in the session and authenticate socket and web requests.  Both coherence and guardian have a few configuration options needed, most importantly guardians secret key.
-
-
-## Orient DB
-
-This is experimental and for use with future features. A graph database separate from the main database for users to build up if they need to while creating bartools.  Not much need be mentioned yet and it is entirely optional and only should be installed if for developing purposes. The intent though briefly is to 
-allow semi-restricted access to a graph database so users can create features such as user connections or other info for analysis.

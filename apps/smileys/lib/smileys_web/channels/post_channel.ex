@@ -4,6 +4,14 @@ defmodule SmileysWeb.PostChannel do
 
   require Logger
 
+  # TODO: Remove data calls from here and move to "Smileys." logic
+  alias SmileysData.Query.Post.Comment, as: QueryPostComment
+  alias SmileysData.Query.Post, as: QueryPost
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.User, as: QueryUser
+
+  alias Smileys.Vote.Action, as: VoteAction
+
 
   def join("post:" <> _post_hash, %{"guardian_token" => token}, socket) do
     case sign_in(socket, token) do
@@ -25,7 +33,7 @@ defmodule SmileysWeb.PostChannel do
     if !user do
       {:noreply, socket}
     else
-      case SmileysData.QueryPost.edit_comment(hash, body, user) do
+      case QueryPostComment.edit(hash, body, user) do
         nil ->
           SmileysWeb.Endpoint.broadcast("user:" <> user.name, "warning", %{msg: "issue editing post"})
           {:noreply, socket}
@@ -38,15 +46,16 @@ defmodule SmileysWeb.PostChannel do
   def handle_in("voteup", %{"posthash" => hash}, socket) do 
     user = current_resource(socket)
 
-    post = SmileysData.QueryPost.post_by_hash(hash)
+    post = QueryPost.by_hash(hash)
 
     result = case user do
       nil ->
         {:no_user, 0}
       _ ->
-        room      = SmileysData.QueryRoom.room_by_id(post.superparentid)
-        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
-        Smileys.Vote.Action.upvote(post, user, post_user, room.name)
+        room      = QueryRoom.by_id(post.superparentid)
+        post_user = QueryUser.by_id(post.posterid)
+        
+        VoteAction.upvote(post, user, post_user, room.name)
     end
     
     _amt = case result do
@@ -74,15 +83,16 @@ defmodule SmileysWeb.PostChannel do
   def handle_in("votedown", %{"posthash" => hash}, socket) do 
     user = current_resource(socket)
 
-    post = SmileysData.QueryPost.post_by_hash(hash)
+    post = QueryPost.by_hash(hash)
 
     result = case user do
       nil ->
         {:no_user, 0}
       _ ->
-        room      = SmileysData.QueryRoom.room_by_id(post.superparentid)
-        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
-        Smileys.Vote.Action.upvote(post, user, post_user, room.name)
+        room      = QueryRoom.by_id(post.superparentid)
+        post_user = QueryUser.by_id(post.posterid)
+
+        VoteAction.downvote(post, user, post_user, room.name)
     end
 
     _amt = case result do

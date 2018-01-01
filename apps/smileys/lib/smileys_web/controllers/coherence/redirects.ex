@@ -42,6 +42,11 @@ defmodule Coherence.Redirects do
 
   """
   use Redirects
+
+  alias SmileysData.Query.User, as: QueryUser
+  alias SmileysData.Query.User.Moderator, as: QueryUserModerator
+  alias SmileysData.Query.User.Helper, as: QueryUserHelper
+
   # Uncomment the import below if adding overrides
   # import SmileysWeb.Router.Helpers
 
@@ -69,16 +74,16 @@ defmodule Coherence.Redirects do
         reg_session["registration"]["email"]
     end
 
-    current_user = SmileysData.QueryUser.user_by_email(email)
+    current_user = QueryUser.by_email(email)
 
-    current_user_w_moderation = SmileysData.QueryUser.build_user_moderator_rooms(current_user)
+    current_user_w_moderation = QueryUserModerator.build_rooms(current_user)
 
     # TODO: refactor moderation for users to avoid this clumsy query -> build -> query
-    _updated_moderation = SmileysData.QueryUser.update_user_moderator_rooms(current_user, current_user_w_moderation.moderating)
+    _updated_moderation = QueryUserModerator.update_rooms(current_user, current_user_w_moderation.moderating)
  
     conn
       |> put_session("user_return_to", nil)
-      |> Guardian.Plug.sign_in(current_user_w_moderation, :token, perms: SmileysData.QueryUser.user_permission_level(current_user_w_moderation))
+      |> Guardian.Plug.sign_in(current_user_w_moderation, :token, perms: QueryUserHelper.permission_level(current_user_w_moderation))
       |> redirect(to: url)
   end
 end

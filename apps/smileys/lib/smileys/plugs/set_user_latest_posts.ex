@@ -1,6 +1,8 @@
 defmodule Smileys.Plugs.SetUserLatestPosts do
   import Plug.Conn
 
+  alias SmileysData.Query.Post, as: QueryPost
+
   def init(default), do: default 
 
   def call(conn, _default) do
@@ -8,7 +10,7 @@ defmodule Smileys.Plugs.SetUserLatestPosts do
       nil ->
         assign(conn, :userlatestposts, [])
       user ->
-        assign(conn, :userlatestposts, SmileysData.QueryPost.latest_by_user(user, 3))
+        assign(conn, :userlatestposts, QueryPost.by_user_latest(user, 3))
     end
   end
 end

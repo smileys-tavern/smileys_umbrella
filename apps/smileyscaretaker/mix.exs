@@ -56,8 +56,8 @@ defmodule Smileyscaretaker.Mixfile do
       {:bamboo, "~> 0.8.0"},
 
       # Smileys
-      {:smileysdata, path: "../../../smileys_data"}
-      #{:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.16"}
+      #{:smileysdata, path: "../../../smileys_data"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.0"}
     ]
   end
 end

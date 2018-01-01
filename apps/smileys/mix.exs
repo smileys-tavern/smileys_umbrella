@@ -67,7 +67,7 @@ defmodule Smileys.Mixfile do
       {:earmark, "~> 1.2"},
 
       # Smileys
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.0.16"},
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.0"},
       #{:smileysdata, path: "../../../smileys_data"},
       {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
       #{:smileyssearch, path: "../../../smileys_search"}

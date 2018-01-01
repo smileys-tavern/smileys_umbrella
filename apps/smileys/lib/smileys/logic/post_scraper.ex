@@ -1,6 +1,6 @@
 defmodule Smileys.Logic.PostScraper do
 	
-	alias SmileysData.QueryUser
+	alias SmileysData.Query.User, as: QueryUser
 
 	@max_actions 3
 
@@ -34,7 +34,7 @@ defmodule Smileys.Logic.PostScraper do
 	end
 
 	defp patron_shout(user_name) do
-		user = QueryUser.user_by_name(user_name)
+		user = QueryUser.by_name(user_name)
 
 		case user do
 			nil ->

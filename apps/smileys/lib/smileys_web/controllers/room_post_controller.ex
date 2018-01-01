@@ -3,6 +3,11 @@ defmodule SmileysWeb.RoomPostController do
 
   alias SmileysData.{Post, PostMeta}
 
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.Post, as: QueryPost
+  alias SmileysData.Query.Post.Anonymous, as: QueryPostAnonymous
+  alias SmileysData.Query.Post.Helper, as: QueryPostHelper
+
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
 
@@ -12,6 +17,7 @@ defmodule SmileysWeb.RoomPostController do
   plug Smileys.Plugs.SetUser
 
 
+  # TODO: big refactor into helping modules
   def new(conn, _params) do
     if !conn.assigns.canpost do
       conn |> put_flash(:info, "A restricted room friend.  You need be granted passage.") |> put_status(401) |> render(SmileysWeb.ErrorView, "401.html")
@@ -47,13 +53,13 @@ defmodule SmileysWeb.RoomPostController do
         user 
     end
 
-    room = SmileysData.QueryRoom.room(room_name)
+    room = QueryRoom.by_name(room_name)
 
   	# Add data that is created for each post automatically
   	post_params_1 = Map.put_new(post_params, "posterid", current_user.id)
   	  |> Map.put_new("voteprivate", current_user.reputation)
       |> Map.put_new("votepublic", 0)
-      |> Map.put_new("hash", SmileysData.QueryPost.create_hash(current_user.id, room_name))
+      |> Map.put_new("hash", QueryPostHelper.create_hash(current_user.id, room_name))
       |> Map.put_new("superparentid", room.id)
       |> Map.put_new("parentid", room.id)
       |> Map.put_new("parenttype", "room")
@@ -122,14 +128,14 @@ defmodule SmileysWeb.RoomPostController do
 
         post_params_4 = %{post_params_2 | "body" => Smileys.Logic.PostMeta.modify_post_by_meta_tags(post_params_3["body"], tag_data)}
 
-        case SmileysData.QueryPost.create_new_post(current_user, post_params_4, meta_params, image_upload) do
+        case QueryPost.create_new(current_user, post_params_4, meta_params, image_upload) do
           {:ok, {:ok, post}} ->
             room_activity = Activity.update_item(%RoomActivity{room: room_name, new_posts: 1})
 
             SmileysWeb.Endpoint.broadcast("room:" <> room_name, "activity", room_activity)
 
             if current_user.name == "amysteriousstranger" do
-              SmileysData.QueryPost.add_anonymous_record(current_user.user_token, post.id)
+              QueryPostAnonymous.add(post.id, current_user.user_token)
             end
 
             conn

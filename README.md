@@ -1,6 +1,7 @@
 ## SmileysUmbrella
 
-**NOTE: entering cleanup mode! Features will stop until code cleanup complete.  Since using this as a learning project some code can now be upgraded using new knowledge.  The next few releases will be as such starting with smileys_data**
+**NOTE: Initial cleanup complete!  There is still more cleaning but the major SmileysData refactor is complete, so future cleanup will be mixed
+with the upcoming feature releases.**
 
 The umbrella contains all (and only) the deployable services that comprise the Smiley's experience. The libraries aren't tied to any domain but smileys.pub demonstrates what the apps here do.  There are examples for api usage here http://smileys.pub/r/aboutsmileys and latest feature releases here http://smileys.pub/r/smileysupdates
 
@@ -148,7 +149,7 @@ Here are some desired features that may be given priority soon.
 
 ### Collaborative editing
 
-A difficult problem to solve and scale
+A difficult problem to solve and scale but well suited for Elixir/Erlang
 
 ### Image transformation options
 
@@ -162,9 +163,9 @@ Smileys would benefit enormously in scale by utilizing a distributed cache.  Neb
 
 A complex feature warranting it's own design doc.  This would be the equivalent of providing an app interface for the site.  Users could augment their post with reusable tools for doing things such as: analyzing provided nodes in tags (accomplishing things like determining connections and edge scores between related data, like determining if a news article has compromised sources), altering the style of the page, providing a poll.  These are a few ideas so far but the infrastructure is early.
 
-### Revisit point algorithm
+### Additional content scoring algorithms
 
-The current reputation based algorithm is not battle tested and should be visited fully. A behaviour has been started to make plugging in algorithms easier but there is still work to be done on that.  The objective at Smileys itself is it operates like a pub, which is not a fair and even democracy. People only want to listen to people that have something half interesting to say and there will always be a fair shake of social connectors, humerous folk and revolutionaries etc.. we should make sure folks subscriptions to the right loudmouths pay out properly and not promote a cycle of echo chambers and risk-free conversation; while others voice would be somewhat quieter until they learn civility or whatever rules a room runs by.
+Now that there is a behavior for them, it is a little more clear how to implement vote scoring algorithms.  Can have a few to swap in in case one is inadequate for the future.
 
 ### Feature Toggles
 

@@ -10,61 +10,39 @@ defmodule Smileyscaretaker.Feeds.Post do
 	
 	alias SmileysData.State.Activity
 	alias SmileysData.State.Room.Activity, as: RoomActivity
+	alias SmileysData.{Room, User}
 
-	def create_post_from_feed(%SmileysFeed{img: img_url, categories: tags, link: feed_url, author: author} = feed, %RegisteredBot{username: bot_username, callback_module: room_name}) do
+	def create_post_from_feed(%SmileysFeed{link: feed_url, title: title, summary: summary} = feed, %RegisteredBot{username: bot_username, callback_module: room_name}) do
 		# Check whether it exists based on feed_url and do not process duplicate
 		case QueryPostMeta.by_link(feed_url) do
 			nil ->
 				bot_user_alias = QueryUser.by_name(bot_username)
 
-		      	room = QueryRoom.by_name(room_name)
+                %User{id: bot_user_id, reputation: bot_user_rep} = bot_user_alias
+		      	%Room{id: room_id, age: room_age, name: room_name} = QueryRoom.by_name(room_name)
 
 				post = %{
-					"title" => feed.title,
-		        	"posterid" => bot_user_alias.id,
-		        	"voteprivate" => bot_user_alias.reputation,
+					"title" => title,
+		        	"posterid" => bot_user_id,
+		        	"voteprivate" => bot_user_rep,
 		        	"votepublic"  => 0,
-		        	"hash" => QueryPostHelper.create_hash(bot_user_alias.id, room.name),
-		        	"superparentid" => room.id,
-		        	"parentid" => room.id,
+		        	"hash" => QueryPostHelper.create_hash(bot_user_id, room_name),
+		        	"superparentid" => room_id,
+		        	"parentid" => room_id,
 		        	"parenttype" => "room",
-		        	"age" => room.age,
-		        	"body" => feed.summary
+		        	"age" => room_age,
+		        	"body" => summary
 			    }
 
-			    tags_final = case author do
-			    	nil ->
-			    		tags
-			    	"" ->
-			    		tags
-			    	_ ->
-			    		[author|tags]
-			    end
+			    {:ok, tags_list, tags_string} = map_tags(feed)
 
-			    image_upload = case img_url do
-			    	nil ->
-			    		nil
-			    	_ ->
-			    		upload_feed_image(img_url, tags_final)
-			    end
+			    {:ok, image_upload} = map_image_upload(feed, tags_list)
 
-			    meta_params = %{
-			    	"link" => feed_url,
-			    	"tags" => case tags_final do 
-			    		[_,_|_] -> 
-			    			String.replace(Enum.join(tags_final, ", "), ~r/[\-\.'’";]/, "")
-			    		[tag|_] ->
-			    			String.replace(tag, ~r/[\-\.'’";]/, "")
-			    		_ ->
-			    			""
-			    	end
-			    }
+			    {:ok, meta_params} = map_meta_params(feed, tags_string)
 
 			    case QueryPost.create_new(bot_user_alias, post, meta_params, image_upload) do
 			    	{:ok, post} ->
-			    		room_activity = Activity.update_item(%RoomActivity{new_posts: 1, room: room.name})
-
-			            SmileyscaretakerWeb.Endpoint.broadcast("room:" <> room.name, "activity_external", %{"room" => room.name, "activity" => room_activity})
+			    		_room_activity = Activity.update_item(%RoomActivity{new_posts: 1, room: room_name})
 
 			    		{:ok, post}
 			    	{:error, error} ->
@@ -73,6 +51,40 @@ defmodule Smileyscaretaker.Feeds.Post do
 			_ ->
 				{:ok, {:duplicate, %{}}}
 		end
+	end
+
+	defp map_meta_params(%SmileysFeed{link: feed_url}, tags_string) do
+	  {:ok, %{"link" => feed_url, "tags" => tags_string}}
+	end
+
+	defp map_image_upload(%SmileysFeed{img: nil}, _) do
+	  {:ok, nil}
+	end
+
+	defp map_image_upload(%SmileysFeed{img: img_url}, tags_list) do
+	  {:ok, upload_feed_image(img_url, tags_list)}
+	end
+
+	defp map_tags(%SmileysFeed{author: author, categories: tags}) do
+      tags_to_list = cond do
+      	is_list(tags) ->
+      	  tags
+      	true ->
+      	  []
+      end
+
+      tags_list = case author do
+	    nil ->
+		  tags_to_list
+	    "" ->
+	      tags_to_list
+	    _ ->
+	      [author|tags_to_list]
+	  end
+
+	  tags_string = String.replace(Enum.join(Enum.slice(tags_list, 0, 7), ", "), ~r/[\-\.'’";]/, "")
+
+	  {:ok, tags_list, tags_string}
 	end
 
 	def map_feed(%{entries: entries}) do

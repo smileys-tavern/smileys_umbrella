@@ -1,6 +1,8 @@
 defmodule Smileys.Plugs.SetUser do
   import Plug.Conn
 
+  alias SmileysData.Query.User.Helper, as: QueryUserHelper
+
   def init(_), do: %{}
 
   def call(conn, _default) do
@@ -8,7 +10,7 @@ defmodule Smileys.Plugs.SetUser do
   		nil ->
   			conn 
   				|> assign(:user, nil)
-  				|> assign(:mystery_token, SmileysData.QueryUser.create_hash(conn.remote_ip))
+  				|> assign(:mystery_token, QueryUserHelper.create_hash(conn.remote_ip))
   		user ->
   			conn
   				|> assign(:user, user)

@@ -1,11 +1,14 @@
 defmodule Smileys.Plugs.SetCanPost do
   import Plug.Conn
 
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.Room.Allow, as: QueryRoomAllow
+
 
   def init(default), do: default 
 
-  def call(%Plug.Conn{params: %{"room" => roomname}} = conn, _default) do
-    room = SmileysData.QueryRoom.room(roomname)
+  def call(%Plug.Conn{params: %{"room" => room_name}} = conn, _default) do
+    room = QueryRoom.by_name(room_name)
 
     if !room do
       assign(conn, :canpost, false)
@@ -19,7 +22,7 @@ defmodule Smileys.Plugs.SetCanPost do
           if !user do
             false
           else
-            case SmileysData.QueryUserRoomAllow.user_allowed_in_room(user.name, room.name) do
+            case QueryRoomAllow.user_allowed(user.name, room.name) do
               {:user_not_allowed, _} ->
                 false
               {:ok, _} ->
@@ -30,7 +33,7 @@ defmodule Smileys.Plugs.SetCanPost do
           if !user do
             false
           else
-            case  SmileysData.QueryUserRoomAllow.user_allowed_in_room(user.name, room.name) do
+            case  QueryRoomAllow.user_allowed(user.name, room.name) do
               {:user_not_allowed, _} ->
                 false
               {:ok, _} ->

@@ -1,6 +1,8 @@
 defmodule Smileys.Plugs.SetIsModerator do
   import Plug.Conn
 
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.User.Moderator, as: QueryUserModerator
 
   def init(default), do: default 
 
@@ -24,13 +26,13 @@ defmodule Smileys.Plugs.SetIsModerator do
   defp assign_ismod(conn, roomname) do
     user = Guardian.Plug.current_resource(conn)
 
-    room = SmileysData.QueryRoom.room(roomname)
+    room = QueryRoom.by_name(roomname)
 
     isMod = cond do
       !user || !room ->
         false
       true ->
-        SmileysData.QueryRoom.room_is_moderator(user.moderating, room.id)
+        QueryUserModerator.moderating_room(user, room.id)
     end
 
     conn

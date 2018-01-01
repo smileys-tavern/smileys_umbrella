@@ -6,6 +6,9 @@ defmodule SmileysWeb.RoomChannel do
 
   require Logger
 
+  alias SmileysData.Query.Post, as: QueryPost
+  alias SmileysData.Query.User, as: QueryUser
+
 
   def join("room:" <> _room_name, %{"guardian_token" => token}, socket) do
     case sign_in(socket, token) do
@@ -52,13 +55,13 @@ defmodule SmileysWeb.RoomChannel do
   def handle_in("voteup", %{"posthash" => hash, "room" => room_name}, socket) do 
     user = current_resource(socket)
 
-    post = SmileysData.QueryPost.post_by_hash(hash)
+    post = QueryPost.by_hash(hash)
 
     result_vote = case user do
       nil ->
         {:no_user, 0}
       _ ->
-        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
+        post_user = QueryUser.by_id(post.posterid)
         Smileys.Vote.Action.upvote(post, user, post_user, room_name)
     end
     
@@ -85,13 +88,13 @@ defmodule SmileysWeb.RoomChannel do
   def handle_in("votedown", %{"posthash" => hash, "room" => room_name}, socket) do 
     user = current_resource(socket)
 
-    post = SmileysData.QueryPost.post_by_hash(hash)
+    post = QueryPost.by_hash(hash)
 
     result_vote = case user do
       nil ->
         {:no_user, 0}
       _ ->
-        post_user = SmileysData.QueryUser.user_by_id(post.posterid)
+        post_user = QueryUser.by_id(post.posterid)
         Smileys.Vote.Action.downvote(post, user, post_user, room_name)
     end
 

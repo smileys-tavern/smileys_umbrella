@@ -3,7 +3,10 @@ defmodule SmileysWeb.RoomEditController do
 
   alias SmileysData.{Room, UserRoomAllow}
 
-
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.Room.Allow, as: QueryRoomAllow
+  alias SmileysData.Query.User.Moderator, as: QueryUserModerator
+  alias SmileysData.Query.User.Helper, as: QueryUserHelper
 
   plug Smileys.Plugs.SetUser
   plug Smileys.Plugs.SetIsModerator
@@ -43,9 +46,9 @@ defmodule SmileysWeb.RoomEditController do
 
     cond do
       captcha_response ->
-        case SmileysData.QueryRoom.room_create(changeset) do
+        case QueryRoom.create(changeset) do
           {:ok, room} ->
-            current_user_w_moderation = case SmileysData.QueryUser.create_user_moderator_privalege(conn.assigns.user, room, "admin") do
+            current_user_w_moderation = case QueryUserModerator.create_room_privalege(conn.assigns.user, room, "admin") do
               {:ok, user_w_moderation} ->
                 user_w_moderation
               _ ->
@@ -56,11 +59,11 @@ defmodule SmileysWeb.RoomEditController do
 
             room_allow_changeset = UserRoomAllow.changeset(%UserRoomAllow{}, user_room_params)
 
-            _ = SmileysData.QueryUserRoomAllow.user_room_allow_create(room_allow_changeset)
+            _ = QueryRoomAllow.create(room_allow_changeset)
 
             conn
               |> put_flash(:info, "Room created successfully.")
-              |> Guardian.Plug.sign_in(current_user_w_moderation, :token, perms: SmileysData.QueryUser.user_permission_level(current_user_w_moderation))
+              |> Guardian.Plug.sign_in(current_user_w_moderation, :token, perms: QueryUserHelper.permission_level(current_user_w_moderation))
               |> redirect(to: "/r/" <> room.name)
           {:error, changeset} ->
             conn
@@ -80,7 +83,7 @@ defmodule SmileysWeb.RoomEditController do
         |> render(SmileysWeb.ErrorView, "401.html")
     end
 
-    room = SmileysData.QueryRoom.room(room_name)
+    room = QueryRoom.by_name(room_name)
 
     changeset = Room.changeset(room)
     
@@ -94,11 +97,11 @@ defmodule SmileysWeb.RoomEditController do
         |> render(SmileysWeb.ErrorView, "401.html")
     end
 
-    room = SmileysData.QueryRoom.room(room_name)
+    room = QueryRoom.by_name(room_name)
 
     changeset = Room.changeset(room, room_params)
 
-    case SmileysData.QueryRoom.room_update(changeset) do
+    case QueryRoom.update(changeset) do
       {:ok, _room} ->
         conn
         |> put_flash(:info, "Room updated successfully.")

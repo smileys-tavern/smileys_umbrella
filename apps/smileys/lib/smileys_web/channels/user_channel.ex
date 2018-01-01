@@ -4,7 +4,12 @@ defmodule SmileysWeb.UserChannel do
 
   require Logger
 
-  alias SmileysData.QueryUser
+  # TODO: Get all this data out of here into some Smileys business logic modules
+  alias SmileysData.Query.User.Subscription, as: QueryUserSubscription
+  alias SmileysData.Query.Room, as: QueryRoom
+  alias SmileysData.Query.Post, as: QueryPost
+  alias SmileysData.Query.Post.Thread, as: QueryPostThread
+  alias SmileysData.Query.Post.Summary, as: QueryPostSummary
 
   alias SmileysData.State.Activity
   alias SmileysData.State.Room.Activity, as: RoomActivity
@@ -28,12 +33,12 @@ defmodule SmileysWeb.UserChannel do
   end
 
   def handle_in("subscribe", %{"roomname" => room_name}, socket) do 
-    room = SmileysData.QueryRoom.room(room_name)
+    room = QueryRoom.by_name(room_name)
 
     user = current_resource(socket)
 
-    if SmileysData.QuerySubscription.can_user_subscribe_to_room(user, room) do
-      case SmileysData.QuerySubscription.create_user_subscription(user, room) do
+    if QueryUserSubscription.can_subscribe_to_room(user, room) do
+      case QueryUserSubscription.create(user, room) do
         {:ok, subscription} ->
           room_activity = Activity.update_item(%RoomActivity{room: room_name, subs: 1})
 
@@ -49,7 +54,7 @@ defmodule SmileysWeb.UserChannel do
   def handle_in("unsubscribe", %{"roomname" => room_name}, socket) do 
     user = current_resource(socket)
 
-    case SmileysData.QuerySubscription.delete_user_subscription(user, room_name) do
+    case QueryUserSubscription.delete(user, room_name) do
       {:ok, roomname} ->
         room_activity = Activity.update_item(%RoomActivity{room: room_name, subs: -1})
 
@@ -62,13 +67,13 @@ defmodule SmileysWeb.UserChannel do
   end
 
   def handle_in("load_thread", %{"hash" => hash, "mode" => mode}, socket) do
-    post = SmileysData.QueryPost.post_by_hash(hash)
+    post = QueryPost.by_hash(hash)
 
-    op = SmileysData.QueryPost.post_by_hash(post.ophash)
+    op = QueryPost.by_hash(post.ophash)
 
-    room = SmileysData.QueryRoom.room_by_id(post.superparentid)
+    room = QueryRoom.by_id(post.superparentid)
 
-    thread = SmileysData.QueryPost.get_thread(mode, post.id)
+    thread = QueryPostThread.by_post_id(post.id, mode)
 
 
     thread_html = build_thread_html(thread, room, op)
@@ -87,7 +92,7 @@ defmodule SmileysWeb.UserChannel do
         {[], 0}
     end
 
-    posts = SmileysData.QueryPost.post_summary_by_ids(search_results)
+    posts = QueryPostSummary.by_ids(search_results)
 
     channel_id = case user do
       nil ->
@@ -106,7 +111,7 @@ defmodule SmileysWeb.UserChannel do
       "email_subscription" ->
         user = current_resource(socket)
 
-        _ = QueryUser.update_user_email_subscription(user, value)
+        _ = QueryUserSubscription.update_email(user, value)
 
         {:reply, {:ok, %{message: "Saved!"}}, socket}
       _ ->
