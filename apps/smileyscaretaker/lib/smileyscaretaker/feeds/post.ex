@@ -82,7 +82,17 @@ defmodule Smileyscaretaker.Feeds.Post do
 	      [author|tags_to_list]
 	  end
 
-	  tags_string = String.replace(Enum.join(Enum.slice(tags_list, 0, 7), ", "), ~r/[\-\.'’";]/, "")
+	  # Scrub all tags
+	  tags_list_scrubbed = Enum.reduce(Enum.reverse(tags_list), [], fn(tag, acc) ->
+	    case Regex.replace(~r/[^a-zA-Z0-9, :]/, tag, "") do
+	      "" ->
+	        acc
+	      scrubbed ->
+	      	[scrubbed|acc]
+	    end
+	  end)
+
+	  tags_string = Enum.join(Enum.slice(tags_list_scrubbed, 0, 7), ", ")
 
 	  {:ok, tags_list, tags_string}
 	end

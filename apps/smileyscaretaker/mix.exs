@@ -49,7 +49,7 @@ defmodule Smileyscaretaker.Mixfile do
       {:httpoison, "~> 0.11.0", override: true},
       {:hackney, "~> 1.9", override: true},
 
-      {:quantum, "~> 2.0.0"},
+      {:quantum, ">= 2.2.0"},
       {:feeder_ex, "~> 1.1"},
       {:cloudex, "~> 0.1.10"},
       {:syn, "1.6.1"},
