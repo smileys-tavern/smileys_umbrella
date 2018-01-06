@@ -49,7 +49,7 @@ defmodule Smileyscaretaker.Mixfile do
       {:httpoison, "~> 0.11.0", override: true},
       {:hackney, "~> 1.9", override: true},
 
-      {:quantum, ">= 2.2.0"},
+      {:quantum, ">= 2.2.1"},
       {:feeder_ex, "~> 1.1"},
       {:cloudex, "~> 0.1.10"},
       {:syn, "1.6.1"},
@@ -57,7 +57,7 @@ defmodule Smileyscaretaker.Mixfile do
 
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}
-      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.0"}
+      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.2"}
     ]
   end
 end
