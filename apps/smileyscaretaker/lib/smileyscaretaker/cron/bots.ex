@@ -3,6 +3,7 @@ defmodule Smileyscaretaker.Cron.Bots do
 	alias Smileyscaretaker.Feeds.Post
 	alias SmileysData.Query.User.Bot, as: QueryBot
 	alias SmileysData.RegisteredBot
+	alias SimpleStatEx, as: SSX
 
   def run_bots() do
     bots = QueryBot.all(50)
@@ -27,13 +28,14 @@ defmodule Smileyscaretaker.Cron.Bots do
         feed = case FeederEx.parse(body) do
           {:ok, feed, _} ->
             feed
-          feeder_response ->
-            IO.inspect "Feed Parse Failed"
-            IO.inspect feeder_response
+          _ ->
+            SSX.stat("sc_feed_failed_parsed", :daily) |> SSX.save()
             nil
         end
 
         if feed do
+          SSX.stat("sc_feed_mapping", :daily) |> SSX.save()
+
           # Each feed can return multiple entries, all of which are mapped here
           mapped_feeds = Post.map_feed(feed)
 

@@ -24,7 +24,9 @@ defmodule Smileyscaretaker.Application do
       worker(SmileysData.State.Timer.ActivityExpire, []),
 
       worker(Smileyscaretaker.Scheduler, []),
-      worker(Smileyscaretaker.Automation.RegisteredBots, [%{}])
+      worker(Smileyscaretaker.Automation.RegisteredBots, [%{}]),
+
+      supervisor(SimpleStatEx.StatSupervisor, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
