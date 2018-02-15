@@ -8,7 +8,7 @@ The umbrella contains all (and only) the deployable services that comprise the S
 
 ### Smileys
 
-The smileys.pub website.  Contains routing and some logic for the service of the site.  The Smileys site is a reddit-like community site with nested threads sorted by activity and voting algorithms.  There is a provided interface (behaviour) for implementing new algorithms as a work in progress (as of version 0.0.11). Smileys.pub is served across 3 servers in order to fascilitate distributed testing and is aware of the api and caretaker as part of the same VM.
+The smileys.pub website.  Contains routing and some logic for the service of the site.  The Smileys site is a reddit-like community site with nested threads sorted by activity and voting algorithms.  There is a provided interface (behaviour) for implementing new algorithms as a work in progress (as of version 0.0.11). Smileys.pub is served across 3 servers in order to fascilitate distributed testing and is aware of the api and processes as part of the same VM.
 
 The core functionality includes
 
@@ -35,16 +35,16 @@ The core functionality includes
   * Commenting in Private rooms is hidden from search and your user page
 
 * Aggregate Pages
-  * Smileys generates some of it's own content via bots in Smileyscaretaker
+  * Smileys generates some of it's own content via bots in Smileysprocesses
   * The currently implemented bots scrape RSS feeds and transfer these summaries into Posts, allowing visitors to link into the full content and comment and vote on it here if they wish.
   * An example of one such is /r/news
 
 * Email Subscriptions
-  * Smileys Caretaker sends out emails asyncronously to every user with a subscription set
-  * Subscriptions will basically send the update info available in the sidebar, updating a user on:
-    * Shouts from other users
+  * Smileys Processes sends out emails asyncronously to every user with a subscription set
+  * Subscriptions will basically send the update info available in their sidebar on-site, updating a user on:
+    * Shoutouts from other users
     * Comment and vote activity on their very own latest posts
-    * New subscribers and posts on users Subscribed to rooms
+    * New subscribers and posts on their Subscribed to rooms
 
 * Real Time Updates
   * All voting, comment counts and responses to your content are updated to the visitors client in real time via efficient channels
@@ -64,7 +64,7 @@ The core functionality includes
 
 ### Smileysapi
 
-The api.smileys.pub api that provides a GraphQL interface to access many of the same features of the site.  It is in early stages (as of 0.0.2) and only has a few endpoints.  api.smileys.pub is served across 2 servers in order to fascilitate distributed testing and is aware of the website and caretaker as part of the same VM. Currently implemented:
+The api.smileys.pub api that provides a GraphQL interface to access many of the same features of the site.  It is in early stages (as of 0.0.2) and only has a few endpoints.  api.smileys.pub is served across 2 servers in order to fascilitate distributed testing and is aware of the website and processes as part of the same VM. Currently implemented:
 
 * Full site content search with various filters
 * Public info about user can be queried
@@ -75,7 +75,7 @@ Some work has been done to implement authentication so that content creation can
 
 ### Smileysprocesses
 
-The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered and runs bots that parse rss feeds. In the future it would handle timed tasks on behalf of users as well. The caretaker is currently served on a single node but is aware of the api and site on the same VM.
+The process service.  This runs Cron style jobs on the same VM as the api and website. Example, it handles post deterioration so that stale content gets lowered and runs bots that parse rss feeds. In the future it would handle timed tasks on behalf of users as well. The processes is currently served on a single node but is aware of the api and site on the same VM.
 
 * Bots can be added programmatically or to the database to scrape content. You can see them on smileys.pub as philosophybot and newsbot for example
 * Vote algorithm behaviour is on timers to adjust content based on time alive
@@ -123,7 +123,7 @@ MIX_ENV=prod mix release --env=prod --name=smileys
 MIX_ENV=prod mix release --env=prod --name=smileysapi
 ```
 ```
-MIX_ENV=prod mix release --env=prod --name=smileyscaretaker
+MIX_ENV=prod mix release --env=prod --name=smileysprocesses
 ```
 
 ### On subsequent releases:
@@ -134,7 +134,7 @@ MIX_ENV=prod mix release --env=prod --upgrade --name=smileys
 MIX_ENV=prod mix release --env=prod --upgrade --name=smileysapi
 ```
 ```
-MIX_ENV=prod mix release --env=prod --upgrade --name=smileyscaretaker
+MIX_ENV=prod mix release --env=prod --upgrade --name=smileysprocesses
 ```
 
 
