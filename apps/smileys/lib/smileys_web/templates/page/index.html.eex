@@ -1,8 +1,4 @@
-<div class="frontpage">
-  <h3>Welcome to Smiley's</h3>
-</div>
-
-<div>
+<div class="cols">
   <div class="col-lg-4">
     <h4>The Newest Rooms</h4>
     <%= if assigns[:new_rooms] do %>
@@ -20,9 +16,9 @@
       <% end %>
     <% end %>
   </div>
-</div>
 
-<div class="end-float"></div>
+  <div class="end-float"></div>
+</div>
 
 <div class="smileys-latest room-title" id="room" data-name="index">
   <h4>Some of Smiley's Latest</h4>

@@ -4,18 +4,29 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <%= if assigns[:op] do %>
-      <meta name="description" content="Smiley's post: <%= assigns[:op].title %> ">
-    <% else %>
-      <meta name="description" content="This is a place to have discussions and hang out, people watch, joke around maybe.">
+    <%= cond do %>
+      <% assigns[:op] -> %>
+        <meta name="description" content="Smiley's post: <%= assigns[:op].title %>">
+      <% assigns[:room] -> %>
+        <meta name="description" content="<%= assigns[:room].name %>: <%= assigns[:room].description %>">
+      <% true -> %>
+        <meta name="description" content="This is a place to have discussions and share knowledge.">
     <% end %>
-    <meta name="author" content="Smiley">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="icon" href="/favicon.ico?v=1" />
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
     <title>
       <%= if assigns[:title] do %>
         <%= assigns[:title] %>
       <% else %>
-        Smiley's. Welcome to Smiley's Pub. It is what it is
+        Smiley's Tavern. Welcome in
       <% end %>
     </title>
 
@@ -49,13 +60,14 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <div class="container">
       <header class="header">
-        <h1><a href="/">Smiley's</a></h1>
+        <h1><a href="/"><img class="logo" src="/images/smileys_logo.svg" /></a></h1>
 
         <div id="search"></div>
 
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
             <%= if assigns[:user] do %>
+              <li><a href="/room/new">Create a Room</a></li>
               <li><a href="/u/<%= assigns[:user].name %>"><%= assigns[:user].name %></a></li>
               <li><%= SmileysWeb.Coherence.ViewHelpers.signout_link(@conn, "Log out") %></li>
             <% else %>
@@ -66,6 +78,17 @@
           <a href="javascript:void(0)" class="menu-toggle"></a>
         </nav>
       </header>
+      <div class="sub-header">
+        <a href="/h/all">/h/all</a>&nbsp;&nbsp;
+        <a href="/h/walloffame">/h/all</a>&nbsp;&nbsp;
+        <a href="/r/news">/r/news</a>&nbsp;&nbsp;
+        <a href="/r/crypto">/r/crypto</a>&nbsp;&nbsp;
+        <a href="/r/robotics">/r/robotics</a>&nbsp;&nbsp;
+        <a href="/r/philosophy">/r/philosophy</a>&nbsp;&nbsp;
+        <a href="/r/architecture">/r/architecture</a>&nbsp;&nbsp;
+        <a href="/r/aboutsmileys">/r/aboutsmileys</a>&nbsp;&nbsp;
+        <a href="/r/smileysupdate">/r/smileysupdate</a>&nbsp;&nbsp;
+      </div>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

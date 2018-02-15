@@ -65,6 +65,7 @@ defmodule Smileys.Mixfile do
       {:scout_apm, "~> 0.3.2"},
       {:syn, "1.6.1"},
       {:earmark, "~> 1.2"},
+      {:simplestatex, "~> 0.1.3"},
 
       # Smileys
       {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.2"},

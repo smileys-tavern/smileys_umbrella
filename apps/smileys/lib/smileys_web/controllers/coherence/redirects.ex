@@ -47,6 +47,8 @@ defmodule Coherence.Redirects do
   alias SmileysData.Query.User.Moderator, as: QueryUserModerator
   alias SmileysData.Query.User.Helper, as: QueryUserHelper
 
+  alias SimpleStatEx, as: SSX
+
   # Uncomment the import below if adding overrides
   # import SmileysWeb.Router.Helpers
 
@@ -80,6 +82,8 @@ defmodule Coherence.Redirects do
 
     # TODO: refactor moderation for users to avoid this clumsy query -> build -> query
     _updated_moderation = QueryUserModerator.update_rooms(current_user, current_user_w_moderation.moderating)
+
+    SSX.stat("s_session_create", :monthly) |> SSX.save()
  
     conn
       |> put_session("user_return_to", nil)

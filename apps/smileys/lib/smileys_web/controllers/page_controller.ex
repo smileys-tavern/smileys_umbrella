@@ -21,11 +21,15 @@ defmodule SmileysWeb.PageController do
   alias SmileysData.Query.User, as: QueryUser
   alias SmileysData.Query.User.Moderator, as: QueryUserModerator
 
+  alias SimpleStatEx, as: SSX
+
 
   def index(conn, _params) do
     {posts, _} = QueryPostSummary.get(10)
 
     reputable_rooms = QueryRoom.list(:reputation, 5)
+
+    SSX.stat("s_visit_index", :monthly) |> SSX.save()
 
     render conn, "index.html", new_posts: decorate_post_comment_count(posts), reputable_rooms: reputable_rooms
   end
@@ -99,6 +103,8 @@ defmodule SmileysWeb.PageController do
 		  	QueryPostSummary.by_room(25, :vote, room.id, params)
 	  end
 
+    SSX.stat("s_visit_room_" <> room_name, :monthly) |> SSX.save()
+
   	render conn, "room.html", room: room, posts: decorate_post_comment_count(posts), ismod: is_mod, roomtype: "room", kerosene: kerosene
   end
 
@@ -123,6 +129,8 @@ defmodule SmileysWeb.PageController do
   	original_poster = QueryUser.by_id(post.posterid)
 
   	comments = QueryPostThread.by_post_id(post.id, "focus")
+
+    SSX.stat("s_visit_comments_" <> roomData.name, :monthly) |> SSX.save()
 
   	render conn, "post.html", post: post, op: op, title: roomData.name, roomtype: "room", room: roomData, comments: comments, opname: original_poster.name, parent: parentpost, opmeta: nil
   end
@@ -155,10 +163,14 @@ defmodule SmileysWeb.PageController do
   			{QueryPostThread.by_post_id(post.id, "hot"), "hot"}
   	end
 
+    SSX.stat("s_visit_comments_" <> roomData.name, :monthly) |> SSX.save()
+
   	render conn, "post.html", post: post, op: op, title: roomData.name, mode: mode, roomtype: "room", room: roomData, comments: comments, opname: original_poster.name, opmeta: op_meta
   end
 
   def about(conn, _params) do
+    SSX.stat("s_visit_about", :monthly) |> SSX.save()
+
     render conn, "about.html"
   end
 

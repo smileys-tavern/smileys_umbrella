@@ -1,13 +1,23 @@
 <div class="sidebar">
+	<div class="sidebar-nav">
+          <ul class="nav nav-pills pull-right">
+            <%= if assigns[:user] do %>
+              <li><a href="/room/new">Create Room</a></li>
+              <li class="button-middle"><a href="/u/<%= assigns[:user].name %>"><%= assigns[:user].name %></a></li>
+              <li><%= SmileysWeb.Coherence.ViewHelpers.signout_link(@conn, "Log out") %></li>
+            <% else %>
+              <li><a href="/sessions/new">Sign in</a></li>
+              <li><a href="/registrations/new">Register</a></li>
+            <% end %>
+          </ul>
+    </div>
+
 	<div class="site-actions">
 		<%= if assigns[:canpost] do %>
 			<a href="/r/<%= assigns[:room].name %>/newpost">Say something here</a>
 		<% end %>
 		<%= if assigns[:cansubscribe] && assigns[:room] do %>
 			<a href="javascript:void(0)" class="room-subscribe" data-room="<%= assigns[:room].name %>">Subscribe here</a>
-		<% end %>
-		<%= if assigns[:user] do %>
-			<a href="/room/new">Create a Room</a>
 		<% end %>
 		<%= if assigns[:ismod] do %>
 			<a href="/room/<%= assigns[:room].name %>/edit">Edit Room</a>
@@ -30,14 +40,18 @@
 			<div class="userlatestposts sidebar-links site-actions">
 				<h5>Your Latest</h5>
 
-				<%= for activity <- assigns[:useractivity] do
-					case activity do 
-						%SmileysData.State.User.Activity{} ->
-							render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity}
-						%SmileysData.State.User.Notification{} ->
-							render SmileysWeb.SharedView, "user_notification.html", %{:notification => activity}
-				     end
-				end %>
+				<%= if Enum.empty?(assigns[:useractivity]) do %>
+				  No-one shouting your name or discussing your posts yet
+				<% else %> 
+					<%= for activity <- assigns[:useractivity] do
+						case activity do 
+							%SmileysData.State.User.Activity{} ->
+								render SmileysWeb.SharedView, "user_activity.html", %{:activity => activity}
+							%SmileysData.State.User.Notification{} ->
+								render SmileysWeb.SharedView, "user_notification.html", %{:notification => activity}
+					     end
+					end %>
+				<% end %>
 			</div>
 		<% end %>
 
@@ -59,19 +73,7 @@
 		</div>
 	<% end %>
 
-	<div class="sidebar-links">
-		<h5>Related / New / Interesting Rooms</h5>
-		<div class="room-link"><a href="/h/all">/h/all</a></div>
-		<div class="room-link"><a href="/h/walloffame">/h/walloffame</a></div>
-		<%= if assigns[:new_rooms] do %>
-			<%= for post <- assigns[:new_rooms] do %>
-				<div class="room-link"><a href="/r/<%= post.name %>">/r/<%= post.name %></a></div>
-			<% end %>
-		<% end %>
-	</div>
-
-	<div class="sidebar-links">
-		<br />
+	<div class="sidebar-links sidebar-links-last">
 		<div class="room-link"><a href="/about">About Smiley's Pub</a></div>
 	</div>
 

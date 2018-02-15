@@ -305,7 +305,7 @@ view : Model -> Html Msg
 view model =
     div [ class "search-container" ]
       [ input [ type_ "text", placeholder "Search", autofocus True, onInput UpdateSearchTerm ] []
-      , button [ class "search-activate", onClick JoinChannel ] [ text "[Enter]" ]
+      , img [ class "search-activate", onClick JoinChannel, src "/images/search4.svg" ] []
       , (renderSearchSummary model.results.results model.results.amt model.page model.status)
       , (renderSearchResults model.results.results)
       ]

@@ -24,6 +24,11 @@
 			<li>youtube/vimeo: embeds a video that was linked instead of just linking to it</li>
 		</ul>
 	</p>
+
+	<p class="smileys-cocktail">
+	  <a href="/"><img src="/images/smileys_logo_black.svg" style="height:60px" /></a><br />
+	  Aio, quantitas magna frumentorum est
+	</p>
 </div>
 
 <%= render SmileysWeb.SharedView, "sidebar.html", assigns %>

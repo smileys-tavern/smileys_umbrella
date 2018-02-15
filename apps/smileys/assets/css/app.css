@@ -14,11 +14,19 @@ h1 {
 h1 a {
 	text-decoration: none;
 	color: #fff;
-	font-family: "Arial Black", Gadget, sans-serif;
+	font-family: "serif";
+	font-size: 34px;
 }
 h1 a:hover {
 	text-decoration: none;
 	color: #fff;
+}
+h4 {
+    -webkit-margin-before: 15px;
+    -webkit-margin-after: 15px;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
 }
 button {
     -moz-appearance: button;
@@ -28,7 +36,7 @@ nav a {
 	color: #fff;
 }
 nav ul{
-	padding-right: 40px;
+	padding-right: 28px;
 }
 
 .end-float { clear: both; }
@@ -52,26 +60,40 @@ nav ul{
   bottom: 0.21em;
   width: 1.9em;
   height: 18px;
-  background: linear-gradient(
-    to bottom, 
-    white, white 20%, 
-    rgba(53, 53, 53, 0.89) 20%, rgba(53, 53, 53, 0.89) 40%, 
-    white 40%, white 60%, 
-    rgba(53, 53, 53, 0.89) 60%, rgba(53, 53, 53, 0.89) 80%, 
-    white 80%, white 100%
-  );
+  background: linear-gradient(to bottom, white, white 20%,      
+  	rgb(39, 93, 152) 20%, rgb(39, 93, 152) 40%,      
+  	white 40%, white 60%,      
+  	rgb(39, 93, 152) 60%, 
+  	rgb(39, 93, 152) 80%,      
+  	white 80%, white 100%)
 }
 
 .header {
-  border-bottom: 2px solid #000;
-  background-color: rgba(53, 53, 53, 0.89);
+  background-color: rgb(39, 93, 152);
   color: #000;
   height: 53px;
   padding: 7px 15px;
   font-weight: bold;
 }
+.sub-header {
+  background-color: #3984e2;
+  height: 22px;
+  padding: 1px 6px;
+  color: #fff;
+  overflow: hidden;
+}
+.sub-header a {
+  color: #fff;
+}
 .header h1 {
 	float: left;
+}
+
+.logo {
+	position: absolute;
+	top: 1px;
+	left: 2px;
+	height: 54px;
 }
 
 .container {
@@ -102,6 +124,12 @@ nav ul{
 	width: 80%;
 }
 
+.smileys-cocktail {
+	padding: 10px;
+	font-family: "serif";
+	font-size: 14px;
+}
+
 /*
  * Room specific
  */
@@ -110,6 +138,14 @@ nav ul{
 	padding: 0;
 	margin: 0 0 20px 10px;
 	position: relative;
+}
+.room-control {
+	padding-left: 10px;
+	color: #3984e2;
+}
+.room-control {
+	font-size: 18px;
+	font-weight: bold;
 }
 .room-title {
 	max-width: 80%;
@@ -374,6 +410,27 @@ nav ul{
  	height: auto;
  	background-color: #fff;
 }
+
+.sidebar-nav {
+	display: none;
+}
+.sidebar-nav a{
+	color: #fff;
+	background-color: #275d98;
+}
+
+.sidebar .nav {
+	background-color: #3984e2;
+	float: none !important;
+	margin: -1px 0 0 0;
+	padding: 4px;
+}
+.sidebar .nav .button-middle {
+	width: 157px;
+	text-align: center;
+	overflow: hidden;
+}
+
 .sidebar .site-actions a {
 	display: block;
 	border-left: 1px dotted #444240;
@@ -398,9 +455,13 @@ nav ul{
 }
 
 .sidebar-links {
-	margin: 20px;
+	margin: 5px 20px 20px 20px;
 	text-align: center;
-	border-top: 9px solid #585454;
+	border-bottom: 5px solid #3984e2;
+	padding-bottom: 6px;
+}
+.sidebar-links-last {
+	border-bottom: none;
 }
 .sidebar-links a{
 	color: #317ab7;
@@ -497,12 +558,17 @@ form.link, form.button {
     height: 30px;
 }
 .search-container {
-	position: relative;
+	position: absolute;
+	top: 6px;
+	left: 200px;
 }
 .search-activate {
-	height: 30px;
-	width: 70px;
-	color: #000;
+	position: absolute;
+	top: 9px;
+	right: 3px;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
 }
 .search-results {
 	position: absolute;
@@ -655,12 +721,20 @@ form.link, form.button {
 
 /* Responsive: Portrait tablets and down */
 @media screen and (max-width: 1240px) {
+
+    nav .nav {
+    	display: none;
+    }
 	.sidebar {
  		width: 100%;
  		display: none;
  		z-index: 100;
  		border-bottom: 2px solid rgba(53, 53, 53, 0.89);
  	}
+
+ 	.sidebar-nav {
+		display: block;
+	}
 
  	.menu-toggle {
 		display: block;
