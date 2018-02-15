@@ -1,3 +1,3 @@
 defmodule SmileysProcesses.Mailer do
-  use Bamboo.Mailer, otp_app: :smileyscaretaker
+  use Bamboo.Mailer, otp_app: :smileysprocesses
 end

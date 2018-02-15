@@ -32,7 +32,9 @@ defmodule SmileysProcesses.Mixfile do
       {:cloudex, "~> 0.1.10"},
       {:syn, "1.6.1"},
       {:bamboo, "~> 0.8.0"},
+      {:postgrex, ">= 0.0.0"},
       {:simplestatex, "~> 0.1.3"},
+      {:httpoison, "~> 0.11.0", override: true},
 
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}

@@ -23,8 +23,8 @@ defmodule SmileysProcesses.Application do
       supervisor(SmileysData.State.PostActivitySupervisor, []),
       worker(SmileysData.State.Timer.ActivityExpire, []),
 
-      worker(Smileyscaretaker.Scheduler, []),
-      worker(Smileyscaretaker.Automation.RegisteredBots, [%{}]),
+      worker(SmileysProcesses.Scheduler, []),
+      worker(SmileysProcesses.Automation.RegisteredBots, [%{}]),
 
       supervisor(SimpleStatEx.StatSupervisor, [])
     ]
