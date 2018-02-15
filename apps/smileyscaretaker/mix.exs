@@ -58,7 +58,7 @@ defmodule Smileyscaretaker.Mixfile do
       # Smileys
       #{:smileysdata, path: "../../../smileys_data"}
       {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.2"},
-      {:simplestatex, "~> 0.1.1"}
+      {:simplestatex, "~> 0.1.3"}
     ]
   end
 end

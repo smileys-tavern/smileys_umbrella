@@ -22,7 +22,7 @@ defmodule Smileyscaretaker.Feeds.Post do
 		      	%Room{id: room_id, age: room_age, name: room_name} = QueryRoom.by_name(room_name)
 
 				post = %{
-					"title" => title,
+					"title" => Regex.replace(~r/[^a-zA-Z0-9 \-\–\.,\/'’‘%|?!:\)\(#&;]+$/, title, ""),
 		        	"posterid" => bot_user_id,
 		        	"voteprivate" => bot_user_rep,
 		        	"votepublic"  => 0,

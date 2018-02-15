@@ -6,6 +6,8 @@ defmodule Smileyscaretaker.Cron.Bots do
 	alias SimpleStatEx, as: SSX
 
   def run_bots() do
+    SSX.stat("sc_ran_bots", :daily) |> SSX.save()
+
     bots = QueryBot.all(50)
 
     Enum.reduce(bots, 0, fn(bot, task_count) ->
