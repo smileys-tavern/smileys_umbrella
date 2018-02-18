@@ -83,11 +83,11 @@
         <a href="/h/walloffame">/h/all</a>&nbsp;&nbsp;
         <a href="/r/news">/r/news</a>&nbsp;&nbsp;
         <a href="/r/crypto">/r/crypto</a>&nbsp;&nbsp;
-        <a href="/r/robotics">/r/robotics</a>&nbsp;&nbsp;
+        <a href="/r/roboticsfeed">/r/roboticsfeed</a>&nbsp;&nbsp;
         <a href="/r/philosophy">/r/philosophy</a>&nbsp;&nbsp;
         <a href="/r/architecture">/r/architecture</a>&nbsp;&nbsp;
         <a href="/r/aboutsmileys">/r/aboutsmileys</a>&nbsp;&nbsp;
-        <a href="/r/smileysupdate">/r/smileysupdate</a>&nbsp;&nbsp;
+        <a href="/r/smileysupdates">/r/smileysupdates</a>&nbsp;&nbsp;
       </div>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
