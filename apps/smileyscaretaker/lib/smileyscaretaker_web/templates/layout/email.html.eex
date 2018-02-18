@@ -1,8 +1,0 @@
-<html>
-  <head>
-    <%= render @view_module, "css.html", %{} %>
-  </head>
-  <body>
-    <%= render @view_module, @view_template, assigns %>
-  </body>
-</html>
