@@ -9,7 +9,7 @@ defmodule Smileys.Mixfile do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.5.1",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -47,14 +47,13 @@ defmodule Smileys.Mixfile do
       {:cowboy, "~> 1.0"},
       {:httpoison, "~> 0.11.0", override: true},
       {:poison, "~> 3.0", override: true},
-      {:timex, "~> 3.1.15", override: true},
+      {:timex, "~> 3.1", override: true},
       {:timex_ecto, "~> 3.1.1", override: true},
       {:hackney, "~> 1.9", override: true},
       {:decimal, "~> 1.4", override: true},
       {:coherence, "~> 0.5.0"},
       {:jose, "~> 1.8"},
       {:guardian, "~> 0.14.4"},
-      {:amnesia, "~> 0.2.7"},
       {:cachex, "~> 2.0"},
       {:thumbnex, "~> 0.2.2"},
       {:html_sanitize_ex, "~> 1.0.0"},
@@ -66,12 +65,15 @@ defmodule Smileys.Mixfile do
       {:syn, "1.6.1"},
       {:earmark, "~> 1.2"},
       {:simplestatex, "~> 0.1.3"},
+      {:quantum, ">= 2.2.7"},
 
       # Smileys
       {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.2"},
       #{:smileysdata, path: "../../../smileys_data"},
-      {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"}
+      {:smileyssearch, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.5"},
       #{:smileyssearch, path: "../../../smileys_search"}
+      #{:smileysprocesses, git: "https://github.com/smileys-tavern/smileys_search.git", tag: "0.0.1"}
+      {:smileysprocesses, path: "../../../smileys_processes"}
     ]
   end
 
@@ -85,7 +87,7 @@ defmodule Smileys.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

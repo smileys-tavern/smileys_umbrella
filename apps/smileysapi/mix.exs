@@ -8,7 +8,7 @@ defmodule Smileysapi.Mixfile do
      config_path: "../../config/config.exs",
      deps_path: "../../deps",
      lockfile: "../../mix.lock",
-     elixir: "~> 1.5.1",
+     elixir: "~> 1.7",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      start_permanent: Mix.env == :prod,
@@ -55,6 +55,7 @@ defmodule Smileysapi.Mixfile do
      {:absinthe, "~> 1.3.1"},
      {:absinthe_plug, "~> 1.1"},
      {:syn, "1.6.1"},
+     {:quantum, ">= 2.2.7"},
 
      # Smileys
      {:smileysdata, git: "https://github.com/smileys-tavern/smileys_data.git", tag: "0.1.2"},

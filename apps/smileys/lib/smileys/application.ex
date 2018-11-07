@@ -29,7 +29,9 @@ defmodule Smileys.Application do
       supervisor(SmileysData.State.UserActivitySupervisor, []),
       supervisor(SmileysData.State.RoomActivitySupervisor, []),
       supervisor(SmileysData.State.PostActivitySupervisor, []),
-      worker(SmileysData.State.Timer.ActivityExpire, [])
+      worker(SmileysData.State.Timer.ActivityExpire, []),
+
+      supervisor(SmileysProcesses.Application, [])
 
       #worker(SmileysData.GraphRepo.get(), [Keyword.new([
       #  {:user,       Application.get_env(:smileys_graph, :user)}, 

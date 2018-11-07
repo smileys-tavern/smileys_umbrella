@@ -5,7 +5,6 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   font-size: 14px;
-  font-family: "Arial Black", Gadget, sans-serif;
 }
 h1 {
 	margin-top: 0;
@@ -286,9 +285,14 @@ nav ul{
 }
 .op-body {
 	float: left;
-	padding: 10px;
+	padding: 10px 10px 10px 45px;
 	height: auto;
 	max-width: 90%;
+}
+.op-body p {
+	font-size: 21px;
+	line-height: 1.58;
+    letter-spacing: -.003em;
 }
 .op-actions {
 	clear: both;
@@ -746,6 +750,12 @@ form.link, form.button {
  	.op-body {
  		width: 100%;
  		max-width: 100%;
+ 		padding: 10px;
+ 	}
+ 	.op-body p {
+ 		font-size: 18px;
+    	line-height: 1.58;
+    	letter-spacing: -.004em;
  	}
  	.op-title {
  		width: 75%;
