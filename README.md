@@ -92,6 +92,12 @@ Bartools is a planned feature later for a behavior of implementing elixir apps t
 
 Gulp is used to expediate many common tasks particularly for builds and deployment.  Gulp is used in order to keep flexibility high as the setup of which services belong in which EVM's may change in the future.  Other deployment tools may work but for now gulp and some manual labour is in use until enough patterned usage needs emerge.
 
+Here are tasks that use your server configs to generate the files needed to deploy distributed Smileys:
+```
+> gulp create_vm_args
+> gulp create_node_sync_config
+```
+
 
 ## Building Releases
 
