@@ -1,8 +1,6 @@
 defmodule Smileysapi.Schema.Types do
   use Absinthe.Schema.Notation
 
-  alias SmileysData.{User, PostMeta}
-
   @desc """
   A post on Smileys
   """

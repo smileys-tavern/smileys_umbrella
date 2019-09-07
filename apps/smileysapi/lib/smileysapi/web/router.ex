@@ -16,8 +16,5 @@ defmodule Smileysapi.Web.Router do
 
   scope "/" do
     pipe_through [:browser_session]
-
-    forward "/", Absinthe.Plug,
-      schema: Smileysapi.Schema
   end
 end

@@ -46,7 +46,6 @@ defmodule Smileysapi.Mixfile do
      {:jose, "~> 1.8"},
      {:guardian, "~> 0.14.4"},
      {:hashids, "~> 2.0"},
-     {:amnesia, "~> 0.2.7"},
      {:decimal, "~> 1.4", override: true},
      {:cachex, "~> 2.0"},
      {:cloudex, "~> 0.1.10"},
@@ -74,6 +73,6 @@ defmodule Smileysapi.Mixfile do
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+     test: ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end
