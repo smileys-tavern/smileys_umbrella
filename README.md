@@ -1,7 +1,6 @@
 ## SmileysUmbrella
 
-***NOTE*** This was a learning project; parts of it are rushed to get to other bits to test the Elixir ecosystem. Pleased to say that ecosystem is AMAZING. This project will no longer be maintained but I'll link to the new project whenever I work on it. I will transfer while refactoring any necessary code into a new project that will ditch the current javascript code for liveview. Organization of code should be much better and easier to plug and play a custom version of the site. Cheers!
-
+NOTE: This project has been refactored and made generic, and updated to LiveView: https://github.com/smileys-tavern/gabbler
 
 ### Smileys
 
